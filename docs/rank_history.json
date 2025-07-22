@@ -639,5 +639,52 @@
         "timestamp": "2025-07-22 17:00"
       }
     ]
+  },
+  "2025-07-22 18:00:00": {
+    "melon_top100": [
+      {
+        "rank": null,
+        "timestamp": "2025-07-22 18:00:00",
+        "chart_type": "TOP100"
+      }
+    ],
+    "melon_hot100": [
+      {
+        "rank": 8,
+        "timestamp": "2025-07-22 18:00",
+        "chart_type": "HOT100"
+      }
+    ],
+    "melon": [
+      {
+        "rank": 8,
+        "timestamp": "2025-07-22 18:00",
+        "chart_type": "HOT100"
+      }
+    ],
+    "genie": [
+      {
+        "rank": 149,
+        "timestamp": "2025-07-22 18:00"
+      }
+    ],
+    "bugs": [
+      {
+        "rank": null,
+        "timestamp": "2025-07-22 18:00:00"
+      }
+    ],
+    "vibe": [
+      {
+        "rank": null,
+        "timestamp": "2025-07-22 18:00:00"
+      }
+    ],
+    "flo": [
+      {
+        "rank": 77,
+        "timestamp": "2025-07-22 18:00"
+      }
+    ]
   }
 }
