@@ -14,12 +14,14 @@ jobs:
   crawl-and-deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       pages: write
       id-token: write
     
     steps:
     - uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Set up Python 3.11
       uses: actions/setup-python@v4
@@ -49,7 +51,7 @@ jobs:
         # 변경 사항이 있을 때만 커밋
         if ! git diff --staged --quiet; then
           git commit -m "📈 차트 데이터 자동 업데이트"
-          git push
+          git push origin master
         else
           echo "No changes to commit."
         fi
