@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 NCT DREAM 차트 추적 대시보드</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <!-- 메뉴 바 -->
+    <div class="menu-bar">
+        <div class="menu-container">
+            <a href="#" class="menu-logo" onclick="showMainContent()">🎯 NCT DREAM 차트</a>
+            <nav class="menu-nav">
+                <button class="menu-item active" onclick="showMainContent()">대시보드</button>
+                <button class="menu-item" onclick="showGuideMenu()">가이드</button>
+                <button class="menu-item" onclick="showAbout()">정보</button>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🎯 NCT DREAM 차트 추적 대시보드</h1>
+            <p>BTF - 실시간 차트 현황 및 스트리밍 지원</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- 차트 현황 및 그래프 좌우 배치 -->
+            <div class="chart-layout">
+                <!-- 실시간 차트 현황 -->
+                <div class="card chart-left">
+                    <h2><span class="card-icon">🏆</span>실시간 차트 현황</h2>
+                    <div class="rank-grid">
+                        <div class="rank-card melon-top">
+                            <div class="rank-header">
+                                <span class="rank-service-name">
+                                    <div class="service-logo melon"></div>
+                                    멜론 TOP100
+                                </span>
+                                <span class="rank-badge out-chart" id="melon-top-badge">차트아웃</span>
+                            </div>
+                            <div class="rank-number" id="melon-top-rank">
+                                -
+                            </div>
+                        </div>
+                        <div class="rank-card melon-hot">
+                            <div class="rank-header">
+                                <span class="rank-service-name">
+                                    <div class="service-logo melon"></div>
+                                    멜론 HOT100
+                                </span>
+                                <span class="rank-badge in-chart" id="melon-hot-badge">차트인</span>
+                            </div>
+                            <div class="rank-number" id="melon-hot-rank">
+                                -
+                            </div>
+                        </div>
+                        <div class="rank-card bugs">
+                            <div class="rank-header">
+                                <span class="rank-service-name">
+                                    <div class="service-logo bugs"></div>
+                                    벅스
+                                </span>
+                                <span class="rank-badge in-chart" id="bugs-badge">차트인</span>
+                            </div>
+                            <div class="rank-number" id="bugs-rank">
+                                -
+                            </div>
+                        </div>
+                        <div class="rank-card genie">
+                            <div class="rank-header">
+                                <span class="rank-service-name">
+                                    <div class="service-logo genie"></div>
+                                    지니
+                                </span>
+                                <span class="rank-badge out-chart" id="genie-badge">차트아웃</span>
+                            </div>
+                            <div class="rank-number" id="genie-rank">
+                                -
+                            </div>
+                        </div>
+                        <div class="rank-card vibe">
+                            <div class="rank-header">
+                                <span class="rank-service-name">
+                                    <div class="service-logo vibe"></div>
+                                    바이브
+                                </span>
+                                <span class="rank-badge out-chart" id="vibe-badge">차트아웃</span>
+                            </div>
+                            <div class="rank-number" id="vibe-rank">
+                                -
+                            </div>
+                        </div>
+                        <div class="rank-card flo">
+                            <div class="rank-header">
+                                <span class="rank-service-name">
+                                    <div class="service-logo flo"></div>
+                                    플로
+                                </span>
+                                <span class="rank-badge out-chart" id="flo-badge">차트아웃</span>
+                            </div>
+                            <div class="rank-number" id="flo-rank">
+                                -
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 차트 그래프 -->
+                <div class="card chart-right">
+                    <h2><span class="card-icon">📊</span>차트 그래프</h2>
+                    <div class="chart-container" style="height: 400px; width: 100%; background: white; border: 2px solid #ddd; position: relative;">
+                        <canvas id="rankChart" style="width: 100% !important; height: 350px !important; display: block !important; background: white;"></canvas>
+                        <div id="chartDebug" style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); color: #666; font-size: 12px;">차트 로딩 중...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 원클릭 스트리밍 -->
+            <div class="card">
+                <h2><span class="card-icon">🎵</span>원클릭 스트리밍</h2>
+                <p>각 플랫폼에서 바로 스트리밍하여 차트 순위를 올려보세요!</p>
+                <div class="streaming-links">
+                    <button class="streaming-btn melon" onclick="goToStreaming('melon')">멜론</button>
+                    <button class="streaming-btn genie" onclick="goToStreaming('genie')">지니</button>
+                    <button class="streaming-btn bugs" onclick="goToStreaming('bugs')">벅스</button>
+                    <button class="streaming-btn vibe" onclick="goToStreaming('vibe')">바이브</button>
+                    <button class="streaming-btn flo" onclick="goToStreaming('flo')">플로</button>
+                </div>
+                <div class="alert">
+                    💡 <strong>팁:</strong> 30초 이상 재생해야 차트에 반영됩니다!
+                </div>
+            </div>
+
+            <!-- 원클릭 라디오 신청 -->
+            <div class="card">
+                <h2><span class="card-icon">📻</span>원클릭 라디오 신청</h2>
+                <p>라디오 방송국에 곡을 신청하여 더 많은 사람들이 들을 수 있도록 해보세요!</p>
+                <div class="radio-request-links">
+                    <a href="sms:#8910&body=NCT DREAM BTF 신청합니다." class="radio-request-btn kbs">
+                        <span class="radio-icon">📻</span>
+                        KBS
+                    </a>
+                    <a href="sms:#8000&body=NCT DREAM BTF 신청합니다." class="radio-request-btn mbc">
+                        <span class="radio-icon">📻</span>
+                        MBC
+                    </a>
+                    <a href="sms:#1077&body=NCT DREAM BTF 신청합니다." class="radio-request-btn sbs">
+                        <span class="radio-icon">📻</span>
+                        SBS
+                    </a>
+                </div>
+                <div class="info-box">
+                    <strong>신청 정보:</strong><br>
+                    곡명: BTF<br>
+                    가수: NCT DREAM<br>
+                    앨범: NCT DREAM Album<br>
+                    <br>
+                    <strong>문자 신청 방법:</strong><br>
+                    • KBS: #8910 번호로 "NCT DREAM BTF 신청합니다"<br>
+                    • MBC: #8000 번호로 "NCT DREAM BTF 신청합니다"<br>
+                    • SBS: #1077 번호로 "NCT DREAM BTF 신청합니다"
+                </div>
+            </div>
+
+            <!-- 멜론 충전하기 -->
+            <div class="card">
+                <h2><span class="card-icon">💰</span>멜론 충전하기</h2>
+                <p>멜론 캐시를 충전하여 더 많은 스트리밍을 지원해보세요!</p>
+                <div class="quick-actions">
+                    <a href="https://www.melon.com/buy/meloncash/charge.htm" class="btn btn-success" target="_blank">멜론 캐시 충전</a>
+                    <a href="https://www.melon.com/muid/family/ticket/index.htm" class="btn btn-success" target="_blank">이용권 구매</a>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">1,000원</div>
+                        <div class="stat-label">최소 충전 금액</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">30일</div>
+                        <div class="stat-label">이용권 기간</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 원클릭 문자투표 -->
+            <div class="card">
+                <h2><span class="card-icon">📱</span>원클릭 문자투표</h2>
+                <p>각종 음악 방송 문자투표에 참여해보세요!</p>
+                <div class="quick-actions">
+                    <a href="sms:00000?body=NCT DREAM BTF" class="btn btn-warning">인기가요 투표</a>
+                    <a href="sms:00000?body=NCT DREAM BTF" class="btn btn-warning">뮤직뱅크 투표</a>
+                    <a href="sms:00000?body=NCT DREAM BTF" class="btn btn-warning">쇼챔피언 투표</a>
+                </div>
+                <div class="alert">
+                    ⚠️ <strong>주의:</strong> 문자 투표는 유료 서비스입니다. 요금을 확인하고 참여해주세요.
+                </div>
+            </div>
+
+            <!-- 공동구매 -->
+            <div class="card">
+                <h2><span class="card-icon">🛒</span>공동구매</h2>
+                <p>팬들과 함께 앨범 구매, 스트리밍 패스 등을 공동구매해보세요!</p>
+                <div class="quick-actions">
+                    <button class="btn" onclick="openGroupBuy('album')">앨범 공동구매</button>
+                    <button class="btn" onclick="openGroupBuy('streaming')">스트리밍 패스</button>
+                    <button class="btn" onclick="openGroupBuy('voting')">투표 패키지</button>
+                </div>
+                <div class="info-box">
+                    <strong>현재 진행 중인 공동구매:</strong><br>
+                    • 멜론 이용권 (10명 참여 중)<br>
+                    • 앨범 구매 (5명 참여 중)<br>
+                    • 투표 패키지 (15명 참여 중)
+                </div>
+            </div>
+        </div>
+
+                        <div class="footer">
+                    <p>마지막 업데이트: <span id="lastUpdate">2025-07-06 00:04:20</span></p>
+                    <p>NCT DREAM 차트 추적 시스템 | 팬덤 스트리밍 지원 플랫폼</p>
+                </div>
+    </div>
+
+    <!-- 가이드 섹션 -->
+    <div id="guideSection">
+        <div class="guide-header">
+            <h1>📚 스트리밍 가이드</h1>
+            <p>각 플랫폼별 스트리밍, 다운로드, 아이디 찾기 가이드</p>
+        </div>
+
+        <!-- 상위 메뉴 탭 -->
+        <div class="main-tabs">
+            <button class="main-tab active" onclick="switchMainTab('music')">음원 가이드</button>
+            <button class="main-tab" onclick="switchMainTab('other')">기타 가이드</button>
+        </div>
+
+        <!-- 음원 사이트 서비스 탭 -->
+        <div id="musicServiceTabs" class="service-tabs">
+            <button class="service-tab active" onclick="switchServiceTab('melon')">멜론</button>
+            <button class="service-tab" onclick="switchServiceTab('genie')">지니</button>
+            <button class="service-tab" onclick="switchServiceTab('bugs')">벅스</button>
+            <button class="service-tab" onclick="switchServiceTab('vibe')">바이브</button>
+            <button class="service-tab" onclick="switchServiceTab('flo')">플로</button>
+            <button class="service-tab" onclick="switchServiceTab('kakao')">카카오 뮤직</button>
+        </div>
+
+        <!-- 기타 서비스 탭 -->
+        <div id="otherServiceTabs" class="service-tabs" style="display: none;">
+            <button class="service-tab active" onclick="switchServiceTab('youtube')">유튜브</button>
+        </div>
+
+        <!-- 가이드 탭 -->
+        <div id="guideTabs" class="guide-tabs" style="display: none;">
+            <button class="guide-tab active" data-type="streaming" onclick="switchGuideTab('streaming')">스트리밍</button>
+            <button class="guide-tab" data-type="music" onclick="switchGuideTab('music')">음원 다운로드</button>
+            <button class="guide-tab" data-type="mv" onclick="switchGuideTab('mv')">뮤비 다운로드</button>
+            <button class="guide-tab" data-type="id" onclick="switchGuideTab('id')">아이디 찾기</button>
+        </div>
+
+        <!-- 디바이스 탭 -->
+        <div id="deviceTabs" class="device-tabs" style="display: none;">
+            <button class="device-tab active" data-device="mobile" onclick="switchDeviceTab('mobile')">모바일</button>
+            <button class="device-tab" data-device="pc" onclick="switchDeviceTab('pc')">PC</button>
+            </div>
+
+        <!-- 가이드 이미지 -->
+        <div class="guide-content" style="display: none;">
+            <div class="guide-image-container">
+                <img id="guideImage" class="guide-image" alt="가이드 이미지" />
+            </div>
+        </div>
+    </div>
+
+    <!-- 스트리밍 모달 -->
+    <div id="streamingModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeStreamingModal()">&times;</span>
+            <h2 id="modalTitle">스트리밍 가이드</h2>
+            <img id="streamingImage" class="modal-image" alt="스트리밍 가이드" />
+            <a id="streamingLink" class="modal-link" href="#" target="_blank">스트리밍 시작하기</a>
+        </div>
+    </div>
+
+    <!-- JavaScript 파일들을 body 끝에 로드 -->
+    <script src="js/dashboard.js"></script>
+    <script src="js/chart.js"></script>
+    <script src="js/guide.js"></script>
+</body>
+</html> 
