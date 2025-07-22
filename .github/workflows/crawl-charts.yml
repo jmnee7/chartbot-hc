@@ -51,6 +51,8 @@ jobs:
         # 변경 사항이 있을 때만 커밋
         if ! git diff --staged --quiet; then
           git commit -m "📈 차트 데이터 자동 업데이트"
+          # 원격 변경사항을 먼저 가져오기
+          git pull origin master --no-rebase
           git push origin master
         else
           echo "No changes to commit."
