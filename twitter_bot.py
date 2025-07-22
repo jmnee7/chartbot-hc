@@ -34,7 +34,7 @@ class TwitterBot:
     
     def setup_twitter_api(self):
         """
-        Twitter API 설정
+        Twitter API 설정 (OAuth 1.0a 우선, Bearer Token 보조)
         """
         try:
             # 환경변수에서 API 키 가져오기
@@ -44,38 +44,47 @@ class TwitterBot:
             access_token_secret = os.getenv('TWITTER_ACCESS_TOKEN_SECRET')
             bearer_token = os.getenv('TWITTER_BEARER_TOKEN')
             
+            # OAuth 1.0a 필수 키 확인
             if not all([api_key, api_secret, access_token, access_token_secret]):
-                print("⚠️ Twitter API 키가 설정되지 않았습니다.")
-                print("환경변수를 설정하거나 GitHub Secrets에 추가해주세요:")
+                print("⚠️ Twitter OAuth 1.0a 키가 설정되지 않았습니다.")
+                print("GitHub Secrets에 다음을 추가해주세요:")
                 print("- TWITTER_API_KEY")
                 print("- TWITTER_API_SECRET") 
                 print("- TWITTER_ACCESS_TOKEN")
                 print("- TWITTER_ACCESS_TOKEN_SECRET")
-                print("- TWITTER_BEARER_TOKEN")
+                print("\n💡 Bearer Token은 선택사항입니다 (TWITTER_BEARER_TOKEN)")
                 return
             
-            # Twitter API v1.1 (트윗 작성용)
+            # Twitter API v1.1 (OAuth 1.0a - 만료 없음, 안정적)
             auth = tweepy.OAuthHandler(api_key, api_secret)
             auth.set_access_token(access_token, access_token_secret)
             self.api = tweepy.API(auth, wait_on_rate_limit=True)
             
-            # Twitter API v2 (선택사항)
+            # Twitter API v2 (Bearer Token - 선택사항, 만료 있음)
             if bearer_token:
-                self.client = tweepy.Client(
-                    bearer_token=bearer_token,
-                    consumer_key=api_key,
-                    consumer_secret=api_secret,
-                    access_token=access_token,
-                    access_token_secret=access_token_secret,
-                    wait_on_rate_limit=True
-                )
+                try:
+                    self.client = tweepy.Client(
+                        bearer_token=bearer_token,
+                        consumer_key=api_key,
+                        consumer_secret=api_secret,
+                        access_token=access_token,
+                        access_token_secret=access_token_secret,
+                        wait_on_rate_limit=True
+                    )
+                    print("✅ Twitter API v2 (Bearer Token) 설정 완료")
+                except Exception as e:
+                    print(f"⚠️ Bearer Token 설정 실패 (API v1.1만 사용): {e}")
+                    self.client = None
+            else:
+                print("ℹ️ Bearer Token이 없어서 API v1.1만 사용합니다")
+                self.client = None
             
-            # API 연결 테스트
+            # API 연결 테스트 (OAuth 1.0a)
             try:
-                self.api.verify_credentials()
-                print("✅ Twitter API 연결 성공!")
+                user = self.api.verify_credentials()
+                print(f"✅ Twitter API v1.1 연결 성공! (@{user.screen_name})")
             except Exception as e:
-                print(f"❌ Twitter API 연결 실패: {e}")
+                print(f"❌ Twitter API v1.1 연결 실패: {e}")
                 self.api = None
                 
         except Exception as e:
