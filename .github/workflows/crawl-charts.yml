@@ -5,9 +5,9 @@ on:
     # 매 시간 정각에 실행 (UTC 기준)
     - cron: '0 * * * *'
   push:
-    branches: [ main ]
+    branches: [ master ]
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
   workflow_dispatch:
 
 jobs:
