@@ -361,29 +361,29 @@
   "2025-07-22 22:00:00": {
     "melon_top100": [
       {
-        "rank": 85,
-        "timestamp": "2025-07-22 22:00",
+        "rank": null,
+        "timestamp": "2025-07-22 22:00:00",
         "chart_type": "TOP100"
       }
     ],
     "melon_hot100": [
       {
-        "rank": 17,
+        "rank": 13,
         "timestamp": "2025-07-22 22:00",
         "chart_type": "HOT100"
       }
     ],
     "melon": [
       {
-        "rank": 85,
+        "rank": 13,
         "timestamp": "2025-07-22 22:00",
-        "chart_type": "TOP100"
+        "chart_type": "HOT100"
       }
     ],
     "genie": [
       {
-        "rank": null,
-        "timestamp": "2025-07-22 22:00:00"
+        "rank": 175,
+        "timestamp": "2025-07-22 22:00"
       }
     ],
     "bugs": [
@@ -400,7 +400,7 @@
     ],
     "flo": [
       {
-        "rank": 88,
+        "rank": 71,
         "timestamp": "2025-07-22 22:00"
       }
     ]
