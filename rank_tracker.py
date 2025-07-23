@@ -76,7 +76,9 @@ class RankTracker:
         """
         
         # 현재 데이터 저장
-        self.history[timestamp] = {}
+        self.history[timestamp] = {
+            "_processed_at": datetime.now().isoformat() # 매번 달라지는 정확한 타임스탬프 추가
+        }
         
         # 모든 서비스에 대해 타겟 곡 상태 저장 (차트아웃 포함)
         service_names = ["melon_top100", "melon_hot100", "melon", "genie", "bugs", "vibe", "flo"]

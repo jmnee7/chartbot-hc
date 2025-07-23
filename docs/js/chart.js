@@ -24,7 +24,7 @@ async function loadChartData() {
         });
 
         const chartData = {
-            labels: timestamps.map(t => new Date(t).toLocaleTimeString()),
+            labels: timestamps.map(t => new Date(t).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Seoul' })),
             datasets: Object.values(datasets).map(d => ({
                 ...d,
                 fill: true,

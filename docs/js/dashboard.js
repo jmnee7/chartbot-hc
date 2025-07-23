@@ -95,7 +95,7 @@ async function updateRealTimeChartStatus() {
             }
         }
 
-        document.getElementById('lastUpdate').textContent = new Date(latestTimestamp).toLocaleString();
+        document.getElementById('lastUpdate').textContent = new Date(latestTimestamp).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
 
     } catch (error) {
         console.error('실시간 차트 현황 업데이트 실패:', error);
