@@ -146,7 +146,7 @@ def filter_target_songs(chart_data, rank_tracker=None):
                         'title': title,
                         'artist': artist,
                         'album': prev_song.get('album', ''),
-                        'service': service_name,
+                        'service': prev_song.get('service', service_name),  # 실제 서비스 이름 사용
                         'timestamp': current_timestamp
                     }
                     filtered_songs.append(chart_out_song)

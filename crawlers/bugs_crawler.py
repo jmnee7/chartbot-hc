@@ -34,7 +34,7 @@ class BugsCrawler(BaseCrawler):
     
     def get_song_elements(self, soup):
         """
-        노래 요소들을 추출
+        노래 요소들을 추출 (새로운 구조에 맞게 변경)
         
         Args:
             soup: BeautifulSoup 객체
@@ -42,11 +42,11 @@ class BugsCrawler(BaseCrawler):
         Returns:
             list: 노래 요소들의 리스트
         """
-        return soup.select("table.list.trackList tbody tr")
+        return soup.select(".list.trackList.chart .track-list li")
     
     def parse_song_data(self, song_element):
         """
-        노래 데이터 파싱
+        노래 데이터 파싱 (새로운 구조에 맞게 변경)
         
         Args:
             song_element: BeautifulSoup 요소
@@ -56,23 +56,23 @@ class BugsCrawler(BaseCrawler):
         """
         try:
             # 순위
-            rank_element = song_element.select_one("div.ranking strong")
+            rank_element = song_element.select_one(".ranking .num")
             rank = safe_int(rank_element.text) if rank_element else 0
             
             # 제목
-            title_element = song_element.select_one("p.title a")
+            title_element = song_element.select_one(".title a")
             title = clean_text(title_element.text) if title_element else ""
             
             # 아티스트
-            artist_element = song_element.select_one("p.artist a")
+            artist_element = song_element.select_one(".artist a")
             artist = clean_text(artist_element.text) if artist_element else ""
             
             # 앨범
-            album_element = song_element.select_one("a.album")
+            album_element = song_element.select_one(".album")
             album = clean_text(album_element.text) if album_element else ""
             
             # 앨범 아트
-            albumart_element = song_element.select_one("a.thumbnail img")
+            albumart_element = song_element.select_one(".thumbnail img")
             albumart = albumart_element.get("src") if albumart_element else ""
             
             return {

@@ -53,7 +53,7 @@ function switchMainTab(tab) {
     // 서비스 탭 전환
     if (tab === 'music') {
         document.getElementById('musicServiceTabs').style.display = 'flex';
-        document.getElementById('otherServiceTabs').style.display = 'none';
+        document.getElementById('etcServiceTabs').style.display = 'none';
         
         // 음원 가이드의 첫 번째 서비스 탭 활성화
         document.querySelectorAll('#musicServiceTabs .service-tab').forEach(tab => {
@@ -63,7 +63,7 @@ function switchMainTab(tab) {
         currentService = 'melon';
     } else {
         document.getElementById('musicServiceTabs').style.display = 'none';
-        document.getElementById('otherServiceTabs').style.display = 'flex';
+        document.getElementById('etcServiceTabs').style.display = 'flex';
         
         // 기타 가이드의 첫 번째 서비스 탭 활성화
         document.querySelectorAll('#otherServiceTabs .service-tab').forEach(tab => {
@@ -218,11 +218,11 @@ function updateGuideImage() {
     // 이미지 로드 실패 시 기본 이미지 표시
     guideImage.onerror = function() {
         console.log(`이미지 로드 실패: ${imagePath}`);
-        this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDUwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjZjVmNWY1Ii8+CjxjaXJjbGUgY3g9IjI1MCIgY3k9IjE1MCIgcj0iODAiIGZpbGw9IiNkZGQiLz4KPHBhdGggZD0iTTIxMCAxMjBsNjAgMzAtNjAgMzB6IiBmaWxsPSIjOTk5Ii8+Cjx0ZXh0IHg9IjI1MCIgeT0iMjIwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNjY2IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZvbnQtd2VpZ2h0PSJib2xkIj7siqTtirjrjJTrqoXshJzrspTslrQ8L3RleHQ+Cjx0ZXh0IHg9IjI1MCIgeT0iMjUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNjY2IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTYiPuydtOuvuOyngCDssL3rs7XtlZzri6QuLi48L3RleHQ+Cjwvc3ZnPg==';
+        this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDUwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjZjVmNWY1Ii8+CjxjaXJjbGUgY3g9IjI1MCIgY3k9IjE1MCIgcj0iODAiIGZpbGw9IiNkZGQiLz4KPHBhdGggZD0iTTIxMCAxMjBsNjAgMzAtNjAgMzB6IiBmaWxsPSIjOTk5Ii8+Cjx0ZXh0IHg9IjI1MCIgeT0iMjIwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNjY2IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZvbnQtd2VpZ2h0PSJib2xkIj7siqTtirjrjJTrqoXshJzrspTslrQ8L3RleHQ+Cjx0ZXh0IHg9IjI1MCIgeT0iMjUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNjY2IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtd2VpZ2h0PSIxNiI+PuydtOuvuOyngCDssL3rs7XtlZzri6QuLi48L3RleHQ+Cjwvc3ZnPg==';
     };
     
     // 이미지 로드 성공 시 로그
     guideImage.onload = function() {
         console.log(`이미지 로드 성공: ${imagePath}`);
     };
-} 
+}
