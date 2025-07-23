@@ -47,9 +47,9 @@ class GenieCrawler(BaseCrawler):
             base_url = self.get_chart_url(chart_type)
             all_chart_data = []
             
-            # Top200의 경우 4개 페이지를 모두 크롤링
+            # Top100의 경우 2개 페이지만 크롤링 (총 100곡)
             if chart_type == "top_100":
-                pages = [1, 2, 3, 4]  # pg=1,2,3,4 (총 200곡)
+                pages = [1, 2]  # pg=1,2 (총 100곡)
             else:
                 pages = [1]  # 실시간 차트는 1페이지만
             
