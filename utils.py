@@ -87,12 +87,19 @@ def safe_int(value):
         return 0
 
 
+from datetime import datetime, timedelta
+
 def get_current_timestamp():
     """
-    현재 시간을 정각으로 맞춘 문자열로 반환하는 함수
+    현재 한국 시간(KST)을 정각으로 맞춘 문자열로 반환하는 함수
     
     Returns:
-        str: 현재 시간 (YYYY-MM-DD HH:00:00 형식)
+        str: 현재 KST 시간 (YYYY-MM-DD HH:00:00 형식)
     """
-    return time.strftime('%Y-%m-%d %H:00:00')
+    # UTC 현재 시간
+    now_utc = datetime.utcnow()
+    # KST (UTC+9)로 변환
+    now_kst = now_utc + timedelta(hours=9)
+    # 분과 초를 0으로 설정하여 정각으로 맞춤
+    return now_kst.replace(minute=0, second=0, microsecond=0).strftime('%Y-%m-%d %H:00:00')
     return time.strftime('%Y-%m-%d %H:%M:%S') 

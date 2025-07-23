@@ -4,7 +4,8 @@
 
 import os
 import tweepy
-from datetime import datetime
+import json
+from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 
 
@@ -24,13 +25,38 @@ class TwitterBot:
         "flo": "플로"
     }
     
-    def __init__(self):
+    def __init__(self, last_tweet_file="docs/last_tweet_timestamp.json"):
         """
         TwitterBot 초기화
         """
         self.api = None
         self.client = None
+        self.last_tweet_file = last_tweet_file
         self.setup_twitter_api()
+
+    def _get_last_tweet_timestamp(self) -> Optional[str]:
+        """
+        마지막 트윗 전송 시간을 파일에서 로드
+        """
+        if os.path.exists(self.last_tweet_file):
+            try:
+                with open(self.last_tweet_file, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    return data.get('last_tweet_timestamp')
+            except (json.JSONDecodeError, IOError) as e:
+                print(f"Error loading last tweet timestamp: {e}")
+        return None
+
+    def _save_last_tweet_timestamp(self, timestamp: str):
+        """
+        마지막 트윗 전송 시간을 파일에 저장
+        """
+        os.makedirs(os.path.dirname(self.last_tweet_file), exist_ok=True)
+        try:
+            with open(self.last_tweet_file, 'w', encoding='utf-8') as f:
+                json.dump({'last_tweet_timestamp': timestamp}, f, ensure_ascii=False, indent=2)
+        except IOError as e:
+            print(f"Error saving last tweet timestamp: {e}")
     
     def setup_twitter_api(self):
         """
@@ -111,11 +137,15 @@ class TwitterBot:
         Returns:
             List[str]: 트윗 내용 리스트
         """
+        # KST 현재 시간
+        now_utc = datetime.utcnow()
+        now_kst = now_utc + timedelta(hours=9)
+
         if current_time is None:
-            current_time = datetime.now().strftime("%H:%M")
+            current_time = now_kst.strftime("%H:%M")
         
         # 날짜 시간 포맷 (YYMMDD HH:MM)
-        today = datetime.now().strftime("%y%m%d")
+        today = now_kst.strftime("%y%m%d")
         formatted_time = f"{today} {current_time}"
         
         tweets = []
@@ -212,12 +242,15 @@ class TwitterBot:
         Returns:
             bool: 트윗 가능 시간 여부
         """
-        current_hour = datetime.now().hour
+        # KST 현재 시간
+        now_utc = datetime.utcnow()
+        now_kst = now_utc + timedelta(hours=9)
+        current_hour = now_kst.hour
         return 6 <= current_hour <= 22
     
     def tweet_rank_changes(self, rank_changes: Dict, current_time: Optional[str] = None) -> bool:
         """
-        순위 변화를 트윗으로 전송 (시간대 제한 포함)
+        순위 변화를 트윗으로 전송 (시간대 및 중복 트윗 방지 포함)
         
         Args:
             rank_changes (Dict): 순위 변화 정보
@@ -229,21 +262,31 @@ class TwitterBot:
         if not self.is_available():
             print("❌ Twitter API를 사용할 수 없습니다.")
             return False
-        
+
+        # KST 현재 시간 (정각으로 맞춤)
+        now_utc = datetime.utcnow()
+        now_kst = now_utc + timedelta(hours=9)
+        current_hour_str = now_kst.replace(minute=0, second=0, microsecond=0).strftime("%Y-%m-%d %H:00")
+
         # 시간대 체크
         if not self.is_tweet_time():
-            current_hour = datetime.now().hour
-            print(f"🌙 현재 시간 {current_hour:02d}시는 트윗 금지 시간대입니다. (허용: 06시~22시)")
+            print(f"🌙 현재 시간 {now_kst.hour:02d}시는 트윗 금지 시간대입니다. (허용: 06시~22시)")
             return True
-        
+
+        # 같은 시간대에 이미 트윗을 보냈는지 확인
+        last_tweet_timestamp = self._get_last_tweet_timestamp()
+        if last_tweet_timestamp == current_hour_str:
+            print(f"ℹ️ {current_hour_str}에 이미 트윗을 보냈습니다. 중복 트윗을 건너뜁니다.")
+            return True
+
         tweets = self.format_rank_change_tweet(rank_changes, current_time)
-        
+
         if not tweets:
             print("📊 타겟 곡이 차트에 없어서 트윗하지 않습니다.")
             return True
-        
+
         success_count = 0
-        
+
         for i, tweet_content in enumerate(tweets):
             try:
                 # 트윗 전송
@@ -255,18 +298,21 @@ class TwitterBot:
                     # API v1.1 사용
                     status = self.api.update_status(tweet_content)
                     print(f"✅ 트윗 {i+1}/{len(tweets)} 전송 성공! (ID: {status.id})")
-                
+
                 success_count += 1
-                
+
                 # 트윗 내용 출력
                 print("📝 트윗 내용:")
                 print("-" * 40)
                 print(tweet_content)
                 print("-" * 40)
-                
+
             except Exception as e:
                 print(f"❌ 트윗 {i+1}/{len(tweets)} 전송 실패: {e}")
-        
+
+        if success_count > 0: # 하나라도 성공하면 시간 저장
+            self._save_last_tweet_timestamp(current_hour_str)
+
         return success_count == len(tweets)
     
     def send_test_tweet(self) -> bool:
@@ -280,7 +326,10 @@ class TwitterBot:
             print("❌ Twitter API를 사용할 수 없습니다.")
             return False
         
-        test_content = f"🤖 음악차트 봇 테스트\n📅 {datetime.now().strftime('%Y-%m-%d %H:%M')}\n\n#테스트 #음악차트봇"
+        # KST 현재 시간
+        now_utc = datetime.utcnow()
+        now_kst = now_utc + timedelta(hours=9)
+        test_content = f"🤖 음악차트 봇 테스트\n📅 {now_kst.strftime('%Y-%m-%d %H:%M')}\n\n#테스트 #음악차트봇"
         
         try:
             if self.client:
@@ -299,4 +348,4 @@ class TwitterBot:
             
         except Exception as e:
             print(f"❌ 테스트 트윗 전송 실패: {e}")
-            return False 
+            return False
