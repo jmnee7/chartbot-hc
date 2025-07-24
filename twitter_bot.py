@@ -265,7 +265,7 @@ class TwitterBot:
             return False
 
         # KST 현재 시간 (정각으로 맞춤, utils 함수 사용)
-        current_hour_str = get_current_kst_timestamp_short() + ":00"  # KST 정각 형식
+        current_hour_str = get_current_kst_timestamp_short()  # KST 정각 형식 (2025-07-24 22:00)
         now_kst = datetime.fromisoformat(get_current_kst_iso())
 
         # 시간대 체크
@@ -279,7 +279,8 @@ class TwitterBot:
             print(f"ℹ️ {current_hour_str}에 이미 트윗을 보냈습니다. 중복 트윗을 건너뜁니다.")
             return True
 
-        tweets = self.format_rank_change_tweet(rank_changes, current_time)
+        # 트윗 내용도 정각 시간으로 표시하기 위해 None 전달 (자동 정각 계산)
+        tweets = self.format_rank_change_tweet(rank_changes, None)
 
         if not tweets:
             print("📊 타겟 곡이 차트에 없어서 트윗하지 않습니다.")

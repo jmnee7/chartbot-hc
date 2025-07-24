@@ -475,12 +475,11 @@ def main():
     rank_changes = rank_tracker.get_rank_changes(filtered_data, target_songs_only=False)
     
     # 트위터로 현재 순위 알림 (변화 유무 상관없이, KST 기준)
-    kst_now = datetime.fromisoformat(get_current_kst_iso())
-    current_time = kst_now.strftime("%H:%M")
+    # current_time을 None으로 전달해서 트위터 봇이 자동으로 정각 시간을 계산하도록 함
     try:
         if twitter_bot.is_available():
             print("\n🐦 트위터 봇 알림 전송 중...")
-            twitter_bot.tweet_rank_changes(rank_changes, current_time)
+            twitter_bot.tweet_rank_changes(rank_changes, None)
         else:
             print("\n⚠️ 트위터 API가 설정되지 않아 트윗을 보내지 않습니다.")
     except Exception as e:
