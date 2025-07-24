@@ -7,6 +7,7 @@ import tweepy
 import json
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
+from utils import get_current_timestamp, get_current_kst_timestamp_short, get_current_kst_iso
 
 
 class TwitterBot:
@@ -137,14 +138,15 @@ class TwitterBot:
         Returns:
             List[str]: 트윗 내용 리스트
         """
-        # KST 현재 시간
-        now_utc = datetime.utcnow()
-        now_kst = now_utc + timedelta(hours=9)
+        # KST 현재 시간 (utils 함수 사용)
+        kst_iso = get_current_kst_iso()
+        now_kst = datetime.fromisoformat(kst_iso)
 
         if current_time is None:
-            current_time = now_kst.strftime("%H:%M")
+            # 정각으로 강제 조정 (예: 11:32 -> 11:00)
+            current_time = now_kst.replace(minute=0, second=0, microsecond=0).strftime("%H:%M")
         
-        # 날짜 시간 포맷 (YYMMDD HH:MM)
+        # 날짜 시간 포맷 (YYMMDD HH:00) - 정각으로 표시
         today = now_kst.strftime("%y%m%d")
         formatted_time = f"{today} {current_time}"
         
@@ -242,9 +244,8 @@ class TwitterBot:
         Returns:
             bool: 트윗 가능 시간 여부
         """
-        # KST 현재 시간
-        now_utc = datetime.utcnow()
-        now_kst = now_utc + timedelta(hours=9)
+        # KST 현재 시간 (utils 함수 사용)
+        now_kst = datetime.fromisoformat(get_current_kst_iso())
         current_hour = now_kst.hour
         return 6 <= current_hour <= 22
     
@@ -263,10 +264,9 @@ class TwitterBot:
             print("❌ Twitter API를 사용할 수 없습니다.")
             return False
 
-        # KST 현재 시간 (정각으로 맞춤)
-        now_utc = datetime.utcnow()
-        now_kst = now_utc + timedelta(hours=9)
-        current_hour_str = now_kst.replace(minute=0, second=0, microsecond=0).strftime("%Y-%m-%d %H:00")
+        # KST 현재 시간 (정각으로 맞춤, utils 함수 사용)
+        current_hour_str = get_current_kst_timestamp_short() + ":00"  # KST 정각 형식
+        now_kst = datetime.fromisoformat(get_current_kst_iso())
 
         # 시간대 체크
         if not self.is_tweet_time():
@@ -326,9 +326,8 @@ class TwitterBot:
             print("❌ Twitter API를 사용할 수 없습니다.")
             return False
         
-        # KST 현재 시간
-        now_utc = datetime.utcnow()
-        now_kst = now_utc + timedelta(hours=9)
+        # KST 현재 시간 (utils 함수 사용)
+        now_kst = datetime.fromisoformat(get_current_kst_iso())
         test_content = f"🤖 음악차트 봇 테스트\n📅 {now_kst.strftime('%Y-%m-%d %H:%M')}\n\n#테스트 #음악차트봇"
         
         try:

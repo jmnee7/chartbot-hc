@@ -10,7 +10,7 @@ from crawlers.genie_crawler import GenieCrawler
 from crawlers.bugs_crawler import BugsCrawler
 from crawlers.vibe_crawler import VibeCrawler
 from crawlers.flo_crawler import FloCrawler
-from utils import get_current_timestamp
+from utils import get_current_timestamp, get_current_kst_timestamp_short, get_current_kst_iso
 from target_songs import is_target_song, get_target_info
 from rank_tracker import RankTracker
 from twitter_bot import TwitterBot
@@ -106,7 +106,7 @@ def filter_target_songs(chart_data, rank_tracker=None):
     
     # 각 서비스별로 처리 (효율적인 처리를 위해 chart_data 키 기반으로 순회)
     service_names = ["melon_top100", "melon_hot100", "melon", "genie", "bugs", "vibe", "flo"]
-    current_timestamp = datetime.now().strftime("%Y-%m-%d %H:00")
+    current_timestamp = get_current_kst_timestamp_short()
     
     for service_name in service_names:
         filtered_songs = []
@@ -122,7 +122,7 @@ def filter_target_songs(chart_data, rank_tracker=None):
                 song_key = tracker._get_song_key(artist, title)
                 current_target_songs.add(song_key)
                 
-                # timestamp 추가
+                # timestamp 추가 (KST 형식으로 통일)
                 song_with_timestamp = song.copy()
                 song_with_timestamp['timestamp'] = current_timestamp
                 filtered_songs.append(song_with_timestamp)
@@ -147,7 +147,7 @@ def filter_target_songs(chart_data, rank_tracker=None):
                         'artist': artist,
                         'album': prev_song.get('album', ''),
                         'service': prev_song.get('service', service_name),  # 실제 서비스 이름 사용
-                        'timestamp': current_timestamp
+                        'timestamp': current_timestamp  # 모든 서비스 동일한 KST 형식
                     }
                     filtered_songs.append(chart_out_song)
                     print(f"📉 [{service_name.upper()}] 차트아웃: {artist} - {title}")
@@ -474,8 +474,9 @@ def main():
     # 순위 변화 계산 (이미 필터링된 데이터 사용)
     rank_changes = rank_tracker.get_rank_changes(filtered_data, target_songs_only=False)
     
-    # 트위터로 현재 순위 알림 (변화 유무 상관없이)
-    current_time = datetime.now().strftime("%H:%M")
+    # 트위터로 현재 순위 알림 (변화 유무 상관없이, KST 기준)
+    kst_now = datetime.fromisoformat(get_current_kst_iso())
+    current_time = kst_now.strftime("%H:%M")
     try:
         if twitter_bot.is_available():
             print("\n🐦 트위터 봇 알림 전송 중...")

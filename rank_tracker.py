@@ -7,6 +7,7 @@ import os
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 from target_songs import is_target_song
+from utils import get_current_kst_iso
 
 
 class RankTracker:
@@ -77,7 +78,7 @@ class RankTracker:
         
         # 현재 데이터 저장
         self.history[timestamp] = {
-            "_processed_at": datetime.now().isoformat() # 매번 달라지는 정확한 타임스탬프 추가
+            "_processed_at": get_current_kst_iso() # 매번 달라지는 정확한 타임스탬프 추가
         }
         
         # 모든 서비스에 대해 타겟 곡 상태 저장 (차트아웃 포함)
@@ -101,10 +102,10 @@ class RankTracker:
                         
                         self.history[timestamp][service_name].append(song_info)
             else:
-                # 차트에 없는 경우 rank: null로 저장
+                # 차트에 없는 경우 rank: null로 저장 (KST 기준)
                 song_info = {
                     "rank": None,
-                    "timestamp": timestamp
+                    "timestamp": timestamp  # timestamp는 이미 KST 정각 형식
                 }
                 # 멜론 서비스의 경우 적절한 차트 타입 설정
                 if service_name == "melon_top100":
