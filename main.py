@@ -14,6 +14,7 @@ from utils import get_current_timestamp, get_current_kst_timestamp_short, get_cu
 from target_songs import is_target_song, get_target_info
 from rank_tracker import RankTracker
 from twitter_bot import TwitterBot
+from youtube_crawler import get_youtube_stats_for_dashboard
 
 
 def init_crawlers():
@@ -497,6 +498,10 @@ def main():
     
     # 타겟 곡 웹페이지 생성
     generate_html_page(filtered_data.copy(), is_filtered=True)
+    
+    # YouTube 통계 수집
+    print("\n📹 YouTube 통계 수집 중...")
+    youtube_stats = get_youtube_stats_for_dashboard()
     
     print("Music chart crawling completed successfully!")
 

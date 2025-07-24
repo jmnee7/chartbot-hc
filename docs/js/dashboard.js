@@ -138,18 +138,40 @@ function openGroupBuy(type) {
     }
 }
 
-// 유튜브 조회수/좋아요 가져오기 (모의 데이터)
-function loadYouTubeStats() {
-    // 실제 YouTube API 키가 필요한 부분이지만, 임시로 모의 데이터 사용
-    setTimeout(() => {
+// 유튜브 조회수/좋아요 가져오기 (실제 데이터)
+async function loadYouTubeStats() {
+    try {
+        const response = await fetch('youtube_stats.json');
+        
+        if (response.ok) {
+            const data = await response.json();
+            
+            const viewCountElement = document.getElementById('viewCount');
+            const likeCountElement = document.getElementById('likeCount');
+            
+            if (viewCountElement) {
+                viewCountElement.textContent = data.view_count_formatted || '-';
+            }
+            if (likeCountElement) {
+                likeCountElement.textContent = data.like_count_formatted || '-';
+            }
+            
+            console.log('✅ YouTube 통계 로드 성공:', data);
+        } else {
+            throw new Error('YouTube 통계 파일을 찾을 수 없습니다.');
+        }
+    } catch (error) {
+        console.error('❌ YouTube 통계 로드 실패:', error);
+        
+        // 실패한 경우 실시간 순위와 동일하게 "-" 표시
         const viewCountElement = document.getElementById('viewCount');
         const likeCountElement = document.getElementById('likeCount');
         
         if (viewCountElement) {
-            viewCountElement.textContent = '1,234,567'; // 실제 데이터로 교체 필요
+            viewCountElement.textContent = '-';
         }
         if (likeCountElement) {
-            likeCountElement.textContent = '45,678'; // 실제 데이터로 교체 필요
+            likeCountElement.textContent = '-';
         }
-    }, 1000);
+    }
 }
