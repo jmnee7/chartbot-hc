@@ -11,7 +11,7 @@ body {
 /* Header Styles */
 .header {
     background-color: #ffffff;
-    padding: 20px;
+    padding: 10px;
     text-align: center;
     border-bottom: 1px solid #dee2e6;
     position: sticky;
@@ -20,7 +20,7 @@ body {
 }
 
 .header h1 {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: #343a40;
     margin-bottom: 0.5rem;
@@ -204,20 +204,24 @@ body {
 }
 
 .streaming-btn, .btn {
-    flex-grow: 1;
+    flex-grow: 0;
+    flex-basis: auto;
     text-align: center;
-    padding: 12px;
-    border-radius: 8px;
+    padding: 10px 15px;
+    border-radius: 25px;
     color: #fff;
     text-decoration: none;
     font-weight: 600;
-    transition: opacity 0.2s;
+    transition: all 0.3s ease;
     border: none;
     cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .streaming-btn:hover, .btn:hover {
-    opacity: 0.85;
+    opacity: 1;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .btn {
@@ -288,7 +292,7 @@ body {
 /* Footer */
 .footer {
     text-align: center;
-    padding: 40px 20px;
+    padding: 20px 20px;
     margin-top: 40px;
     background-color: #ffffff;
     border-top: 1px solid #dee2e6;
@@ -375,4 +379,11 @@ body {
     .youtube-section .youtube-stats-display {
         flex-direction: column;
     }
+}
+
+.card h2 small {
+    font-size: 0.6em; /* 기존 폰트 크기의 0.6배 */
+    font-weight: normal;
+    margin-left: 10px;
+    color: #6c757d;
 }

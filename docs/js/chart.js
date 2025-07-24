@@ -51,7 +51,8 @@ async function loadChartData() {
                         beginAtZero: false,
                         ticks: {
                             stepSize: 10
-                        }
+                        },
+                        max: 100 // 100위까지만 표시
                     }
                 },
                 plugins: {

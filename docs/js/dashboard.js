@@ -97,9 +97,6 @@ async function updateRealTimeChartStatus() {
 
         document.getElementById('lastUpdate').textContent = new Date(latestTimestamp + '+09:00').toLocaleString('ko-KR', { 
             timeZone: 'Asia/Seoul',
-            year: 'numeric',
-            month: '2-digit', 
-            day: '2-digit',
             hour: '2-digit',
             minute: '2-digit',
             hour12: false
