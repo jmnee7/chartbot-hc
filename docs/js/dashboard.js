@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     updateRealTimeChartStatus();
-    loadChartData();
-    loadYouTubeStats(); // 유튜브 통계 로드 추가
+    // 그래프 섹션 제거로 차트 데이터 로드는 비활성화
+    // loadChartData();
+    loadYouTubeStats(); // 유튜브 통계 로드
     setInterval(updateRealTimeChartStatus, 60000); // 1분마다 업데이트
 
     // 초기 뷰 설정
@@ -95,12 +96,12 @@ async function updateRealTimeChartStatus() {
             }
         }
 
-        document.getElementById('lastUpdate').textContent = new Date(latestTimestamp + '+09:00').toLocaleString('ko-KR', { 
-            timeZone: 'Asia/Seoul',
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false
-        });
+        const d = new Date(latestTimestamp + '+09:00');
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        const HH = String(d.getHours()).padStart(2, '0');
+        document.getElementById('lastUpdate').textContent = `${yyyy}.${mm}.${dd} ${HH}:00`;
 
     } catch (error) {
         console.error('실시간 차트 현황 업데이트 실패:', error);
@@ -172,3 +173,5 @@ async function loadYouTubeStats() {
         }
     }
 }
+
+// 목표 진행률 UI 제거로 관련 함수 삭제

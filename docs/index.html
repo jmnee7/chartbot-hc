@@ -9,19 +9,31 @@
     <link rel="stylesheet" href="styles/main.css?v=2.5">
   </head>
   <body>
-    <header class="header">
-      <h1 onclick="showView('dashboard')" style="cursor: pointer;">NCT DREAM 스트리밍</h1>
-      <nav class="main-nav">
-        <a href="#" class="nav-item active" onclick="showView('dashboard')">대시보드</a>
-        <a href="#" class="nav-item" onclick="showView('guide')">스트리밍 가이드</a>
-      </nav>
-    </header>
+    <!-- Top App Bar -->
+    <div class="topbar">
+      <div class="topbar__title">🐻 해찬 스트리밍</div>
+      <div class="topbar__actions">
+        <button class="hamburger" id="hamburgerBtn" aria-label="메뉴 열기" aria-expanded="false">
+          <span class="hamburger__bars"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Slide-out Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+      <div class="mobile-menu__header">
+        <button class="menu-close" id="menuCloseBtn" aria-label="닫기">✕</button>
+      </div>
+      <a href="#" onclick="showView('dashboard'); closeMenu(); return false;">대시보드</a>
+      <a href="#" onclick="showView('guide'); closeMenu(); return false;">스트리밍 가이드</a>
+    </div>
+    <div class="backdrop" id="menuBackdrop"></div>
 
     <main id="dashboard-view" class="container">
       <div class="dashboard-grid">
         <section class="chart-layout">
           <div class="card">
-            <h2><span class="card-icon">🏆</span>실시간 순위 <small>(마지막 업데이트: <span id="lastUpdate"></span>)</small></h2>
+            <h2><span class="card-icon">🏆</span>실시간 순위 <small>(<span id="lastUpdate"></span>)</small></h2>
             <div class="rank-grid">
               <div class="rank-card">
                 <div class="rank-header">
@@ -85,54 +97,74 @@
               </div>
             </div>
           </div>
-          <div class="card">
-            <h2><span class="card-icon">📊</span>순위 추이</h2>
-            <canvas id="rankChart"></canvas>
-          </div>
         </section>
 
-        <div class="card">
-          <h2><span class="card-icon">🎵</span>바로 스트리밍</h2>
-          <div class="streaming-links">
-            <a href="#" class="streaming-btn melon" onclick="goToStreaming('melon')">멜론</a>
-            <a href="#" class="streaming-btn genie" onclick="goToStreaming('genie')">지니</a>
-            <a href="#" class="streaming-btn bugs" onclick="goToStreaming('bugs')">벅스</a>
-            <a href="#" class="streaming-btn vibe" onclick="goToStreaming('vibe')">바이브</a>
-            <a href="#" class="streaming-btn flo" onclick="goToStreaming('flo')">플로</a>
-          </div>
-        </div>
-
-        <div class="card youtube-section">
-          <h2><span class="card-icon">▶️</span>뮤직비디오</h2>
-          <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/3rsBWr3JOUI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          </div>
-          <div class="youtube-stats-display">
-            <div class="stat-item">
-              <span class="stat-label">조회수</span>
-              <span class="stat-value" id="viewCount">-</span>
+        <!-- Quick Actions Layout -->
+        <div class="quick-actions-row two-col">
+          <div class="card">
+            <h2 class="section-title"><span class="emoji">🎵</span>원클릭 스트리밍</h2>
+            <div class="streaming-links">
+              <a href="#" class="streaming-btn melon" onclick="goToStreaming('melon')">멜론</a>
+              <a href="#" class="streaming-btn genie" onclick="goToStreaming('genie')">지니</a>
+              <a href="#" class="streaming-btn bugs" onclick="goToStreaming('bugs')">벅스</a>
+              <a href="#" class="streaming-btn vibe" onclick="goToStreaming('vibe')">바이브</a>
+              <a href="#" class="streaming-btn flo" onclick="goToStreaming('flo')">플로</a>
             </div>
-            <div class="stat-item">
-              <span class="stat-label">좋아요</span>
-              <span class="stat-value" id="likeCount">-</span>
+          </div>
+
+          <div class="card">
+            <h2 class="section-title"><span class="emoji">📱</span>원클릭 문자투표</h2>
+            <div class="quick-actions">
+              <a href="sms:00000?body=NCT DREAM BTF" class="btn">인기가요</a>
+              <a href="sms:00000?body=NCT DREAM BTF" class="btn">뮤직뱅크</a>
+              <a href="sms:00000?body=NCT DREAM BTF" class="btn">음악중심</a>
             </div>
           </div>
         </div>
 
-        <div class="card">
-          <h2><span class="card-icon">📻</span>라디오 신청</h2>
-          <div class="radio-links">
-            <a href="sms:#8910&body=NCT DREAM BTF 신청합니다." class="btn">KBS</a>
-            <a href="sms:#8000&body=NCT DREAM BTF 신청합니다." class="btn">MBC</a>
-            <a href="sms:#1077&body=NCT DREAM BTF 신청합니다." class="btn">SBS</a>
+        <div class="quick-actions-row three-col">
+          <div class="card">
+            <h2 class="section-title"><span class="emoji">🛒</span>공동구매</h2>
+            <div class="group-buy-links">
+              <button class="btn" onclick="openGroupBuy('album')">공동구매 1</button>
+              <button class="btn" onclick="openGroupBuy('streaming')">공동구매 1</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2 class="section-title"><span class="emoji">💰</span>멜론 충전하기</h2>
+            <div class="quick-actions">
+              <a href="https://www.melon.com/buy/meloncash/charge.htm" class="btn" target="_blank">멜론 캐시 충전</a>
+              <a href="https://www.melon.com/muid/family/ticket/index.htm" class="btn" target="_blank">이용권 구매</a>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2 class="section-title"><span class="emoji">📻</span>원클릭 라디오 신청</h2>
+            <div class="radio-links">
+              <a href="sms:#8910&body=NCT DREAM BTF 신청합니다." class="btn">KBS</a>
+              <a href="sms:#8000&body=NCT DREAM BTF 신청합니다." class="btn">MBC</a>
+              <a href="sms:#1077&body=NCT DREAM BTF 신청합니다." class="btn">SBS</a>
+            </div>
           </div>
         </div>
 
-        <div class="card">
-          <h2><span class="card-icon">🛒</span>공동구매 참여</h2>
-          <div class="group-buy-links">
-            <button class="btn" onclick="openGroupBuy('album')">앨범 공동구매</button>
-            <button class="btn" onclick="openGroupBuy('streaming')">스트리밍 패스</button>
+        <div class="quick-actions-row">
+          <div class="card youtube-section" style="grid-column: 1 / -1;">
+            <h2 class="section-title"><span class="emoji">📈</span>유튜브 추이</h2>
+            <div class="video-container">
+              <iframe src="https://www.youtube.com/embed/3rsBWr3JOUI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="youtube-stats-display">
+              <div class="stat-item">
+                <span class="stat-label">조회수</span>
+                <span class="stat-value" id="viewCount">-</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">좋아요</span>
+                <span class="stat-value" id="likeCount">-</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -188,5 +220,31 @@
     <script src="js/dashboard.js?v=2.5"></script>
     <script src="js/chart.js?v=2.5"></script>
     <script src="js/guide.js?v=2.5"></script>
+    <script>
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const backdrop = document.getElementById('menuBackdrop');
+
+      function openMenu() {
+        mobileMenu.classList.add('open');
+        backdrop.classList.add('visible');
+        hamburgerBtn.setAttribute('aria-expanded', 'true');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+      }
+      function closeMenu() {
+        mobileMenu.classList.remove('open');
+        backdrop.classList.remove('visible');
+        hamburgerBtn.setAttribute('aria-expanded', 'false');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+      }
+      function toggleMenu() {
+        if (mobileMenu.classList.contains('open')) { closeMenu(); } else { openMenu(); }
+      }
+
+      hamburgerBtn.addEventListener('click', toggleMenu);
+      document.getElementById('menuCloseBtn').addEventListener('click', closeMenu);
+      backdrop.addEventListener('click', closeMenu);
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+    </script>
   </body>
   </html>
