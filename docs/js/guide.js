@@ -42,6 +42,16 @@ const typeNames = {
     stability: '끊김 방지'
 };
 
+// Encode only the filename segment to safely handle spaces/plus signs/Korean
+function encodeFilePath(path) {
+    if (!path) return path;
+    const lastSlash = path.lastIndexOf('/');
+    if (lastSlash === -1) return encodeURIComponent(path);
+    const dir = path.slice(0, lastSlash + 1);
+    const file = path.slice(lastSlash + 1);
+    return dir + encodeURIComponent(file);
+}
+
 // 상위 메뉴 탭 전환 함수
 function switchMainTab(tab) {
     currentMainTab = tab;
@@ -254,7 +264,7 @@ function updateGuideImage() {
             };
             const file = map[currentIdDetail];
             if (file) {
-                imagePath = `assets/guide/generateid/dualnumber/${file}`;
+                imagePath = encodeFilePath(`assets/guide/generateid/dualnumber/${file}`);
             }
         } else if (currentIdCategory === 'id') {
             const map = {
@@ -267,7 +277,7 @@ function updateGuideImage() {
             };
             const file = map[currentIdDetail];
             if (file) {
-                imagePath = `assets/guide/generateid/id/${file}`;
+                imagePath = encodeFilePath(`assets/guide/generateid/id/${file}`);
             }
         }
     } else if (currentGuideType === 'streaming') {
@@ -298,7 +308,7 @@ function updateGuideImage() {
     }
     
     const guideImage = document.getElementById('guideImage');
-    guideImage.src = imagePath;
+    guideImage.src = imagePath ? imagePath : '';
     // 단일 이미지 모드에서는 클릭 이벤트 제거
     guideImage.onclick = null;
     // 디바이스 텍스트 결정
@@ -343,24 +353,24 @@ function updateVoteGuideImage(key) {
     // 아이디 가이드와 동일하게 단일 이미지 엘리먼트만 사용해 레이아웃 변화를 최소화
     const listMap = {
         mubit: [
-            'assets/guide/vote/뮤빗1.png',
-            'assets/guide/vote/뮤빗2.png'
+            encodeFilePath('assets/guide/vote/뮤빗1.png'),
+            encodeFilePath('assets/guide/vote/뮤빗2.png')
         ],
         starplanet: [
-            'assets/guide/vote/스타플래닛1.png',
-            'assets/guide/vote/스타플래닛2.png'
+            encodeFilePath('assets/guide/vote/스타플래닛1.png'),
+            encodeFilePath('assets/guide/vote/스타플래닛2.png')
         ],
         champ: [
-            'assets/guide/vote/아이돌챔프1.png',
-            'assets/guide/vote/아이돌챔프2.png'
+            encodeFilePath('assets/guide/vote/아이돌챔프1.png'),
+            encodeFilePath('assets/guide/vote/아이돌챔프2.png')
         ],
         fancast: [
-            'assets/guide/vote/팬캐스트 투표권 모으기.png',
-            'assets/guide/vote/팬캐스트 투표하기.png'
+            encodeFilePath('assets/guide/vote/팬캐스트 투표권 모으기.png'),
+            encodeFilePath('assets/guide/vote/팬캐스트 투표하기.png')
         ],
         higher: [
-            'assets/guide/vote/하이어1.png',
-            'assets/guide/vote/하이어2.png'
+            encodeFilePath('assets/guide/vote/하이어1.png'),
+            encodeFilePath('assets/guide/vote/하이어2.png')
         ]
     };
     const paths = listMap[key] || [];
