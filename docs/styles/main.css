@@ -72,11 +72,10 @@ body {
 .banner-dots button { width: 8px; height: 8px; border-radius: 50%; border: none; background: #e5e7eb; cursor: pointer; }
 .banner-dots button.active { background: #0d6efd; }
 
-/* Bottom-sheet Modal (Group Buy) */
-.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: none; align-items: flex-end; justify-content: center; }
+/* Centered modal (scrollable) */
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 16px; }
 .modal.show { display: flex; }
-.modal-content { background:#fff; width: 100%; max-width: 640px; border-radius: 16px 16px 0 0; padding: 16px; box-shadow: 0 -8px 24px rgba(0,0,0,0.15); transform: translateY(100%); animation: slideup 0.25s ease forwards; }
-@keyframes slideup { to { transform: translateY(0); } }
+.modal-content { background:#fff; width: 100%; max-width: 720px; border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
 /* Card */
 .card { background-color: #ffffff; border-radius: 14px; padding: 22px; border: 1px solid #eef1f4; box-shadow: 0 6px 18px rgba(17, 24, 39, 0.04); }
@@ -146,14 +145,17 @@ body {
 
 /* Home shortcut grid (2x2 like quick tiles) */
 .home-shortcuts-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.home-shortcut { display: flex; align-items: center; justify-content: center; padding: 14px; border-radius: 14px; background: #f8fafc; border: 1.5px solid #e5f6ef; color: #111827; font-weight: 600; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.08); transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease; cursor: pointer; width: 100%; }
+button.home-shortcut, a.home-shortcut { -webkit-appearance: none; appearance: none; border: none; text-decoration: none; }
+.home-shortcut { display: flex; align-items: center; justify-content: center; padding: 14px; border-radius: 14px; background: #f8fafc; border: 1.5px solid #e5f6ef; color: #111827; font-weight: 600; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.08); transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease; cursor: pointer; width: 100%; box-sizing: border-box; }
 .home-shortcut:hover { background: #c81054; border-color: #c81054; color: #ffffff; box-shadow: 0 6px 18px rgba(200, 16, 84, 0.18); }
 .home-shortcut:focus-visible { outline: 2px solid #ffd1e1; outline-offset: 2px; }
 .home-shortcut:active { transform: scale(0.98); }
+/* iOS Safari reset to prevent default inner padding/rounded for button */
+button.home-shortcut { border-radius: 14px; background: #f8fafc; }
 
 @media (max-width: 480px) {
   .home-shortcuts-grid { gap: 10px; }
-  .home-shortcut { padding: 12px; font-size: 0.95rem; }
+  .home-shortcut { padding: 12px; font-size: 0.95rem; min-height: 54px; }
 }
 
 /* Desktop sizing adjustments */
@@ -248,6 +250,8 @@ body {
   line-height: 1.5; 
   font-size: 0.95rem;
   white-space: pre-wrap; 
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }
 .guide-text a { color: #c2410c; font-weight: 700; text-decoration: underline; }
 .guide-text .title { display: block; font-weight: 900; font-size: 1.05rem; margin-bottom: 8px; color: #5a1d0e; }

@@ -252,7 +252,7 @@ function openGroupBuyModal(vendor) {
 
     // 벤더별 안내 텍스트 (가이드 화면과 동일 데이터)
     const vendorText = {
-        minirecord: `미니레코드 공동구매\n\n▪️공구 기간: ~ 9월 7일 23:59 (KST)\n\n▪️공구 특전: 엽서 1종\n\n▪️공구 가격&링크\n💿 Tin Case Ver. 29,700원\nhttps://minirecord.shop/product/detail.html?product_no=2326\n\n💿 Savory Ver. 14,500원\nhttps://minirecord.shop/product/detail.html?product_no=2325\n\n💿 Full Spread(랜덤) Ver. 14,500원\nhttps://minirecord.shop/product/detail.html?product_no=2328\n\n💿 Full Spread(세트) Ver. 43,500원\nhttps://minirecord.shop/product/detail.html?product_no=2327\n\n※ 앨범 발매 후 온•오프라인 물량에 차질이 있을 수 있으므로 최대한 >예약 판매 기간 내에< 에 많은 구매 부탁드립니다.`,
+        minirecord: `미니레코드 공동구매\n\n▪️공구 기간: ~ 9월 7일 23:59 (KST)\n\n▪️공구 특전: 엽서 1종\n\n▪️공구 가격&링크\n💿 Tin Case Ver. 29,700원\nhttp://bit.ly/423DcoR\n\n💿 Savory Ver. 14,500원\nhttps://bit.ly/47mHYl0\n\n💿 Full Spread(랜덤) Ver. 14,500원\nhttps://bit.ly/4pfGPlM\n\n💿 Full Spread(세트) Ver. 43,500원\nhttps://bit.ly/47mg5JH\n\n※ 앨범 발매 후 온•오프라인 물량에 차질이 있을 수 있으므로 최대한 >예약 판매 기간 내에< 에 많은 구매 부탁드립니다.`,
         applemusic: `애플뮤직 공동구매\n\n▪️공구 기간: ~ 9월 7일 23:59(KST)\n\n▪️공구 특전: 스티커 1종\n\n🔗공구 가격 & 링크\n💿Tin Case Ver. 30,700원\nhttps://abit.ly/acaxvd\n\n💿 Savory Ver. 14,500원\nhttps://abit.ly/fvgwev\n\n💿 Full Spread(랜덤) Ver. 14,500원\nhttps://abit.ly/rvw5i6\n\n💿 Full Spread(세트) ver. 43,200원\nhttps://abit.ly/vvau2w\n\n※ 앨범 발매 후 온•오프라인 물량에 차질이 있을 수 있으므로 최대한 >예약 판매 기간 내에< 에 많은 구매 부탁드립니다.`,
         everline: `에버라인 공동구매\n\n▪️공구 기간: ~ 9월 8일 23:59 (KST)\n\n▪️공구 특전: 핀버튼 3종 중 랜덤 1종\n\n▪️공구 가격&링크\n💿 Tin Case Ver. 30,500₩\nhttps://bit.ly/45XUyWC\n\n💿 Savory Ver. 14,700\nhttps://bit.ly/4fJkn01\n\n💿 Full Spread(랜덤) Ver. 14,700₩\nhttps://bit.ly/45XUGp4\n\n💿 Full Spread(세트) Ver. 43,600₩\nhttps://bit.ly/4mQLk40\n\n* 앨범 발매 후 온•오프라인 물량에 차질이 있을 수 있으므로\n최대한 >예약 판매 기간 내에< 많은 구매 부탁드립니다.`,
         allmd: `올엠디 공동구매\n\n▪️공구 기간 : ~ 9월 7일 23:59 (KST)\n\n▪️공구 특전: 스티커 1종\n\n▪️공구 가격\n💿Tin Case Ver. 29,500원\n💿Savory Ver. 14,400원\n💿Full Spread Ver. (랜덤) 14,400원\n💿Full Spread Ver. (세트) 42,600원\n\n🔗공구 링크 \nhttps://buly.kr/9BWCsD7\n\n※ 앨범 발매 후 온•오프라인 물량에 차질이 있을 수 있으므로 최대한 >예약 판매 기간 내에< 에 많은 구매 부탁드립니다.`
@@ -331,10 +331,16 @@ function openQuickModal(mode) {
             { label: '올엠디', key: 'allmd' }
         ];
         vendors.forEach(v => {
-            const btn = document.createElement('a');
+            const btn = document.createElement('button');
             btn.className = 'btn';
-            btn.href = '#';
-            btn.onclick = function(e) { e.preventDefault(); openGroupBuyModal(v.key); };
+            btn.type = 'button';
+            btn.onclick = function(e) {
+                // 모달 내부 클릭이 배경 닫기로 전파되지 않도록 방지
+                e.preventDefault();
+                e.stopPropagation();
+                // 같은 모달을 재활용하여 상세로 전환
+                openGroupBuyModal(v.key);
+            };
             btn.textContent = v.label;
             body.appendChild(btn);
         });
