@@ -36,15 +36,40 @@ body {
 .mobile-menu__header { display: flex; justify-content: flex-end; align-items: center; height: 40px; }
 .menu-close { border: none; background: #f1f3f5; color: #111827; border-radius: 8px; padding: 6px 10px; cursor: pointer; }
 .menu-close:hover { background: #e9ecef; }
-.mobile-menu a { padding: 12px 10px; border-radius: 10px; color: #212529; text-decoration: none; font-weight: 600; }
+.mobile-menu a { display: block; padding: 12px 10px; border-radius: 10px; color: #212529; text-decoration: none; font-weight: 600; }
 .mobile-menu a:hover { background: #f1f3f5; }
 .backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.25); opacity: 0; pointer-events: none; transition: opacity 0.25s ease; z-index: 250; }
 .backdrop.visible { opacity: 1; pointer-events: auto; }
+
+/* Submenu (mobile menu) */
+.submenu { display: flex; flex-direction: column; gap: 6px; padding-left: 10px; }
+.mobile-menu .submenu a { display: block; font-weight: 500; font-size: 0.95rem; padding-left: 14px; }
 
 /* Layout */
 .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
 .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
 .chart-layout { grid-column: 1 / -1; }
+/* Ensure MusicWave section uses full width like chart layout */
+#musicwave-section { grid-column: 1 / -1; }
+.banner-section { grid-column: 1 / -1; }
+
+/* Banner Slider */
+.banner-section { position: relative; overflow: hidden; }
+.banner-slider { display: flex; transition: transform 0.4s ease; }
+.banner-slide { min-width: 100%; user-select: none; }
+.banner-slide img { width: 100%; height: auto; border-radius: 10px; display: block; }
+.banner-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.35); color: #fff; border: none; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.banner-nav.prev { left: 10px; }
+.banner-nav.next { right: 10px; }
+.banner-dots { position: absolute; bottom: 10px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; }
+.banner-dots button { width: 8px; height: 8px; border-radius: 50%; border: none; background: #e5e7eb; cursor: pointer; }
+.banner-dots button.active { background: #0d6efd; }
+
+/* Bottom-sheet Modal (Group Buy) */
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: none; align-items: flex-end; justify-content: center; }
+.modal.show { display: flex; }
+.modal-content { background:#fff; width: 100%; max-width: 640px; border-radius: 16px 16px 0 0; padding: 16px; box-shadow: 0 -8px 24px rgba(0,0,0,0.15); transform: translateY(100%); animation: slideup 0.25s ease forwards; }
+@keyframes slideup { to { transform: translateY(0); } }
 
 /* Card */
 .card { background-color: #ffffff; border-radius: 14px; padding: 22px; border: 1px solid #eef1f4; box-shadow: 0 6px 18px rgba(17, 24, 39, 0.04); }
@@ -93,7 +118,8 @@ body {
 .youtube-section .stat-value { font-size: 1.5rem; font-weight: 700; color: #dc3545; }
 
 /* Footer */
-.footer { text-align: center; padding: 20px 20px; margin-top: 40px; background-color: #ffffff; border-top: 1px solid #dee2e6; color: #6c757d; }
+.footer { text-align: center; padding: 8px 12px; margin-top: 24px; background-color: #ffffff; border-top: 1px solid #dee2e6; color: #6c757d; font-size: 0.72rem; line-height: 1.2; }
+.footer p { margin: 2px 0; }
 
 /* Quick Actions Grid */
 .quick-actions-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
@@ -101,11 +127,18 @@ body {
 
 /* New rows for better control */
 .quick-actions-row { display: grid; gap: 20px; }
-.quick-actions-row.two-col { grid-template-columns: repeat(2, 1fr); }
-.quick-actions-row.three-col { grid-template-columns: repeat(3, 1fr); }
+.quick-actions-row.two-col { grid-template-columns: 1fr; }
+.quick-actions-row.three-col { grid-template-columns: 1fr; }
 .dashboard-grid > .quick-actions-row { grid-column: 1 / -1; }
 .section-title { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; font-size: 1.1rem; }
 .section-title .emoji { font-size: 1.15rem; }
+
+/* MusicWave quick actions emphasize */
+#musicwave-section .btn { display: block; width: 100%; text-align: center; font-size: 0.95rem; padding: 12px 16px; border-radius: 12px; }
+#musicwave-section .quick-actions.single { justify-content: center; }
+
+/* Guide nested tabs spacing */
+#idCategoryTabs, #idDetailTabs { margin-top: 10px; }
 
 /* Responsive */
 @media (max-width: 992px) { .chart-layout { grid-template-columns: 1fr; } }
@@ -117,3 +150,59 @@ body {
 }
 
 .card h2 small { font-size: 0.6em; font-weight: normal; margin-left: 10px; color: #6c757d; }
+
+/* Guide tabs/buttons */
+.main-tabs, .guide-tabs, .service-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+.main-tab, .guide-tab, .service-tab { padding: 8px 12px; border-radius: 10px; border: none !important; background: transparent; color: #111827; font-weight: 600; cursor: pointer; }
+.service-tabs .service-tab { border: none !important; background: transparent !important; box-shadow: none !important; }
+.service-tabs .service-tab:not(.active) { background: transparent !important; }
+.main-tab.active, .guide-tab.active, .service-tab.active { background: #0d6efd; color: #ffffff; border: none !important; }
+
+/* Highlighter style for ID guide category buttons */
+#idCategoryTabs .service-tab { border: none !important; background: transparent !important; padding: 12px 18px; border-radius: 16px; font-weight: 800; }
+#idCategoryTabs .service-tab.active {
+  background: #c81054 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(200, 16, 84, 0.18);
+}
+
+/* Guide image responsive */
+.guide-image-container { text-align: center; }
+.guide-image { max-width: 100%; height: auto; border-radius: 8px; display: inline-block; }
+/* Vote multi image spacing */
+.guide-image.vote-image { display: block; margin: 10px auto; }
+
+/* Guide hub grid */
+.guide-hub { margin-top: 8px; }
+.guide-section-title { font-size: 1rem; font-weight: 700; color: #374151; margin: 18px 0 10px; }
+.guide-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.guide-item { padding: 10px 10px; background: #fff; border: 1.5px solid #a7f3d0; border-radius: 10px; color: #111827; text-align: center; cursor: pointer; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; min-height: 48px; }
+.guide-item:hover { background: #f0fdf4; border-color: #34d399; }
+.guide-item.active { background: #c81054; color: #fff; border-color: #c81054; }
+.guide-item.text-only { border: none !important; background: transparent !important; min-height: auto; padding: 8px 6px; box-shadow: none; }
+.guide-item.text-only:focus { outline: none; }
+.guide-item.text-only:hover { background: transparent; color: #0d6efd; }
+
+/* ID guide category buttons (듀얼 넘버/아이디 생성) - remove green border before click */
+/* Layout: shrink to content width */
+#id-grid .guide-grid { display: flex; flex-wrap: wrap; gap: 16px; }
+#id-subgrid { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 14px; }
+#id-grid .guide-item { border: none !important; background: #fff; box-shadow: none; white-space: nowrap; min-height: auto; padding: 8px 14px; border-radius: 12px; line-height: 1.25; }
+#id-grid .guide-item:hover { background: #f8fafc; }
+#id-grid .guide-item.active {
+  background: #c81054 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(200, 16, 84, 0.18);
+  border: none !important;
+}
+
+/* Vote guide buttons: match ID guide button design */
+#vote-grid .guide-grid { display: flex; flex-wrap: wrap; gap: 16px; }
+#vote-grid .guide-item { border: none !important; background: #fff; box-shadow: none; white-space: nowrap; min-height: auto; padding: 8px 14px; border-radius: 12px; line-height: 1.25; }
+#vote-grid .guide-item:hover { background: #f8fafc; }
+#vote-grid .guide-item.active { background: #c81054 !important; color: #fff !important; box-shadow: 0 4px 14px rgba(200, 16, 84, 0.18); }
+
+/* Override: remove borders on streaming buttons entirely */
+.streaming-btn, .no-border { border: none !important; box-shadow: none !important; background: #ffffff; }
+.streaming-btn:hover, .no-border:hover { border: none !important; box-shadow: none !important; background: #f8fafc; }
+.guide-subheader { margin: 8px 0; font-size: 0.9rem; color: #6b7280; font-weight: 700; padding: 6px 10px; background: #f3f4f6; border-radius: 8px; display: inline-block; }

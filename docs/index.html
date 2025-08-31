@@ -11,7 +11,7 @@
   <body>
     <!-- Top App Bar -->
     <div class="topbar">
-      <div class="topbar__title">🐻 해찬 스트리밍</div>
+      <div class="topbar__title" id="homeTitle" role="button" tabindex="0" aria-label="홈으로 이동">🐻 해찬 스트리밍</div>
       <div class="topbar__actions">
         <button class="hamburger" id="hamburgerBtn" aria-label="메뉴 열기" aria-expanded="false">
           <span class="hamburger__bars"></span>
@@ -24,15 +24,49 @@
       <div class="mobile-menu__header">
         <button class="menu-close" id="menuCloseBtn" aria-label="닫기">✕</button>
       </div>
-      <a href="#" onclick="showView('dashboard'); closeMenu(); return false;">대시보드</a>
-      <a href="#" onclick="showView('guide'); closeMenu(); return false;">스트리밍 가이드</a>
+      <a href="#" onclick="openDashboardSection('rank-section'); return false;">스트리밍 리스트</a>
+      <a href="#" onclick="openChecklist('pre'); return false;">🌻음원 발매 전날 체크리스트🌻</a>
+      <a href="#" onclick="openChecklist('release'); return false;">🌻음원 발매 당일 체크리스트🌻</a>
+
+      <!-- 가이드 상위 및 하위 메뉴 -->
+      <a href="#" id="guideParent" onclick="toggleSubmenu('guide'); return false;">가이드 ▾</a>
+      <div class="submenu" id="guideSubmenu" style="display: none;">
+        <a href="#" onclick="openGuideMenu('id'); closeMenu(); return false;">아이디 가이드</a>
+        <a href="#" onclick="openGuideMenu('streaming'); closeMenu(); return false;">스트리밍 가이드</a>
+        <a href="#" onclick="openGuideMenu('music'); closeMenu(); return false;">다운로드 가이드</a>
+        <a href="#" onclick="openGuideMenu('vote'); closeMenu(); return false;">투표 가이드</a>
+        <a href="#" onclick="openGuideMenu('stability'); closeMenu(); return false;">기타 가이드</a>
+      </div>
+
+      <!-- 기타 상위 및 하위 메뉴 -->
+      <a href="#" id="etcParent" onclick="toggleSubmenu('etc'); return false;">기타 ▾</a>
+      <div class="submenu" id="etcSubmenu" style="display: none;">
+        <a href="#" onclick="openDashboardSection('streaming-section'); return false;">원클릭 스트리밍</a>
+        <a href="#" onclick="openDashboardSection('radio-section'); return false;">원클릭 라디오 신청</a>
+        <a href="#" onclick="openDashboardSection('groupbuy-section'); return false;">공동구매</a>
+        <a href="#" onclick="openGuideMenu('vote'); closeMenu(); return false;">투표</a>
+        <a href="#" onclick="openDashboardSection('rank-section'); return false;">차트</a>
+        <a href="#" onclick="openNotice(); return false;">공지사항</a>
+      </div>
     </div>
     <div class="backdrop" id="menuBackdrop"></div>
 
     <main id="dashboard-view" class="container">
       <div class="dashboard-grid">
-        <section class="chart-layout">
-          <div class="card">
+        <!-- Home Banner Slider -->
+        <div class="card banner-section" id="home-banner">
+          <div class="banner-slider" id="bannerSlider">
+            <div class="banner-slide"><img src="assets/home/banner/공동구매.jpeg" alt="공동구매 배너"></div>
+            <div class="banner-slide"><img src="assets/home/banner/아이디가이드.jpeg" alt="아이디 가이드 배너"></div>
+            <div class="banner-slide"><img src="assets/home/banner/투표가이드.jpeg" alt="투표 가이드 배너"></div>
+          </div>
+          <button class="banner-nav prev" id="bannerPrev" aria-label="이전">‹</button>
+          <button class="banner-nav next" id="bannerNext" aria-label="다음">›</button>
+          <div class="banner-dots" id="bannerDots"></div>
+        </div>
+        <!-- Rank moved to bottom later -->
+        <section class="chart-layout" id="rank-section-container">
+          <div class="card" id="rank-section">
             <h2><span class="card-icon">🏆</span>실시간 순위 <small>(<span id="lastUpdate"></span>)</small></h2>
             <div class="rank-grid">
               <div class="rank-card">
@@ -101,45 +135,31 @@
 
         <!-- Quick Actions Layout -->
         <div class="quick-actions-row two-col">
-          <div class="card">
+          <div class="card" id="streaming-section">
             <h2 class="section-title"><span class="emoji">🎵</span>원클릭 스트리밍</h2>
             <div class="streaming-links">
-              <a href="#" class="streaming-btn melon" onclick="goToStreaming('melon')">멜론</a>
-              <a href="#" class="streaming-btn genie" onclick="goToStreaming('genie')">지니</a>
-              <a href="#" class="streaming-btn bugs" onclick="goToStreaming('bugs')">벅스</a>
-              <a href="#" class="streaming-btn vibe" onclick="goToStreaming('vibe')">바이브</a>
-              <a href="#" class="streaming-btn flo" onclick="goToStreaming('flo')">플로</a>
-            </div>
-          </div>
-
-          <div class="card">
-            <h2 class="section-title"><span class="emoji">📱</span>원클릭 문자투표</h2>
-            <div class="quick-actions">
-              <a href="sms:00000?body=NCT DREAM BTF" class="btn">인기가요</a>
-              <a href="sms:00000?body=NCT DREAM BTF" class="btn">뮤직뱅크</a>
-              <a href="sms:00000?body=NCT DREAM BTF" class="btn">음악중심</a>
+              <a href="https://www.melon.com/yplayer/streamingguide/index.htm" target="_blank" class="btn" rel="noopener">멜론 뮤직웨이브 바로가기</a>
+              <a href="#" class="streaming-btn melon no-border" onclick="goToStreaming('melon')">멜론</a>
+              <a href="#" class="streaming-btn genie no-border" onclick="goToStreaming('genie')">지니</a>
+              <a href="#" class="streaming-btn bugs no-border" onclick="goToStreaming('bugs')">벅스</a>
+              <a href="#" class="streaming-btn vibe no-border" onclick="goToStreaming('vibe')">바이브</a>
+              <a href="#" class="streaming-btn flo no-border" onclick="goToStreaming('flo')">플로</a>
             </div>
           </div>
         </div>
 
         <div class="quick-actions-row three-col">
-          <div class="card">
+          <div class="card" id="groupbuy-section">
             <h2 class="section-title"><span class="emoji">🛒</span>공동구매</h2>
             <div class="group-buy-links">
-              <button class="btn" onclick="openGroupBuy('album')">공동구매 1</button>
-              <button class="btn" onclick="openGroupBuy('streaming')">공동구매 1</button>
+              <button class="btn" onclick="openGroupBuyModal('applemusic')">애플뮤직</button>
+              <button class="btn" onclick="openGroupBuyModal('allmd')">올엠디</button>
+              <button class="btn" onclick="openGroupBuyModal('minirecord')">미니레코드</button>
+              <button class="btn" onclick="openGroupBuyModal('everline')">에버라인</button>
             </div>
           </div>
 
-          <div class="card">
-            <h2 class="section-title"><span class="emoji">💰</span>멜론 충전하기</h2>
-            <div class="quick-actions">
-              <a href="https://www.melon.com/buy/meloncash/charge.htm" class="btn" target="_blank">멜론 캐시 충전</a>
-              <a href="https://www.melon.com/muid/family/ticket/index.htm" class="btn" target="_blank">이용권 구매</a>
-            </div>
-          </div>
-
-          <div class="card">
+          <div class="card" id="radio-section">
             <h2 class="section-title"><span class="emoji">📻</span>원클릭 라디오 신청</h2>
             <div class="radio-links">
               <a href="sms:#8910&body=NCT DREAM BTF 신청합니다." class="btn">KBS</a>
@@ -167,45 +187,70 @@
             </div>
           </div>
         </div>
+
+        <!-- Move Rank section to the very bottom of dashboard grid -->
+        <section class="chart-layout" style="grid-column: 1 / -1;">
+          <div class="card" aria-hidden="true" style="display:none"></div>
+        </section>
       </div>
     </main>
 
     <section id="guide-view" class="container" style="display: none;">
       <div class="card">
-        <h2><span class="card-icon">📚</span>스트리밍 가이드</h2>
-        <p>각 음원 사이트별 스트리밍 방법을 확인하세요.</p>
+        <div class="guide-hub">
+          <div id="streaming-grid" style="display: none;">
+            <div class="guide-grid">
+              <button class="guide-item" onclick="openStreamingGuide('melon')">멜론 스트리밍 가이드</button>
+              <button class="guide-item" onclick="openStreamingGuide('genie')">지니 스트리밍 가이드</button>
+              <button class="guide-item" onclick="openStreamingGuide('bugs')">벅스 스트리밍 가이드</button>
+              <button class="guide-item" onclick="openStreamingGuide('vibe')">바이브 스트리밍 가이드</button>
+              <button class="guide-item" onclick="openStreamingGuide('flo')">플로 스트리밍 가이드</button>
+            </div>
+          </div>
 
-        <div class="main-tabs">
-          <button class="main-tab active" onclick="switchMainTab('music')">음원 가이드</button>
-          <button class="main-tab" onclick="switchMainTab('etc')">기타 가이드</button>
+          <div id="id-grid" style="display: none;">
+            <div class="guide-grid">
+              <button class="guide-item" onclick="openIdCategoryGrid('dualnumber', this)">듀얼 넘버 생성 가이드</button>
+              <button class="guide-item" onclick="openIdCategoryGrid('id', this)">아이디 생성 가이드</button>
+            </div>
+            <div id="id-subgrid" class="guide-grid" style="display: none;"></div>
+          </div>
+
+          <div id="download-grid" style="display: none;">
+            <div class="guide-grid">
+              <button class="guide-item" onclick="openDownloadGuide('music','melon')">멜론 음원 다운로드</button>
+              <button class="guide-item" onclick="openDownloadGuide('music','genie')">지니 음원 다운로드</button>
+              <button class="guide-item" onclick="openDownloadGuide('music','bugs')">벅스 음원 다운로드</button>
+              <button class="guide-item" onclick="openDownloadGuide('music','vibe')">바이브 음원 다운로드</button>
+              <button class="guide-item" onclick="openDownloadGuide('music','kakao')">카카오뮤직 음원 다운로드</button>
+              <button class="guide-item" onclick="openDownloadGuide('mv','melon')">멜론 뮤비 다운로드</button>
+              <button class="guide-item" onclick="openDownloadGuide('mv','bugs')">벅스 뮤비 다운로드</button>
+            </div>
+          </div>
+
+          <div id="vote-grid" style="display: none;">
+            <div class="guide-grid">
+              <button class="guide-item" onclick="openVoteGuide('mubit')">뮤빗</button>
+              <button class="guide-item" onclick="openVoteGuide('starplanet')">스타플래닛</button>
+              <button class="guide-item" onclick="openVoteGuide('champ')">챔프</button>
+              <button class="guide-item" onclick="openVoteGuide('fancast')">팬캐스트</button>
+              <button class="guide-item" onclick="openVoteGuide('higher')">하이어</button>
+            </div>
+          </div>
+
+          <div id="other-grid" style="display: none;">
+            <div class="guide-grid">
+              <button class="guide-item" onclick="openOtherGuide('radio')">라디오 신청 가이드</button>
+              <button class="guide-item" onclick="openOtherGuide('vcoloring')">V 컬러링 가이드</button>
+              <button class="guide-item" onclick="openOtherGuide('block')">끊김 방지 가이드</button>
+              <button class="guide-item" onclick="openOtherGuide('samsung')">삼성뮤직 활용 가이드</button>
+              <button class="guide-item" onclick="openOtherGuide('shorts')">숏폼 제작 가이드</button>
+              <button class="guide-item" onclick="openOtherGuide('gift')">멜론 선물하기</button>
+            </div>
+          </div>
         </div>
 
-        <div id="musicServiceTabs" class="service-tabs">
-          <button class="service-tab active" onclick="switchServiceTab('melon')">멜론</button>
-          <button class="service-tab" onclick="switchServiceTab('genie')">지니</button>
-          <button class="service-tab" onclick="switchServiceTab('bugs')">벅스</button>
-          <button class="service-tab" onclick="switchServiceTab('vibe')">바이브</button>
-          <button class="service-tab" onclick="switchServiceTab('flo')">플로</button>
-          <button class="service-tab" onclick="switchServiceTab('kakao')">카카오 뮤직</button>
-        </div>
-
-        <div id="etcServiceTabs" class="service-tabs" style="display: none;">
-          <button class="service-tab active" onclick="switchServiceTab('youtube')">유튜브</button>
-        </div>
-
-        <div id="guideTabs" class="guide-tabs" style="display: none;">
-          <button class="guide-tab active" data-type="streaming" onclick="switchGuideTab('streaming')">스트리밍</button>
-          <button class="guide-tab" data-type="music" onclick="switchGuideTab('music')">음원 다운로드</button>
-          <button class="guide-tab" data-type="mv" onclick="switchGuideTab('mv')">뮤비 다운로드</button>
-          <button class="guide-tab" data-type="id" onclick="switchGuideTab('id')">아이디 찾기</button>
-        </div>
-
-        <div id="deviceTabs" class="device-tabs" style="display: none;">
-          <button class="device-tab active" data-device="mobile" onclick="switchDeviceTab('mobile')">모바일</button>
-          <button class="device-tab" data-device="pc" onclick="switchDeviceTab('pc')">PC</button>
-        </div>
-
-        <div class="guide-content" style="display: none;">
+        <div class="guide-content" style="display: none; margin-top: 16px;">
           <div class="guide-image-container">
             <img id="guideImage" class="guide-image" alt="가이드 이미지" />
           </div>
@@ -214,8 +259,21 @@
     </section>
 
     <footer class="footer">
-      <p>&copy; 2025 NCT DREAM Chart Tracker. All rights reserved.</p>
+      <p>해찬 스트리밍</p>
+      <p>e-mail : haechanstreamteam@gmail.com</p>
+      <p>Copyright 2025. HAECHAN STREAM All Rights Reserved.</p>
     </footer>
+
+    <!-- Group Buy Modal -->
+    <div id="gbModal" class="modal">
+      <div class="modal-content">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <h3 id="gbTitle" style="margin:0;">공동구매</h3>
+          <button onclick="closeGbModal()" class="btn">닫기</button>
+        </div>
+        <div id="gbBody" class="guide-grid"></div>
+      </div>
+    </div>
 
     <script src="js/dashboard.js?v=2.5"></script>
     <script src="js/chart.js?v=2.5"></script>
@@ -245,6 +303,59 @@
       document.getElementById('menuCloseBtn').addEventListener('click', closeMenu);
       backdrop.addEventListener('click', closeMenu);
       document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+
+      // Home title click -> go home (dashboard)
+      const homeTitle = document.getElementById('homeTitle');
+      if (homeTitle) {
+        homeTitle.addEventListener('click', () => { showView('dashboard'); });
+        homeTitle.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { showView('dashboard'); } });
+      }
+
+      // Submenu toggle for '가이드' and '기타'
+      function toggleSubmenu(menu) {
+        const submenu = document.getElementById(`${menu}Submenu`);
+        const parent = document.getElementById(`${menu}Parent`);
+        const isOpen = submenu.style.display === 'block';
+        submenu.style.display = isOpen ? 'none' : 'block';
+        if (parent) {
+          const label = menu === 'guide' ? '가이드' : '기타';
+          parent.textContent = isOpen ? `${label} ▾` : `${label} ▴`;
+        }
+      }
+
+      // Open guide view with specific type (direct routing)
+      function openGuideMenu(type) {
+        showView('guide');
+        closeMenu();
+        if (typeof switchGuideTab === 'function') {
+          switchGuideTab(type);
+        }
+      }
+
+      // Open dashboard specific section helper
+      function openDashboardSection(sectionId) {
+        showView('dashboard');
+        closeMenu();
+        if (!sectionId) return;
+        const el = document.getElementById(sectionId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+
+      // Open simple checklists (placeholder)
+      function openChecklist(type) {
+        showView('dashboard');
+        closeMenu();
+        alert('준비 중입니다.🐻');
+      }
+
+      // Open notice (placeholder)
+      function openNotice() {
+        showView('dashboard');
+        closeMenu();
+        alert('공지사항은 곧 업데이트됩니다.');
+      }
     </script>
   </body>
   </html>

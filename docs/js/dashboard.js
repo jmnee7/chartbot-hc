@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 초기 뷰 설정
     showView('dashboard');
+
+    // Init banner slider
+    initBannerSlider();
 });
 
 function showView(viewId) {
@@ -120,6 +123,46 @@ function goToStreaming(service) {
     window.open(url, '_blank');
 }
 
+// Banner slider logic
+function initBannerSlider() {
+    const slider = document.getElementById('bannerSlider');
+    if (!slider) return;
+    const slides = Array.from(slider.children);
+    const prevBtn = document.getElementById('bannerPrev');
+    const nextBtn = document.getElementById('bannerNext');
+    const dotsWrap = document.getElementById('bannerDots');
+    let index = 0;
+    let timerId;
+
+    function updateView() {
+        slider.style.transform = `translateX(-${index * 100}%)`;
+        Array.from(dotsWrap.children).forEach((d, i) => d.classList.toggle('active', i === index));
+    }
+
+    // Dots
+    slides.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.addEventListener('click', () => { index = i; resetAuto(); updateView(); });
+        dotsWrap.appendChild(dot);
+    });
+
+    function next() { index = (index + 1) % slides.length; updateView(); }
+    function prev() { index = (index - 1 + slides.length) % slides.length; updateView(); }
+
+    if (nextBtn) nextBtn.addEventListener('click', () => { next(); resetAuto(); });
+    if (prevBtn) prevBtn.addEventListener('click', () => { prev(); resetAuto(); });
+
+    function startAuto() { timerId = setInterval(next, 5000); }
+    function stopAuto() { if (timerId) clearInterval(timerId); }
+    function resetAuto() { stopAuto(); startAuto(); }
+
+    slider.addEventListener('mouseenter', stopAuto);
+    slider.addEventListener('mouseleave', startAuto);
+
+    updateView();
+    startAuto();
+}
+
 function openGroupBuy(type) {
     let message = '';
     switch(type) {
@@ -135,6 +178,57 @@ function openGroupBuy(type) {
         alert('공동구매 참여 신청이 완료되었습니다! 참여자 수가 모집되면 연락드리겠습니다.');
     }
 }
+
+// Group Buy Modal
+function openGroupBuyModal(vendor) {
+    const modal = document.getElementById('gbModal');
+    const title = document.getElementById('gbTitle');
+    const body = document.getElementById('gbBody');
+    if (!modal || !title || !body) return;
+
+    const data = {
+        applemusic: [
+            { label: 'Tin Case Ver.', url: 'https://abit.ly/acaxvd' },
+            { label: 'Savory Ver.', url: 'https://abit.ly/fvgwev' },
+            { label: 'Full Spread(랜덤) Ver.', url: 'https://abit.ly/rvw5i6' },
+            { label: 'Full Spread(세트) Ver.', url: 'https://abit.ly/vvau2w' }
+        ],
+        allmd: [
+            { label: '올엠디 바로가기', url: 'https://buly.kr/9BWCsD7' }
+        ],
+        minirecord: [
+            { label: 'Tin Case Ver.', url: 'https://minirecord.shop/product/detail.html?product_no=2326' },
+            { label: 'Savory Ver.', url: 'https://minirecord.shop/product/detail.html?product_no=2325' },
+            { label: 'Full Spread(랜덤) Ver.', url: 'https://minirecord.shop/product/detail.html?product_no=2328' },
+            { label: 'Full Spread(세트) Ver.', url: 'https://minirecord.shop/product/detail.html?product_no=2327' }
+        ],
+        everline: [
+            { label: 'Tin Case Ver.', url: 'https://bit.ly/45XUyWC' },
+            { label: 'Savory Ver.', url: 'https://bit.ly/4fJkn01' },
+            { label: 'Full Spread(랜덤) Ver.', url: 'https://bit.ly/45XUGp4' },
+            { label: 'Full Spread(세트) Ver.', url: 'https://bit.ly/4mQLk40' }
+        ]
+    };
+
+    const vendorName = {
+        applemusic: '애플뮤직', allmd: '올엠디', minirecord: '미니레코드', everline: '에버라인'
+    }[vendor] || '공동구매';
+
+    title.textContent = vendorName;
+    body.innerHTML = '';
+    (data[vendor] || []).forEach(item => {
+        const btn = document.createElement('a');
+        btn.className = 'btn';
+        btn.href = item.url;
+        btn.target = '_blank';
+        btn.rel = 'noopener';
+        btn.textContent = item.label;
+        body.appendChild(btn);
+    });
+    modal.classList.add('show');
+}
+
+function closeGbModal() { const m = document.getElementById('gbModal'); if (m) m.classList.remove('show'); }
 
 // 유튜브 조회수/좋아요 가져오기 (실제 데이터)
 async function loadYouTubeStats() {
