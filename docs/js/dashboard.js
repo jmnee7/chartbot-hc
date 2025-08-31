@@ -15,8 +15,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('gbModal');
     if (modal) {
         modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeGbModal();
+            // 카카오톡/인앱브라우저에서 이벤트 전파 이슈 대응: 컨텐츠 외 영역 클릭 시 닫기
+            const content = document.querySelector('#gbModal .modal-content');
+            if (!content) return;
+            if (!content.contains(e.target)) closeGbModal();
         });
+        // ESC 키 닫기 (인앱 일부에서도 동작)
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeGbModal(); });
     }
 });
 

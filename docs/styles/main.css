@@ -145,7 +145,7 @@ body {
 
 /* Home shortcut grid (2x2 like quick tiles) */
 .home-shortcuts-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-.home-shortcut { display: flex; align-items: center; justify-content: center; padding: 14px; border-radius: 14px; background: #f8fafc; border: 1.5px solid #e5f6ef; text-decoration: none; color: #111827; font-weight: 600; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.08); transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease; }
+.home-shortcut { display: flex; align-items: center; justify-content: center; padding: 14px; border-radius: 14px; background: #f8fafc; border: 1.5px solid #e5f6ef; color: #111827; font-weight: 600; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.08); transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease; cursor: pointer; width: 100%; }
 .home-shortcut:hover { background: #c81054; border-color: #c81054; color: #ffffff; box-shadow: 0 6px 18px rgba(200, 16, 84, 0.18); }
 .home-shortcut:focus-visible { outline: 2px solid #ffd1e1; outline-offset: 2px; }
 .home-shortcut:active { transform: scale(0.98); }
@@ -153,6 +153,12 @@ body {
 @media (max-width: 480px) {
   .home-shortcuts-grid { gap: 10px; }
   .home-shortcut { padding: 12px; font-size: 0.95rem; }
+}
+
+/* Desktop sizing adjustments */
+@media (min-width: 992px) {
+  .home-shortcuts-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .home-shortcut { padding: 16px 18px; font-size: 1rem; }
 }
 
 /* Guide nested tabs spacing */
