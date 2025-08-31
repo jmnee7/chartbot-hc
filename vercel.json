@@ -1,14 +1,14 @@
 {
   "version": 2,
   "trailingSlash": false,
-  "cleanUrls": true,
-  "rewrites": [
-    { "source": "/", "destination": "/index.html" },
-    { "source": "/dashboard", "destination": "/index.html" },
-    { "source": "/target", "destination": "/target_index.html" }
+  "builds": [
+    { "src": "docs/**", "use": "@vercel/static" }
   ],
-  "redirects": [
-    { "source": "/docs/(.*)", "destination": "/$1", "permanent": false }
+  "routes": [
+    { "src": "/", "dest": "/docs/index.html" },
+    { "src": "/dashboard", "dest": "/docs/index.html" },
+    { "src": "/target", "dest": "/docs/target_index.html" },
+    { "src": "/(.*)", "dest": "/docs/$1" }
   ],
   "headers": [
     {
