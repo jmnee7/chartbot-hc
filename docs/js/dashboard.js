@@ -10,6 +10,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Init banner slider
     initBannerSlider();
+
+    // Modal backdrop close support
+    const modal = document.getElementById('gbModal');
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeGbModal();
+        });
+    }
 });
 
 function showView(viewId) {
@@ -62,12 +70,12 @@ async function updateRealTimeChartStatus() {
 
             if (rankElement && badgeElement) {
                 if (currentRank !== null) {
-                    rankElement.textContent = currentRank;
-                    badgeElement.textContent = '차트인';
+                    rankElement.textContent = `${currentRank}위`;
+                    badgeElement.textContent = 'IN';
                     badgeElement.className = 'rank-badge in-chart';
                 } else {
                     rankElement.textContent = '-';
-                    badgeElement.textContent = '차트아웃';
+                    badgeElement.textContent = 'OUT';
                     badgeElement.className = 'rank-badge out-chart';
                 }
             }
@@ -273,6 +281,62 @@ function openGroupBuyModal(vendor) {
 }
 
 function closeGbModal() { const m = document.getElementById('gbModal'); if (m) m.classList.remove('show'); }
+
+// Unified quick modal (streaming/radio/groupbuy)
+function openQuickModal(mode) {
+    const modal = document.getElementById('gbModal');
+    const title = document.getElementById('gbTitle');
+    const body = document.getElementById('gbBody');
+    if (!modal || !title || !body) return;
+
+    body.innerHTML = '';
+    if (mode === 'streaming') {
+        title.textContent = '원클릭 스트리밍';
+        const services = [
+            { label: '멜론', key: 'melon' },
+            { label: '지니', key: 'genie' },
+            { label: '벅스', key: 'bugs' },
+            { label: '바이브', key: 'vibe' },
+            { label: '플로', key: 'flo' }
+        ];
+        services.forEach(s => {
+            const btn = document.createElement('a');
+            btn.className = 'btn';
+            btn.href = '#';
+            btn.onclick = function(e) { e.preventDefault(); alert('준비 중입니다.🐻'); };
+            btn.textContent = s.label;
+            body.appendChild(btn);
+        });
+    } else if (mode === 'radio') {
+        title.textContent = '원클릭 라디오 신청';
+        ['KBS','MBC','SBS'].forEach(label => {
+            const btn = document.createElement('a');
+            btn.className = 'btn';
+            btn.href = '#';
+            btn.onclick = function(e) { e.preventDefault(); alert('준비 중입니다.🐻'); };
+            btn.textContent = label;
+            body.appendChild(btn);
+        });
+    } else if (mode === 'groupbuy') {
+        title.textContent = '공동구매';
+        const vendors = [
+            { label: '미니레코드', key: 'minirecord' },
+            { label: '애플뮤직', key: 'applemusic' },
+            { label: '에버라인', key: 'everline' },
+            { label: '올엠디', key: 'allmd' }
+        ];
+        vendors.forEach(v => {
+            const btn = document.createElement('a');
+            btn.className = 'btn';
+            btn.href = '#';
+            btn.onclick = function(e) { e.preventDefault(); openGroupBuyModal(v.key); };
+            btn.textContent = v.label;
+            body.appendChild(btn);
+        });
+    }
+
+    modal.classList.add('show');
+}
 
 // 유튜브 조회수/좋아요 가져오기 (실제 데이터)
 async function loadYouTubeStats() {

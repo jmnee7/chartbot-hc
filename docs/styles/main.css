@@ -1,22 +1,17 @@
 /* Base */
 body {
-  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Malgun Gothic', '맑은 고딕', sans-serif;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   background-color: #f8f9fa;
   color: #111827;
   margin: 0;
-  padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   /* 레이아웃 흔들림 방지: 세로 스크롤바 공간을 항상 예약 */
   overflow-y: scroll;
   scrollbar-gutter: stable both-edges;
-  /* 카카오톡 브라우저 호환성 */
-  -webkit-overflow-scrolling: touch;
 }
 
 /* Top App Bar */
@@ -42,7 +37,7 @@ body {
 .hamburger__bars::after { transform: translateY(6px); }
 
 /* Slide-out Menu */
-.mobile-menu { position: fixed; top: 0; right: 0; height: 100vh; width: 280px; background: #ffffff; box-shadow: -8px 0 24px rgba(0,0,0,0.08); border-left: 1px solid #f1f3f5; transform: translateX(100%); transition: transform 0.25s ease; z-index: 300; padding: 16px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+.mobile-menu { position: fixed; top: 0; right: 0; height: 100vh; width: 280px; background: #ffffff; box-shadow: -8px 0 24px rgba(0,0,0,0.08); border-left: 1px solid #f1f3f5; transform: translateX(100%); transition: transform 0.25s ease; z-index: 300; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
 .mobile-menu.open { transform: translateX(0); }
 .mobile-menu__header { display: flex; justify-content: flex-end; align-items: center; height: 40px; }
 .menu-close { border: none; background: #f1f3f5; color: #111827; border-radius: 8px; padding: 6px 10px; cursor: pointer; }
@@ -51,11 +46,6 @@ body {
 .mobile-menu a:hover { background: #f1f3f5; }
 .backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.25); opacity: 0; pointer-events: none; transition: opacity 0.25s ease; z-index: 250; }
 .backdrop.visible { opacity: 1; pointer-events: auto; }
-
-/* Prevent body scroll lock conflict: allow page to scroll when menu is open on small screens */
-@media (max-width: 768px) {
-  body.menu-open { position: fixed; width: 100%; }
-}
 
 /* Submenu (mobile menu) */
 .submenu { display: flex; flex-direction: column; gap: 6px; padding-left: 10px; }
@@ -73,7 +63,7 @@ body {
 .banner-section { position: relative; overflow: hidden; }
 .banner-slider { display: flex; transition: transform 0.4s ease; }
 .banner-slide { min-width: 100%; user-select: none; }
-.banner-slide img { width: 100%; height: auto; border-radius: 10px; display: block; }
+.banner-slide img { width: 100%; height: auto; border-radius: 0; display: block; }
 .banner-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.35); color: #fff; border: none; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 .banner-nav.prev { left: 10px; }
 .banner-nav.next { right: 10px; }
@@ -93,52 +83,16 @@ body {
 .card-icon { margin-right: 10px; color: #0d6efd; }
 
 /* Rank */
-.rank-grid { 
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin: -7.5px;
-}
-
-/* Grid 지원 브라우저용 */
-@supports (display: grid) {
-  .rank-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    margin: 0;
-  }
-  .rank-card {
-    flex: none !important;
-    width: auto !important;
-    margin: 0 !important;
-  }
-}
-
-.rank-card { 
-  background-color: #fbfcfd; 
-  border-radius: 12px; 
-  padding: 16px; 
-  display: flex; 
-  flex-direction: column; 
-  justify-content: space-between; 
-  border: 1px solid #eef1f4;
-  box-sizing: border-box;
-  /* Flexbox fallback */
-  flex: 1 1 calc(50% - 15px);
-  margin: 7.5px;
-  min-width: 0;
-}
+.rank-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+.rank-card { background-color: #fbfcfd; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #eef1f4; }
 .rank-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .rank-service-name { font-weight: 600; font-size: 0.9rem; color: #495057; display: flex; align-items: center; }
 .service-logo { width: 20px; height: 20px; margin-right: 8px; border-radius: 50%; }
 .rank-badge { font-size: 0.72rem; padding: 3px 8px; border-radius: 999px; font-weight: 700; text-transform: uppercase; border: 1px solid #e9ecef; white-space: nowrap; line-height: 1.1; letter-spacing: -0.01em; }
 .rank-badge.in-chart { background-color: #ecfdf5; color: #065f46; border-color: #bbf7d0; }
 .rank-badge.out-chart { background-color: #fef2f2; color: #991b1b; border-color: #fecaca; }
-.rank-info { display: flex; align-items: baseline; justify-content: space-between; }
-.rank-number { font-size: 2rem; font-weight: 700; color: #212529; }
+.rank-info { display: flex; align-items: center; justify-content: space-between; }
+.rank-number { font-size: 0.9rem; font-weight: 800; color: #212529; }
 .rank-change { font-size: 1rem; font-weight: 700; }
 .rank-change.up { color: #198754; }
 .rank-change.down { color: #dc3545; }
@@ -164,10 +118,10 @@ body {
 /* YouTube */
 .youtube-section .video-container { position: relative; width: 100%; padding-bottom: 56.25%; margin-bottom: 15px; }
 .youtube-section .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 8px; }
-.youtube-section .youtube-stats-display { display: flex; justify-content: space-around; margin-bottom: 15px; gap: 10px; }
-.youtube-section .stat-item { flex: 1; background-color: #f0f2f5; padding: 10px; border-radius: 8px; text-align: center; }
-.youtube-section .stat-label { font-size: 0.85rem; color: #6c757d; margin-bottom: 5px; }
-.youtube-section .stat-value { font-size: 1.5rem; font-weight: 700; color: #dc3545; }
+.youtube-section .youtube-stats-display { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; }
+.youtube-section .stat-item { background-color: #f0f2f5; padding: 12px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 64px; }
+.youtube-section .stat-label { font-size: 0.85rem; color: #6c757d; margin-bottom: 6px; line-height: 1; }
+.youtube-section .stat-value { font-size: 1.5rem; font-weight: 700; color: #dc3545; line-height: 1; white-space: nowrap; font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1, 'lnum' 1; }
 
 /* Footer */
 .footer { text-align: center; padding: 8px 12px; margin-top: auto; background-color: #ffffff; border-top: 1px solid #dee2e6; color: #6c757d; font-size: 0.72rem; line-height: 1.2; }
@@ -189,6 +143,18 @@ body {
 #musicwave-section .btn { display: block; width: 100%; text-align: center; font-size: 0.95rem; padding: 12px 16px; border-radius: 12px; }
 #musicwave-section .quick-actions.single { justify-content: center; }
 
+/* Home shortcut grid (2x2 like quick tiles) */
+.home-shortcuts-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.home-shortcut { display: flex; align-items: center; justify-content: center; padding: 14px; border-radius: 14px; background: #f8fafc; border: 1.5px solid #e5f6ef; text-decoration: none; color: #111827; font-weight: 600; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.08); transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease; }
+.home-shortcut:hover { background: #c81054; border-color: #c81054; color: #ffffff; box-shadow: 0 6px 18px rgba(200, 16, 84, 0.18); }
+.home-shortcut:focus-visible { outline: 2px solid #ffd1e1; outline-offset: 2px; }
+.home-shortcut:active { transform: scale(0.98); }
+
+@media (max-width: 480px) {
+  .home-shortcuts-grid { gap: 10px; }
+  .home-shortcut { padding: 12px; font-size: 0.95rem; }
+}
+
 /* Guide nested tabs spacing */
 #idCategoryTabs, #idDetailTabs { margin-top: 10px; }
 
@@ -198,63 +164,32 @@ body {
   .quick-actions-grid { grid-template-columns: 1fr; }
   .quick-actions-row.two-col { grid-template-columns: 1fr; }
   .quick-actions-row.three-col { grid-template-columns: 1fr; }
-  .rank-grid { 
-    gap: 10px; 
-    margin: -5px;
-  }
-  .rank-card { 
-    padding: 12px; 
-    flex: 1 1 calc(50% - 10px);
-    margin: 5px;
-  }
+  .rank-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .rank-card { padding: 12px; }
   .rank-service-name { font-size: 0.8rem; }
   .service-logo { width: 16px; height: 16px; margin-right: 6px; }
   .rank-badge { font-size: 0.6rem; padding: 2px 5px; }
   .rank-number { font-size: 1.6rem; }
   .rank-change { font-size: 0.85rem; }
   .rank-header { margin-bottom: 8px; }
-  
-  /* Grid 지원 브라우저용 모바일 */
-  @supports (display: grid) {
-    .rank-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin: 0;
-    }
-    .rank-card {
-      margin: 0 !important;
-    }
-  }
+  .youtube-section .youtube-stats-display { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .youtube-section .stat-item { min-height: 56px; padding: 10px; }
+  .youtube-section .stat-value { font-size: 1.35rem; }
 }
 
 /* 더 작은 모바일 화면 (480px 이하) */
 @media (max-width: 480px) {
-  .rank-grid { 
-    gap: 8px; 
-    margin: -4px;
-  }
-  .rank-card { 
-    padding: 10px; 
-    flex: 1 1 calc(50% - 8px);
-    margin: 4px;
-  }
+  .rank-grid { gap: 8px; }
+  .rank-card { padding: 10px; }
   .rank-service-name { font-size: 0.75rem; }
   .service-logo { width: 14px; height: 14px; margin-right: 4px; }
   .rank-badge { font-size: 0.55rem; padding: 1px 4px; }
   .rank-number { font-size: 1.4rem; }
   .rank-change { font-size: 0.8rem; }
   .rank-header { margin-bottom: 6px; }
-  
-  /* Grid 지원 브라우저용 작은 모바일 */
-  @supports (display: grid) {
-    .rank-grid {
-      gap: 8px;
-      margin: 0;
-    }
-    .rank-card {
-      margin: 0 !important;
-    }
-  }
+  .youtube-section .youtube-stats-display { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .youtube-section .stat-item { min-height: 52px; padding: 8px; }
+  .youtube-section .stat-value { font-size: 1.25rem; }
 }
 
 .card h2 small { font-size: 0.6em; font-weight: normal; margin-left: 10px; color: #6c757d; }
