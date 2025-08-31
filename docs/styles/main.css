@@ -152,8 +152,26 @@ body {
   .quick-actions-grid { grid-template-columns: 1fr; }
   .quick-actions-row.two-col { grid-template-columns: 1fr; }
   .quick-actions-row.three-col { grid-template-columns: 1fr; }
-  .rank-grid { grid-template-columns: repeat(2, 1fr); }
-  .rank-badge { font-size: 0.62rem; padding: 2px 6px; }
+  .rank-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .rank-card { padding: 12px; }
+  .rank-service-name { font-size: 0.8rem; }
+  .service-logo { width: 16px; height: 16px; margin-right: 6px; }
+  .rank-badge { font-size: 0.6rem; padding: 2px 5px; }
+  .rank-number { font-size: 1.6rem; }
+  .rank-change { font-size: 0.85rem; }
+  .rank-header { margin-bottom: 8px; }
+}
+
+/* 더 작은 모바일 화면 (480px 이하) */
+@media (max-width: 480px) {
+  .rank-grid { gap: 8px; }
+  .rank-card { padding: 10px; }
+  .rank-service-name { font-size: 0.75rem; }
+  .service-logo { width: 14px; height: 14px; margin-right: 4px; }
+  .rank-badge { font-size: 0.55rem; padding: 1px 4px; }
+  .rank-number { font-size: 1.4rem; }
+  .rank-change { font-size: 0.8rem; }
+  .rank-header { margin-bottom: 6px; }
 }
 
 .card h2 small { font-size: 0.6em; font-weight: normal; margin-left: 10px; color: #6c757d; }
