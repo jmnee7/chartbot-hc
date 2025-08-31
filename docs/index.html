@@ -32,21 +32,21 @@
       <a href="#" id="guideParent" onclick="toggleSubmenu('guide'); return false;">가이드 ▾</a>
       <div class="submenu" id="guideSubmenu" style="display: none;">
         <a href="#" onclick="openGuideMenu('id'); closeMenu(); return false;">아이디 가이드</a>
-        <a href="#" onclick="openGuideMenu('streaming'); closeMenu(); return false;">스트리밍 가이드</a>
-        <a href="#" onclick="openGuideMenu('music'); closeMenu(); return false;">다운로드 가이드</a>
+        <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">스트리밍 가이드</a>
+        <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">다운로드 가이드</a>
         <a href="#" onclick="openGuideMenu('vote'); closeMenu(); return false;">투표 가이드</a>
-        <a href="#" onclick="openGuideMenu('stability'); closeMenu(); return false;">기타 가이드</a>
+        <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">기타 가이드</a>
       </div>
 
       <!-- 기타 상위 및 하위 메뉴 -->
       <a href="#" id="etcParent" onclick="toggleSubmenu('etc'); return false;">기타 ▾</a>
       <div class="submenu" id="etcSubmenu" style="display: none;">
-        <a href="#" onclick="openDashboardSection('streaming-section'); return false;">원클릭 스트리밍</a>
-        <a href="#" onclick="openDashboardSection('radio-section'); return false;">원클릭 라디오 신청</a>
-        <a href="#" onclick="openDashboardSection('groupbuy-section'); return false;">공동구매</a>
-        <a href="#" onclick="openGuideMenu('vote'); closeMenu(); return false;">투표</a>
-        <a href="#" onclick="openDashboardSection('rank-section'); return false;">차트</a>
-        <a href="#" onclick="openNotice(); return false;">공지사항</a>
+        <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">원클릭 스트리밍</a>
+        <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">원클릭 라디오 신청</a>
+        <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">공동구매</a>
+        <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">투표</a>
+        <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">차트</a>
+        <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">공지사항</a>
       </div>
     </div>
     <div class="backdrop" id="menuBackdrop"></div>
@@ -56,9 +56,21 @@
         <!-- Home Banner Slider -->
         <div class="card banner-section" id="home-banner">
           <div class="banner-slider" id="bannerSlider">
-            <div class="banner-slide"><img src="assets/home/banner/공동구매.jpeg" alt="공동구매 배너"></div>
-            <div class="banner-slide"><img src="assets/home/banner/아이디가이드.jpeg" alt="아이디 가이드 배너"></div>
-            <div class="banner-slide"><img src="assets/home/banner/투표가이드.jpeg" alt="투표 가이드 배너"></div>
+            <div class="banner-slide">
+              <a href="https://x.com/haechanstrm/status/1958163414007918855?s=46&t=v_6BPoVYQREP02R8RyJyuA" target="_blank" rel="noopener">
+                <img src="assets/home/banner/공동구매.jpeg" alt="공동구매 배너">
+              </a>
+            </div>
+            <div class="banner-slide">
+              <a href="#" onclick="openGuideMenu('id'); return false;" data-action="guide-id">
+                <img src="assets/home/banner/아이디가이드.jpeg" alt="아이디 가이드 배너">
+              </a>
+            </div>
+            <div class="banner-slide">
+              <a href="#" onclick="openGuideMenu('vote'); return false;" data-action="guide-vote">
+                <img src="assets/home/banner/투표가이드.jpeg" alt="투표 가이드 배너">
+              </a>
+            </div>
           </div>
           <button class="banner-nav prev" id="bannerPrev" aria-label="이전">‹</button>
           <button class="banner-nav next" id="bannerNext" aria-label="다음">›</button>
@@ -322,6 +334,24 @@
           parent.textContent = isOpen ? `${label} ▾` : `${label} ▴`;
         }
       }
+
+      // Robust banner routing (fallback if inline handler blocked)
+      (function(){
+        const slider = document.getElementById('bannerSlider');
+        if (!slider) return;
+        slider.addEventListener('click', function(e){
+          const a = e.target.closest('a[data-action]');
+          if (!a) return;
+          const action = a.getAttribute('data-action');
+          if (action === 'guide-id') {
+            e.preventDefault();
+            openGuideMenu('id');
+          } else if (action === 'guide-vote') {
+            e.preventDefault();
+            openGuideMenu('vote');
+          }
+        });
+      })();
 
       // Open guide view with specific type (direct routing)
       function openGuideMenu(type) {

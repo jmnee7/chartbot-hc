@@ -76,8 +76,10 @@ function switchGuideTab(type) {
         tab.classList.remove('active');
     });
     
-    // 클릭된 탭 활성화
-    event.target.classList.add('active');
+    // 클릭된 탭 활성화 (inline handler가 아닌 호출 대비)
+    if (typeof event !== 'undefined' && event && event.target) {
+        event.target.classList.add('active');
+    }
     
     // 가이드 타이틀/소제목은 제거 상태 유지 (요청사항)
 
@@ -91,8 +93,14 @@ function switchGuideTab(type) {
     const voteGrid = document.getElementById('vote-grid');
     const otherGrid = document.getElementById('other-grid');
 
-    // 먼저 모두 숨김
+    // 먼저 모두 숨김 및 이미지 영역 초기화(잔상 제거)
     [streamingGrid, idGrid, downloadGrid, voteGrid, otherGrid].forEach(el => { if (el) el.style.display = 'none'; });
+    const container = document.querySelector('.guide-image-container');
+    const single = document.getElementById('guideImage');
+    if (container) {
+        Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
+    }
+    if (single) { single.style.display = ''; single.src = ''; single.onclick = null; }
     if (type === 'id') {
         if (idGrid) idGrid.style.display = 'block';
         // 1단계: 카테고리 탭 렌더링 (구 그리드 사용)
@@ -114,8 +122,14 @@ function switchGuideTab(type) {
             });
             // 기본 선택
             const firstBtn = idCategoryTabs.querySelector('button');
-            if (firstBtn) firstBtn.click();
+            if (firstBtn && typeof firstBtn.click === 'function') firstBtn.click();
         }
+        // idCategoryTabs 요소가 없는 현재 마크업에서는 기존 그리드의 첫 버튼을 자동 선택
+        if (!idCategoryTabs && idGrid) {
+            const firstCatBtn = idGrid.querySelector('.guide-grid .guide-item');
+            if (firstCatBtn && typeof firstCatBtn.click === 'function') firstCatBtn.click();
+        }
+
         // 디바이스 탭 숨기기
         document.getElementById('deviceTabs').style.display = 'none';
         if (idDetailTabs) { idDetailTabs.style.display = 'none'; idDetailTabs.innerHTML = ''; }
@@ -150,6 +164,11 @@ function switchGuideTab(type) {
             });
             const first = voteDetailTabs.querySelector('button');
             if (first) first.click();
+        }
+        // voteDetailTabs 요소가 없는 현재 마크업 대응: 기본(첫 번째) 버튼 자동 선택
+        if (!voteDetailTabs && voteGrid) {
+            const firstGridBtn = voteGrid.querySelector('.guide-item');
+            if (firstGridBtn && typeof firstGridBtn.click === 'function') firstGridBtn.click();
         }
         document.getElementById('deviceTabs').style.display = 'none';
         document.querySelector('.guide-content').style.display = 'block';
@@ -321,6 +340,7 @@ function setMultiImages(paths) {
 
 // 투표 가이드 이미지 매핑
 function updateVoteGuideImage(key) {
+    // 아이디 가이드와 동일하게 단일 이미지 엘리먼트만 사용해 레이아웃 변화를 최소화
     const listMap = {
         mubit: [
             'assets/guide/vote/뮤빗1.png',
@@ -346,19 +366,25 @@ function updateVoteGuideImage(key) {
     const paths = listMap[key] || [];
     const container = document.querySelector('.guide-image-container');
     const single = document.getElementById('guideImage');
-    if (!container) return;
-    // 단일 이미지 숨김
-    if (single) { single.style.display = 'none'; single.onclick = null; }
-    // 기존 다중 이미지 제거
+    if (!container || !single) return;
+
+    // 기존 다중 이미지 제거 및 단일 이미지 표시
     Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
-    // 두 이미지를 모두 추가
-    paths.forEach(src => {
-        const img = document.createElement('img');
-        img.src = src;
-        img.alt = '투표 가이드 이미지';
-        img.className = 'guide-image vote-image';
-        container.appendChild(img);
-    });
+    single.style.display = '';
+
+    // 기본 이미지는 첫 번째로, 클릭 시 다음 이미지로 순환하도록 처리 (있을 때만)
+    let idx = 0;
+    if (paths.length > 0) {
+        single.src = paths[0];
+        single.onclick = paths.length > 1 ? function() {
+            idx = (idx + 1) % paths.length;
+            single.src = paths[idx];
+        } : null;
+        single.alt = '투표 가이드 이미지';
+    } else {
+        single.src = '';
+        single.onclick = null;
+    }
 }
 
 // 투표 가이드 버튼 클릭 핸들러 (스타일 활성화 토글 포함)
@@ -411,6 +437,8 @@ function openIdCategoryGrid(category, el) {
     grid.style.display = 'flex';
     currentGuideType = 'id';
     currentIdCategory = category;
+    // 이전 선택 상태 초기화
+    currentIdDetail = null;
     if (el && el.parentElement) {
         Array.from(el.parentElement.querySelectorAll('.guide-item')).forEach(b => b.classList.remove('active'));
         el.classList.add('active');
@@ -431,6 +459,13 @@ function openIdCategoryGrid(category, el) {
             <button class=\"guide-item text-only\" onclick=\"selectIdDetail('kakao')\">카카오 뮤직</button>
         `;
     }
+    // 하위 첫 항목을 자동 선택하여 이미지가 즉시 보이도록 함 (렌더 뒤 이벤트 루프에서 실행)
+    setTimeout(() => {
+        const firstDetailBtn = grid.querySelector('.guide-item');
+        if (firstDetailBtn && typeof firstDetailBtn.click === 'function') {
+            firstDetailBtn.click();
+        }
+    }, 0);
 }
 
 function selectIdDetail(detail) {

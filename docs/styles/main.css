@@ -6,6 +6,12 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* 레이아웃 흔들림 방지: 세로 스크롤바 공간을 항상 예약 */
+  overflow-y: scroll;
+  scrollbar-gutter: stable both-edges;
 }
 
 /* Top App Bar */
@@ -95,7 +101,7 @@ body {
 .streaming-links, .radio-links, .group-buy-links, .quick-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 .streaming-btn, .btn { flex-grow: 0; flex-basis: auto; text-align: center; padding: 10px 14px; border-radius: 10px; text-decoration: none; font-weight: 600; transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease; border: 1px solid #e5e7eb; background: #ffffff; color: #111827; cursor: pointer; box-shadow: none; }
 .streaming-btn:hover, .btn:hover { background: #f8fafc; border-color: #d1d5db; }
-.streaming-btn:active, .btn:active { transform: scale(0.98); }
+.streaming-btn:active, .btn:active { transform: none; }
 .streaming-btn:focus-visible, .btn:focus-visible { outline: 2px solid #cfe2ff; outline-offset: 2px; }
 /* Service accents */
 .streaming-btn.melon { color: #0a7a2a; border-color: #b2f2bb; }
@@ -118,7 +124,7 @@ body {
 .youtube-section .stat-value { font-size: 1.5rem; font-weight: 700; color: #dc3545; }
 
 /* Footer */
-.footer { text-align: center; padding: 8px 12px; margin-top: 24px; background-color: #ffffff; border-top: 1px solid #dee2e6; color: #6c757d; font-size: 0.72rem; line-height: 1.2; }
+.footer { text-align: center; padding: 8px 12px; margin-top: auto; background-color: #ffffff; border-top: 1px solid #dee2e6; color: #6c757d; font-size: 0.72rem; line-height: 1.2; }
 .footer p { margin: 2px 0; }
 
 /* Quick Actions Grid */
@@ -170,7 +176,7 @@ body {
 .guide-image-container { text-align: center; }
 .guide-image { max-width: 100%; height: auto; border-radius: 8px; display: inline-block; }
 /* Vote multi image spacing */
-.guide-image.vote-image { display: block; margin: 10px auto; }
+.guide-image.vote-image { display: none; }
 
 /* Guide hub grid */
 .guide-hub { margin-top: 8px; }
@@ -179,6 +185,10 @@ body {
 .guide-item { padding: 10px 10px; background: #fff; border: 1.5px solid #a7f3d0; border-radius: 10px; color: #111827; text-align: center; cursor: pointer; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; min-height: 48px; }
 .guide-item:hover { background: #f0fdf4; border-color: #34d399; }
 .guide-item.active { background: #c81054; color: #fff; border-color: #c81054; }
+.guide-item:active { transform: none !important; }
+.service-tab:active { transform: none !important; }
+.guide-item, .service-tab { outline: none; transition: none !important; }
+.guide-item:focus, .service-tab:focus { outline: none; }
 .guide-item.text-only { border: none !important; background: transparent !important; min-height: auto; padding: 8px 6px; box-shadow: none; }
 .guide-item.text-only:focus { outline: none; }
 .guide-item.text-only:hover { background: transparent; color: #0d6efd; }
@@ -199,6 +209,7 @@ body {
 /* Vote guide buttons: match ID guide button design */
 #vote-grid .guide-grid { display: flex; flex-wrap: wrap; gap: 16px; }
 #vote-grid .guide-item { border: none !important; background: #fff; box-shadow: none; white-space: nowrap; min-height: auto; padding: 8px 14px; border-radius: 12px; line-height: 1.25; }
+#vote-grid .guide-item:active { transform: none !important; }
 #vote-grid .guide-item:hover { background: #f8fafc; }
 #vote-grid .guide-item.active { background: #c81054 !important; color: #fff !important; box-shadow: 0 4px 14px rgba(200, 16, 84, 0.18); }
 
@@ -206,3 +217,11 @@ body {
 .streaming-btn, .no-border { border: none !important; box-shadow: none !important; background: #ffffff; }
 .streaming-btn:hover, .no-border:hover { border: none !important; box-shadow: none !important; background: #f8fafc; }
 .guide-subheader { margin: 8px 0; font-size: 0.9rem; color: #6b7280; font-weight: 700; padding: 6px 10px; background: #f3f4f6; border-radius: 8px; display: inline-block; }
+
+/* Align ID/Vote guide button groups to top-left */
+#id-grid .guide-grid { justify-content: flex-start; align-items: flex-start; }
+#vote-grid .guide-grid { justify-content: flex-start; align-items: flex-start; }
+#id-subgrid { justify-content: flex-start; align-items: flex-start; }
+
+/* Ensure guide card centered within white area */
+#guide-view .card { margin-left: auto; margin-right: auto; }
