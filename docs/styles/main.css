@@ -176,7 +176,7 @@ body {
 /* Guide image responsive */
 .guide-image-container { 
   text-align: center; 
-  min-height: 400px; /* 이미지 로딩 시 레이아웃 변경 방지 */
+  min-height: 360px; /* 고정된 표시 영역 확보로 레이아웃 흔들림 방지 */
   width: 100%; /* 넓이 고정 */
   max-width: 100%; /* 최대 넓이 제한 */
   display: flex;
@@ -185,12 +185,12 @@ body {
   overflow: hidden; /* 넘치는 내용 숨김 */
 }
 .guide-content { 
-  min-height: 320px; 
+  min-height: 360px; 
   width: 100%; /* 넓이 고정 */
   max-width: 100%; /* 최대 넓이 제한 */
   margin-top: 0; /* 상단 여백 최소화 */
 }
-.guide-image { width: 100%; height: auto; border-radius: 8px; display: block; }
+.guide-image { width: 100%; max-width: 100%; height: auto; max-height: 80vh; object-fit: contain; border-radius: 8px; display: block; }
 /* Vote multi image spacing */
 .guide-image.vote-image { display: block; margin: 10px auto; }
 

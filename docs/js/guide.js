@@ -100,6 +100,42 @@ function encodeFilePath(path) {
     } catch (_) {}
 })();
 
+// Preload groupbuy images to speed up first render
+(function preloadGroupBuyImages(){
+    try {
+        const sources = [
+            'assets/guide/groupbuy/미니레코드 국문.png',
+            'assets/guide/groupbuy/미니레코드 영문.png',
+            'assets/guide/groupbuy/애플뮤직 국문.png',
+            'assets/guide/groupbuy/애플뮤직 영문.png',
+            'assets/guide/groupbuy/에버라인 국문.png',
+            'assets/guide/groupbuy/에버라인 영문.png',
+            'assets/guide/groupbuy/올엠디.png'
+        ].map(encodeFilePath);
+        sources.forEach(src => { const img = new Image(); img.decoding = 'async'; img.src = src; });
+    } catch (_) {}
+})();
+
+// Preload ID guide images (first-view stability)
+(function preloadIdGuideImages(){
+    try {
+        const idFiles = [
+            'assets/guide/generateid/dualnumber/202508_듀얼넘버생성_skt.png',
+            'assets/guide/generateid/dualnumber/202508_듀얼넘버생성_lgu+.png',
+            'assets/guide/generateid/dualnumber/202508_듀얼넘버생성_kt.png',
+            'assets/guide/generateid/id/아이디생성가이드_202508ver_멜론.png',
+            'assets/guide/generateid/id/아이디생성가이드_202508ver_지니.png',
+            'assets/guide/generateid/id/아이디생성가이드_202508ver_벅스.png',
+            'assets/guide/generateid/id/아이디생성가이드_202508ver_바이브.png',
+            'assets/guide/generateid/id/아이디생성가이드_202508ver_플로.png',
+            'assets/guide/generateid/id/아이디생성가이드_202508ver_카카오뮤직01.png',
+            'assets/guide/generateid/id/아이디생성가이드_202508ver_카카오뮤직02.png',
+            'assets/guide/generateid/id/아이디생성가이드_202508ver_카카오뮤직03.png'
+        ].map(encodeFilePath);
+        idFiles.forEach(src => { const img = new Image(); img.decoding = 'async'; img.src = src; });
+    } catch (_) {}
+})();
+
 // 상위 메뉴 탭 전환 함수
 function switchMainTab(tab) {
     currentMainTab = tab;
@@ -160,7 +196,8 @@ function switchGuideTab(type) {
     if (container) {
         Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
     }
-    if (single) { single.style.display = ''; single.src = ''; single.onclick = null; }
+    // 기본 이미지 요소는 초기에는 숨김 (빈 src로 인한 엑박 방지)
+    if (single) { single.style.display = 'none'; single.src = ''; single.onclick = null; }
     // 공동구매 전용 텍스트는 기본적으로 숨김/초기화 (다른 탭 잔상 제거)
     if (guideTextBox) { guideTextBox.style.display = 'none'; guideTextBox.innerHTML = ''; }
     if (type === 'id') {
@@ -198,6 +235,15 @@ function switchGuideTab(type) {
         // 가이드 콘텐츠 표시
         document.querySelector('.guide-content').style.display = 'block';
         if (voteDetailTabs) voteDetailTabs.style.display = 'none';
+        // 안정화: 첫 진입 시 기본 선택 보장 (듀얼넘버 > SKT)
+        if (!currentIdCategory && !currentIdDetail) {
+            // 즉시 표시를 위해 상태를 직접 설정 후 업데이트
+            currentIdCategory = 'dualnumber';
+            currentIdDetail = 'skt';
+            updateGuideImage();
+            // UI 버튼 활성화는 비동기로 보정
+            setTimeout(() => { try { openIdCategoryGrid('dualnumber', null); selectIdDetail('skt'); } catch(_){} }, 0);
+        }
         return;
     } else {
         if (idCategoryTabs) idCategoryTabs.style.display = 'none';
@@ -392,7 +438,16 @@ function updateGuideImage() {
     }
     
     const guideImage = document.getElementById('guideImage');
-    guideImage.src = imagePath ? imagePath : '';
+    // 이미지 경로가 있을 때만 표시하여 엑박 방지
+    if (imagePath) {
+        // 초기 렌더 타이밍에서 가끔 빈 프레임이 보이는 문제 방지: onload 후 표시
+        guideImage.onload = function() { this.style.display = ''; };
+        guideImage.onerror = function() { this.style.display = 'none'; };
+        guideImage.src = imagePath;
+    } else {
+        guideImage.src = '';
+        guideImage.style.display = 'none';
+    }
     // 단일 이미지 모드에서는 클릭 이벤트 제거
     guideImage.onclick = null;
     // 디바이스 텍스트 결정
@@ -566,7 +621,7 @@ function openGroupBuyGuide(vendor) {
     if (container) {
         Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
         // 로딩 placeholder 추가
-        container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; min-height: 200px; color: #9ca3af; font-size: 0.9rem;">이미지 로딩 중...</div>';
+        container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; min-height: 140px; color: #9ca3af; font-size: 0.9rem;">이미지 로딩 중...</div>';
     }
     if (single) { single.style.display = 'none'; single.onclick = null; single.src = ''; }
 
@@ -612,11 +667,18 @@ function openGroupBuyGuide(vendor) {
     let loadedCount = 0;
     const totalImages = list.length;
     
-    list.forEach(src => {
+    list.forEach((src, idx) => {
         const img = document.createElement('img');
         img.src = src;
         img.alt = '공동구매 가이드 이미지';
         img.className = 'guide-image vote-image';
+        img.decoding = 'async';
+        if (idx === 0) {
+            img.loading = 'eager';
+            img.setAttribute('fetchpriority', 'high');
+        } else {
+            img.loading = 'lazy';
+        }
         
         // 이미지 로드 완료 시 placeholder 제거
         img.onload = function() {
