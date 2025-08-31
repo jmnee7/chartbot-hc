@@ -1,21 +1,8 @@
 {
   "version": 2,
-  "trailingSlash": false,
-  "builds": [
-    { "src": "docs/**", "use": "@vercel/static" }
-  ],
+  "buildCommand": "echo 'No build needed - static files only'",
+  "outputDirectory": "docs",
   "routes": [
-    { "src": "/", "dest": "/docs/index.html" },
-    { "src": "/dashboard", "dest": "/docs/index.html" },
-    { "src": "/target", "dest": "/docs/target_index.html" },
-    { "src": "/(.*)", "dest": "/docs/$1" }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=300" }
-      ]
-    }
+    { "src": "/(.*)", "dest": "/$1" }
   ]
 }
