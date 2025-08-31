@@ -53,7 +53,7 @@ body {
 
 /* Layout */
 .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-.dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+.dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
 .chart-layout { grid-column: 1 / -1; }
 /* Ensure MusicWave section uses full width like chart layout */
 #musicwave-section { grid-column: 1 / -1; }
@@ -78,12 +78,12 @@ body {
 .modal-content { background:#fff; width: 100%; max-width: 720px; border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
 /* Card */
-.card { background-color: #ffffff; border-radius: 14px; padding: 22px; border: 1px solid #eef1f4; box-shadow: 0 6px 18px rgba(17, 24, 39, 0.04); }
-.card h2 { font-size: 1.3rem; font-weight: 600; margin-bottom: 20px; color: #343a40; display: flex; align-items: center; }
+.card { background-color: #ffffff; border-radius: 14px; padding: 20px; border: 1px solid #eef1f4; box-shadow: 0 6px 18px rgba(17, 24, 39, 0.04); }
+.card h2 { font-size: 1.3rem; font-weight: 600; margin: 0 0 16px 0; color: #343a40; display: flex; align-items: center; }
 .card-icon { margin-right: 10px; color: #0d6efd; }
 
 /* Rank */
-.rank-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+.rank-grid { display: grid; grid-template-columns: repeat(2, 1fr); row-gap: 12px; column-gap: 12px; }
 .rank-card { background-color: #fbfcfd; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #eef1f4; }
 .rank-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .rank-service-name { font-weight: 600; font-size: 0.9rem; color: #495057; display: flex; align-items: center; }
@@ -99,8 +99,8 @@ body {
 
 /* Actions */
 .streaming-links, .radio-links, .group-buy-links, .quick-actions { display: flex; flex-wrap: wrap; gap: 10px; }
-.streaming-btn, .btn { flex-grow: 0; flex-basis: auto; text-align: center; padding: 10px 14px; border-radius: 10px; text-decoration: none; font-weight: 600; transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease; border: 1px solid #e5e7eb; background: #ffffff; color: #111827; cursor: pointer; box-shadow: none; }
-.streaming-btn:hover, .btn:hover { background: #f8fafc; border-color: #d1d5db; }
+.streaming-btn, .btn { flex-grow: 0; flex-basis: auto; text-align: center; padding: 12px 16px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease; border: 1px solid #eef1f4; background: #ffffff; color: #111827; cursor: pointer; box-shadow: none; }
+.streaming-btn:hover, .btn:hover { background: #f8fafc; border-color: #e5e7eb; }
 .streaming-btn:active, .btn:active { transform: none; }
 .streaming-btn:focus-visible, .btn:focus-visible { outline: 2px solid #cfe2ff; outline-offset: 2px; }
 /* Service accents */
@@ -132,7 +132,7 @@ body {
 .dashboard-grid > .quick-actions-grid { grid-column: 1 / -1; }
 
 /* New rows for better control */
-.quick-actions-row { display: grid; gap: 20px; }
+.quick-actions-row { display: grid; gap: 16px; }
 .quick-actions-row.two-col { grid-template-columns: 1fr; }
 .quick-actions-row.three-col { grid-template-columns: 1fr; }
 .dashboard-grid > .quick-actions-row { grid-column: 1 / -1; }
@@ -146,8 +146,9 @@ body {
 /* Home shortcut grid (2x2 like quick tiles) */
 .home-shortcuts-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 button.home-shortcut, a.home-shortcut { -webkit-appearance: none; appearance: none; border: none; text-decoration: none; }
-.home-shortcut { display: flex; align-items: center; justify-content: center; padding: 14px; border-radius: 14px; background: #f8fafc; border: 1.5px solid #e5f6ef; color: #111827; font-weight: 600; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.08); transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease; cursor: pointer; width: 100%; box-sizing: border-box; }
-.home-shortcut:hover { background: #c81054; border-color: #c81054; color: #ffffff; box-shadow: 0 6px 18px rgba(200, 16, 84, 0.18); }
+.home-shortcut { display: flex; align-items: center; justify-content: center; padding: 12px 16px; border-radius: 12px; background: #ffffff; border: 1.5px solid #e5e7eb !important; color: #111827; font-weight: 600; font-size: 0.95rem; box-shadow: 0 6px 18px rgba(17, 24, 39, 0.04); transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease; cursor: pointer; width: 100%; box-sizing: border-box; min-height: 56px; }
+.home-shortcut:hover { background: #f8fafc; border-color: #d1d5db !important; box-shadow: 0 8px 22px rgba(17, 24, 39, 0.06); }
+.home-shortcut:focus { border-color: #d1d5db !important; }
 .home-shortcut:focus-visible { outline: 2px solid #ffd1e1; outline-offset: 2px; }
 .home-shortcut:active { transform: scale(0.98); }
 /* iOS Safari reset to prevent default inner padding/rounded for button */
@@ -155,7 +156,7 @@ button.home-shortcut { border-radius: 14px; background: #f8fafc; }
 
 @media (max-width: 480px) {
   .home-shortcuts-grid { gap: 10px; }
-  .home-shortcut { padding: 12px; font-size: 0.95rem; min-height: 54px; }
+  .home-shortcut { padding: 12px 16px; font-size: 0.95rem; min-height: 52px; }
 }
 
 /* Desktop sizing adjustments */
