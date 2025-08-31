@@ -1,17 +1,22 @@
 /* Base */
 body {
-  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Malgun Gothic', '맑은 고딕', sans-serif;
   background-color: #f8f9fa;
   color: #111827;
   margin: 0;
+  padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   /* 레이아웃 흔들림 방지: 세로 스크롤바 공간을 항상 예약 */
   overflow-y: scroll;
   scrollbar-gutter: stable both-edges;
+  /* 카카오톡 브라우저 호환성 */
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Top App Bar */
@@ -37,7 +42,7 @@ body {
 .hamburger__bars::after { transform: translateY(6px); }
 
 /* Slide-out Menu */
-.mobile-menu { position: fixed; top: 0; right: 0; height: 100vh; width: 280px; background: #ffffff; box-shadow: -8px 0 24px rgba(0,0,0,0.08); border-left: 1px solid #f1f3f5; transform: translateX(100%); transition: transform 0.25s ease; z-index: 300; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+.mobile-menu { position: fixed; top: 0; right: 0; height: 100vh; width: 280px; background: #ffffff; box-shadow: -8px 0 24px rgba(0,0,0,0.08); border-left: 1px solid #f1f3f5; transform: translateX(100%); transition: transform 0.25s ease; z-index: 300; padding: 16px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
 .mobile-menu.open { transform: translateX(0); }
 .mobile-menu__header { display: flex; justify-content: flex-end; align-items: center; height: 40px; }
 .menu-close { border: none; background: #f1f3f5; color: #111827; border-radius: 8px; padding: 6px 10px; cursor: pointer; }
@@ -46,6 +51,11 @@ body {
 .mobile-menu a:hover { background: #f1f3f5; }
 .backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.25); opacity: 0; pointer-events: none; transition: opacity 0.25s ease; z-index: 250; }
 .backdrop.visible { opacity: 1; pointer-events: auto; }
+
+/* Prevent body scroll lock conflict: allow page to scroll when menu is open on small screens */
+@media (max-width: 768px) {
+  body.menu-open { position: fixed; width: 100%; }
+}
 
 /* Submenu (mobile menu) */
 .submenu { display: flex; flex-direction: column; gap: 6px; padding-left: 10px; }
@@ -83,8 +93,44 @@ body {
 .card-icon { margin-right: 10px; color: #0d6efd; }
 
 /* Rank */
-.rank-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-.rank-card { background-color: #fbfcfd; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #eef1f4; }
+.rank-grid { 
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin: -7.5px;
+}
+
+/* Grid 지원 브라우저용 */
+@supports (display: grid) {
+  .rank-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin: 0;
+  }
+  .rank-card {
+    flex: none !important;
+    width: auto !important;
+    margin: 0 !important;
+  }
+}
+
+.rank-card { 
+  background-color: #fbfcfd; 
+  border-radius: 12px; 
+  padding: 16px; 
+  display: flex; 
+  flex-direction: column; 
+  justify-content: space-between; 
+  border: 1px solid #eef1f4;
+  box-sizing: border-box;
+  /* Flexbox fallback */
+  flex: 1 1 calc(50% - 15px);
+  margin: 7.5px;
+  min-width: 0;
+}
 .rank-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .rank-service-name { font-weight: 600; font-size: 0.9rem; color: #495057; display: flex; align-items: center; }
 .service-logo { width: 20px; height: 20px; margin-right: 8px; border-radius: 50%; }
@@ -152,26 +198,63 @@ body {
   .quick-actions-grid { grid-template-columns: 1fr; }
   .quick-actions-row.two-col { grid-template-columns: 1fr; }
   .quick-actions-row.three-col { grid-template-columns: 1fr; }
-  .rank-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .rank-card { padding: 12px; }
+  .rank-grid { 
+    gap: 10px; 
+    margin: -5px;
+  }
+  .rank-card { 
+    padding: 12px; 
+    flex: 1 1 calc(50% - 10px);
+    margin: 5px;
+  }
   .rank-service-name { font-size: 0.8rem; }
   .service-logo { width: 16px; height: 16px; margin-right: 6px; }
   .rank-badge { font-size: 0.6rem; padding: 2px 5px; }
   .rank-number { font-size: 1.6rem; }
   .rank-change { font-size: 0.85rem; }
   .rank-header { margin-bottom: 8px; }
+  
+  /* Grid 지원 브라우저용 모바일 */
+  @supports (display: grid) {
+    .rank-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin: 0;
+    }
+    .rank-card {
+      margin: 0 !important;
+    }
+  }
 }
 
 /* 더 작은 모바일 화면 (480px 이하) */
 @media (max-width: 480px) {
-  .rank-grid { gap: 8px; }
-  .rank-card { padding: 10px; }
+  .rank-grid { 
+    gap: 8px; 
+    margin: -4px;
+  }
+  .rank-card { 
+    padding: 10px; 
+    flex: 1 1 calc(50% - 8px);
+    margin: 4px;
+  }
   .rank-service-name { font-size: 0.75rem; }
   .service-logo { width: 14px; height: 14px; margin-right: 4px; }
   .rank-badge { font-size: 0.55rem; padding: 1px 4px; }
   .rank-number { font-size: 1.4rem; }
   .rank-change { font-size: 0.8rem; }
   .rank-header { margin-bottom: 6px; }
+  
+  /* Grid 지원 브라우저용 작은 모바일 */
+  @supports (display: grid) {
+    .rank-grid {
+      gap: 8px;
+      margin: 0;
+    }
+    .rank-card {
+      margin: 0 !important;
+    }
+  }
 }
 
 .card h2 small { font-size: 0.6em; font-weight: normal; margin-left: 10px; color: #6c757d; }
