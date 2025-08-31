@@ -88,7 +88,7 @@ body {
 .rank-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .rank-service-name { font-weight: 600; font-size: 0.9rem; color: #495057; display: flex; align-items: center; }
 .service-logo { width: 20px; height: 20px; margin-right: 8px; border-radius: 50%; }
-.rank-badge { font-size: 0.72rem; padding: 3px 8px; border-radius: 999px; font-weight: 700; text-transform: uppercase; border: 1px solid #e9ecef; }
+.rank-badge { font-size: 0.72rem; padding: 3px 8px; border-radius: 999px; font-weight: 700; text-transform: uppercase; border: 1px solid #e9ecef; white-space: nowrap; line-height: 1.1; letter-spacing: -0.01em; }
 .rank-badge.in-chart { background-color: #ecfdf5; color: #065f46; border-color: #bbf7d0; }
 .rank-badge.out-chart { background-color: #fef2f2; color: #991b1b; border-color: #fecaca; }
 .rank-info { display: flex; align-items: baseline; justify-content: space-between; }
@@ -152,7 +152,8 @@ body {
   .quick-actions-grid { grid-template-columns: 1fr; }
   .quick-actions-row.two-col { grid-template-columns: 1fr; }
   .quick-actions-row.three-col { grid-template-columns: 1fr; }
-  .rank-grid { grid-template-columns: 1fr; }
+  .rank-grid { grid-template-columns: repeat(2, 1fr); }
+  .rank-badge { font-size: 0.62rem; padding: 2px 6px; }
 }
 
 .card h2 small { font-size: 0.6em; font-weight: normal; margin-left: 10px; color: #6c757d; }
@@ -173,13 +174,48 @@ body {
 }
 
 /* Guide image responsive */
-.guide-image-container { text-align: center; }
-.guide-image { max-width: 100%; height: auto; border-radius: 8px; display: inline-block; }
+.guide-image-container { 
+  text-align: center; 
+  min-height: 400px; /* 이미지 로딩 시 레이아웃 변경 방지 */
+  width: 100%; /* 넓이 고정 */
+  max-width: 100%; /* 최대 넓이 제한 */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* 위쪽 정렬로 본문을 더 올림 */
+  overflow: hidden; /* 넘치는 내용 숨김 */
+}
+.guide-content { 
+  min-height: 320px; 
+  width: 100%; /* 넓이 고정 */
+  max-width: 100%; /* 최대 넓이 제한 */
+  margin-top: 0; /* 상단 여백 최소화 */
+}
+.guide-image { width: 100%; height: auto; border-radius: 8px; display: block; }
 /* Vote multi image spacing */
-.guide-image.vote-image { display: none; }
+.guide-image.vote-image { display: block; margin: 10px auto; }
+
+/* Guide rich text (groupbuy descriptions) */
+.guide-text { 
+  background: #fff7ed; 
+  border: 1px solid #fed7aa; 
+  color: #7c2d12; 
+  border-radius: 10px; 
+  padding: 14px; 
+  margin-bottom: 12px; 
+  line-height: 1.5; 
+  font-size: 0.95rem;
+  white-space: pre-wrap; 
+}
+.guide-text a { color: #c2410c; font-weight: 700; text-decoration: underline; }
+.guide-text .title { display: block; font-weight: 900; font-size: 1.05rem; margin-bottom: 8px; color: #5a1d0e; }
 
 /* Guide hub grid */
-.guide-hub { margin-top: 8px; }
+.guide-hub { 
+  margin-top: 8px; 
+  min-height: 120px; /* 버튼 영역 레이아웃 안정화 */
+  width: 100%; /* 넓이 고정 */
+  max-width: 100%; /* 최대 넓이 제한 */
+}
 .guide-section-title { font-size: 1rem; font-weight: 700; color: #374151; margin: 18px 0 10px; }
 .guide-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
 .guide-item { padding: 10px 10px; background: #fff; border: 1.5px solid #a7f3d0; border-radius: 10px; color: #111827; text-align: center; cursor: pointer; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; min-height: 48px; }
@@ -187,7 +223,7 @@ body {
 .guide-item.active { background: #c81054; color: #fff; border-color: #c81054; }
 .guide-item:active { transform: none !important; }
 .service-tab:active { transform: none !important; }
-.guide-item, .service-tab { outline: none; transition: none !important; }
+.guide-item, .service-tab { outline: none; transition: none !important; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 .guide-item:focus, .service-tab:focus { outline: none; }
 .guide-item.text-only { border: none !important; background: transparent !important; min-height: auto; padding: 8px 6px; box-shadow: none; }
 .guide-item.text-only:focus { outline: none; }
@@ -195,9 +231,9 @@ body {
 
 /* ID guide category buttons (듀얼 넘버/아이디 생성) - remove green border before click */
 /* Layout: shrink to content width */
-#id-grid .guide-grid { display: flex; flex-wrap: wrap; gap: 16px; }
-#id-subgrid { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 14px; }
-#id-grid .guide-item { border: none !important; background: #fff; box-shadow: none; white-space: nowrap; min-height: auto; padding: 8px 14px; border-radius: 12px; line-height: 1.25; }
+#id-grid .guide-grid { display: flex; flex-wrap: wrap; gap: 12px; }
+#id-subgrid { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 10px; min-height: 44px; }
+#id-grid .guide-item { border: none !important; background: #fff; box-shadow: none; white-space: nowrap; min-height: 40px; padding: 8px 12px; border-radius: 12px; line-height: 1.2; }
 #id-grid .guide-item:hover { background: #f8fafc; }
 #id-grid .guide-item.active {
   background: #c81054 !important;
@@ -207,16 +243,37 @@ body {
 }
 
 /* Vote guide buttons: match ID guide button design */
-#vote-grid .guide-grid { display: flex; flex-wrap: wrap; gap: 16px; }
-#vote-grid .guide-item { border: none !important; background: #fff; box-shadow: none; white-space: nowrap; min-height: auto; padding: 8px 14px; border-radius: 12px; line-height: 1.25; }
+#vote-grid { min-height: 64px; }
+#vote-grid .guide-grid { display: flex; flex-wrap: wrap; gap: 12px; min-height: 56px; }
+#vote-grid .guide-item { border: none !important; background: #fff; box-shadow: none; white-space: nowrap; min-height: 40px; padding: 8px 12px; border-radius: 12px; line-height: 1.2; }
 #vote-grid .guide-item:active { transform: none !important; }
 #vote-grid .guide-item:hover { background: #f8fafc; }
-#vote-grid .guide-item.active { background: #c81054 !important; color: #fff !important; box-shadow: 0 4px 14px rgba(200, 16, 84, 0.18); }
+#vote-grid .guide-item.active { background: #c81054; color: #fff; box-shadow: 0 4px 14px rgba(200, 16, 84, 0.18); }
 
 /* Override: remove borders on streaming buttons entirely */
 .streaming-btn, .no-border { border: none !important; box-shadow: none !important; background: #ffffff; }
 .streaming-btn:hover, .no-border:hover { border: none !important; box-shadow: none !important; background: #f8fafc; }
 .guide-subheader { margin: 8px 0; font-size: 0.9rem; color: #6b7280; font-weight: 700; padding: 6px 10px; background: #f3f4f6; border-radius: 8px; display: inline-block; }
+
+/* Groupbuy guide - unified with vote guide */
+#groupbuy-grid { padding-top: 0; min-height: 64px; }
+#groupbuy-grid .guide-grid { display: flex; flex-wrap: wrap; gap: 12px; min-height: 56px; }
+#groupbuy-grid .guide-item { border: none !important; background: #fff; box-shadow: none; white-space: nowrap; min-height: 40px; padding: 8px 12px; border-radius: 12px; line-height: 1.2; }
+#groupbuy-grid .guide-item:active { transform: none !important; }
+#groupbuy-grid .guide-item:hover { background: #f8fafc; }
+#groupbuy-grid .guide-item.active { background: #c81054; color: #fff; box-shadow: 0 4px 14px rgba(200, 16, 84, 0.18); }
+
+/* Normalize sizes: make groupbuy buttons identical to vote guide buttons */
+#groupbuy-grid .guide-item, #vote-grid .guide-item {
+  height: 44px !important;
+  min-height: 44px !important;
+  padding: 0 16px !important;
+  border-radius: 12px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+  line-height: 1 !important;
+}
 
 /* Align ID/Vote guide button groups to top-left */
 #id-grid .guide-grid { justify-content: flex-start; align-items: flex-start; }

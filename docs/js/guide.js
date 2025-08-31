@@ -39,8 +39,37 @@ const typeNames = {
     mv: '뮤비 다운로드',
     vote: '투표',
     id: '아이디 찾기',
-    stability: '끊김 방지'
+    stability: '끊김 방지',
+    groupbuy: '공동구매'
 };
+
+// 안전한 링크 변환: 일반 텍스트 중 URL을 클릭 가능한 앵커로 변환
+function escapeHtml(text) {
+    return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function linkifyText(text) {
+    if (!text) return '';
+    const urlPattern = /(https?:\/\/[^\s]+)/g;
+    const parts = text.split(urlPattern);
+    let html = '';
+    for (let i = 0; i < parts.length; i++) {
+        const part = parts[i];
+        if (i % 2 === 1) {
+            const url = part;
+            const safeHref = url.replace(/"/g, '&quot;');
+            html += `<a href="${safeHref}" target="_blank" rel="noopener noreferrer">${escapeHtml(url)}</a>`;
+        } else {
+            html += escapeHtml(part);
+        }
+    }
+    return html;
+}
 
 // Encode only the filename segment to safely handle spaces/plus signs/Korean
 function encodeFilePath(path) {
@@ -51,6 +80,25 @@ function encodeFilePath(path) {
     const file = path.slice(lastSlash + 1);
     return dir + encodeURIComponent(file);
 }
+
+// Preload vote guide images to prevent flicker on tab switch
+(function preloadVoteImages(){
+    try {
+        const sources = [
+            'assets/guide/vote/뮤빗1.png',
+            'assets/guide/vote/뮤빗2.png',
+            'assets/guide/vote/스타플래닛1.png',
+            'assets/guide/vote/스타플래닛2.png',
+            'assets/guide/vote/아이돌챔프1.png',
+            'assets/guide/vote/아이돌챔프2.png',
+            'assets/guide/vote/팬캐스트 투표권 모으기.png',
+            'assets/guide/vote/팬캐스트 투표하기.png',
+            'assets/guide/vote/하이어1.png',
+            'assets/guide/vote/하이어2.png'
+        ].map(encodeFilePath);
+        sources.forEach(src => { const img = new Image(); img.src = src; });
+    } catch (_) {}
+})();
 
 // 상위 메뉴 탭 전환 함수
 function switchMainTab(tab) {
@@ -102,15 +150,19 @@ function switchGuideTab(type) {
     const downloadGrid = document.getElementById('download-grid');
     const voteGrid = document.getElementById('vote-grid');
     const otherGrid = document.getElementById('other-grid');
+    const groupbuyGrid = document.getElementById('groupbuy-grid');
 
     // 먼저 모두 숨김 및 이미지 영역 초기화(잔상 제거)
-    [streamingGrid, idGrid, downloadGrid, voteGrid, otherGrid].forEach(el => { if (el) el.style.display = 'none'; });
+    [streamingGrid, idGrid, downloadGrid, voteGrid, otherGrid, groupbuyGrid].forEach(el => { if (el) el.style.display = 'none'; });
     const container = document.querySelector('.guide-image-container');
     const single = document.getElementById('guideImage');
+    const guideTextBox = document.getElementById('guideText');
     if (container) {
         Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
     }
     if (single) { single.style.display = ''; single.src = ''; single.onclick = null; }
+    // 공동구매 전용 텍스트는 기본적으로 숨김/초기화 (다른 탭 잔상 제거)
+    if (guideTextBox) { guideTextBox.style.display = 'none'; guideTextBox.innerHTML = ''; }
     if (type === 'id') {
         if (idGrid) idGrid.style.display = 'block';
         // 1단계: 카테고리 탭 렌더링 (구 그리드 사용)
@@ -152,31 +204,24 @@ function switchGuideTab(type) {
         if (idDetailTabs) { idDetailTabs.style.display = 'none'; idDetailTabs.innerHTML=''; }
     }
 
+    // 공동구매 가이드
+    if (type === 'groupbuy') {
+        if (groupbuyGrid) groupbuyGrid.style.display = 'block';
+        // 기본(첫 번째) 버튼 자동 선택 - 투표 가이드와 동일한 방식
+        if (groupbuyGrid) {
+            const firstGridBtn = groupbuyGrid.querySelector('.guide-item');
+            if (firstGridBtn && typeof firstGridBtn.click === 'function') firstGridBtn.click();
+        }
+        document.getElementById('deviceTabs').style.display = 'none';
+        document.querySelector('.guide-content').style.display = 'block';
+        return;
+    }
+
     // 투표 가이드 하위 탭
     if (type === 'vote') {
         if (voteGrid) voteGrid.style.display = 'block';
-        if (voteDetailTabs) {
-            voteDetailTabs.style.display = 'flex';
-            voteDetailTabs.innerHTML = `
-                <button class="service-tab" data-vote="mubit">뮤빗</button>
-                <button class="service-tab" data-vote="starplanet">스타플래닛</button>
-                <button class="service-tab" data-vote="champ">챔프</button>
-                <button class="service-tab" data-vote="fancast">팬캐스트</button>
-                <button class="service-tab" data-vote="higher">하이어</button>
-            `;
-            Array.from(voteDetailTabs.querySelectorAll('button')).forEach(btn => {
-                btn.addEventListener('click', () => {
-                    Array.from(voteDetailTabs.querySelectorAll('button')).forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    const key = btn.getAttribute('data-vote');
-                    updateVoteGuideImage(key);
-                });
-            });
-            const first = voteDetailTabs.querySelector('button');
-            if (first) first.click();
-        }
-        // voteDetailTabs 요소가 없는 현재 마크업 대응: 기본(첫 번째) 버튼 자동 선택
-        if (!voteDetailTabs && voteGrid) {
+        // 기본(첫 번째) 버튼 자동 선택
+        if (voteGrid) {
             const firstGridBtn = voteGrid.querySelector('.guide-item');
             if (firstGridBtn && typeof firstGridBtn.click === 'function') firstGridBtn.click();
         }
@@ -244,8 +289,22 @@ function switchDeviceTab(device) {
     updateGuideImage();
 }
 
+// 가이드 텍스트 박스 초기화 (공동구매가 아닌 경우 숨김)
+function hideGuideTextBox() {
+    const textBox = document.getElementById('guideText');
+    if (textBox) {
+        textBox.style.display = 'none';
+        textBox.innerHTML = '';
+    }
+}
+
 // 가이드 이미지 업데이트 함수
 function updateGuideImage() {
+    // 공동구매가 아닌 경우 텍스트 박스 숨김
+    if (currentGuideType !== 'groupbuy') {
+        hideGuideTextBox();
+    }
+    
     // 투표 가이드로 인해 추가된 다중 이미지가 있다면 정리하고 단일 이미지 모드로 복구
     const container = document.querySelector('.guide-image-container');
     if (container) {
@@ -267,17 +326,42 @@ function updateGuideImage() {
                 imagePath = encodeFilePath(`assets/guide/generateid/dualnumber/${file}`);
             }
         } else if (currentIdCategory === 'id') {
-            const map = {
-                'melon': '아이디생성가이드_202508ver_멜론.png',
-                'vibe': '아이디생성가이드_202508ver_바이브.png',
-                'bugs': '아이디생성가이드_202508ver_벅스.png',
-                'genie': '아이디생성가이드_202508ver_지니.png',
-                'kakao': '아이디생성가이드_202508ver_카카오뮤직01.png',
-                'flo': '아이디생성가이드_202508ver_플로.png'
-            };
-            const file = map[currentIdDetail];
-            if (file) {
-                imagePath = encodeFilePath(`assets/guide/generateid/id/${file}`);
+            // 카카오뮤직은 3장, 나머지는 1장
+            if (currentIdDetail === 'kakao') {
+                const kakaoList = [
+                    '아이디생성가이드_202508ver_카카오뮤직01.png',
+                    '아이디생성가이드_202508ver_카카오뮤직02.png',
+                    '아이디생성가이드_202508ver_카카오뮤직03.png'
+                ].map(f => encodeFilePath(`assets/guide/generateid/id/${f}`));
+                // 단일 이미지 숨기고 다중 이미지로 렌더
+                const container = document.querySelector('.guide-image-container');
+                const single = document.getElementById('guideImage');
+                if (container) {
+                    Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
+                }
+                if (single) { single.style.display = 'none'; single.onclick = null; single.src = ''; }
+                if (container) {
+                    kakaoList.forEach(src => {
+                        const img = document.createElement('img');
+                        img.src = src;
+                        img.alt = '카카오뮤직 아이디 생성 가이드';
+                        img.className = 'guide-image vote-image';
+                        container.appendChild(img);
+                    });
+                }
+                return; // 조기 종료 (단일 이미지 경로 설정 생략)
+            } else {
+                const map = {
+                    'melon': '아이디생성가이드_202508ver_멜론.png',
+                    'vibe': '아이디생성가이드_202508ver_바이브.png',
+                    'bugs': '아이디생성가이드_202508ver_벅스.png',
+                    'genie': '아이디생성가이드_202508ver_지니.png',
+                    'flo': '아이디생성가이드_202508ver_플로.png'
+                };
+                const file = map[currentIdDetail];
+                if (file) {
+                    imagePath = encodeFilePath(`assets/guide/generateid/id/${file}`);
+                }
             }
         }
     } else if (currentGuideType === 'streaming') {
@@ -350,25 +434,25 @@ function setMultiImages(paths) {
 
 // 투표 가이드 이미지 매핑
 function updateVoteGuideImage(key) {
-    // 아이디 가이드와 동일하게 단일 이미지 엘리먼트만 사용해 레이아웃 변화를 최소화
+    // 두 이미지를 동시에 표시: 1) 투표권 모으기 2) 투표하기
     const listMap = {
-        mubit: [
+        musicbank: [
             encodeFilePath('assets/guide/vote/뮤빗1.png'),
             encodeFilePath('assets/guide/vote/뮤빗2.png')
         ],
-        starplanet: [
+        musiccore: [
             encodeFilePath('assets/guide/vote/스타플래닛1.png'),
             encodeFilePath('assets/guide/vote/스타플래닛2.png')
         ],
-        champ: [
+        inkigayo: [
             encodeFilePath('assets/guide/vote/아이돌챔프1.png'),
             encodeFilePath('assets/guide/vote/아이돌챔프2.png')
         ],
-        fancast: [
+        showchampion: [
             encodeFilePath('assets/guide/vote/팬캐스트 투표권 모으기.png'),
             encodeFilePath('assets/guide/vote/팬캐스트 투표하기.png')
         ],
-        higher: [
+        theshow: [
             encodeFilePath('assets/guide/vote/하이어1.png'),
             encodeFilePath('assets/guide/vote/하이어2.png')
         ]
@@ -376,25 +460,39 @@ function updateVoteGuideImage(key) {
     const paths = listMap[key] || [];
     const container = document.querySelector('.guide-image-container');
     const single = document.getElementById('guideImage');
-    if (!container || !single) return;
+    if (!container) return;
 
-    // 기존 다중 이미지 제거 및 단일 이미지 표시
+    // 단일 기본 이미지 숨김
+    if (single) { single.style.display = 'none'; single.onclick = null; single.src = ''; }
+
+    // 기존 투표 이미지 제거 및 로딩 placeholder 추가
     Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
-    single.style.display = '';
+    container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; min-height: 200px; color: #9ca3af; font-size: 0.9rem;">이미지 로딩 중...</div>';
 
-    // 기본 이미지는 첫 번째로, 클릭 시 다음 이미지로 순환하도록 처리 (있을 때만)
-    let idx = 0;
-    if (paths.length > 0) {
-        single.src = paths[0];
-        single.onclick = paths.length > 1 ? function() {
-            idx = (idx + 1) % paths.length;
-            single.src = paths[idx];
-        } : null;
-        single.alt = '투표 가이드 이미지';
-    } else {
-        single.src = '';
-        single.onclick = null;
-    }
+    // 이미지 로드 카운터
+    let loadedCount = 0;
+    const totalImages = paths.length;
+
+    // 순서대로 두 이미지를 추가
+    paths.forEach(src => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = '투표 가이드 이미지';
+        img.className = 'guide-image vote-image';
+        
+        // 이미지 로드 완료 시 placeholder 제거
+        img.onload = function() {
+            loadedCount++;
+            if (loadedCount === totalImages && container) {
+                const placeholder = container.querySelector('div');
+                if (placeholder && placeholder.textContent.includes('로딩 중')) {
+                    placeholder.remove();
+                }
+            }
+        };
+        
+        container.appendChild(img);
+    });
 }
 
 // 투표 가이드 버튼 클릭 핸들러 (스타일 활성화 토글 포함)
@@ -407,6 +505,8 @@ function openVoteGuide(key) {
         if (activeBtn) activeBtn.classList.add('active');
     }
     currentGuideType = 'vote';
+    // 투표 가이드에서는 텍스트 박스 숨김
+    hideGuideTextBox();
     document.querySelector('.guide-content').style.display = 'block';
     updateVoteGuideImage(key);
 }
@@ -415,6 +515,8 @@ function openVoteGuide(key) {
 function openStreamingGuide(service) {
     currentGuideType = 'streaming';
     currentService = service;
+    // 스트리밍 가이드에서는 텍스트 박스 숨김
+    hideGuideTextBox();
     // 스트리밍 선택 시 그리드 유지, 이미지 표시
     const streamingGrid = document.getElementById('streaming-grid');
     if (streamingGrid) streamingGrid.style.display = 'block';
@@ -425,6 +527,8 @@ function openStreamingGuide(service) {
 function openDownloadGuide(kind, service) {
     currentGuideType = kind === 'mv' ? 'mv' : 'music';
     currentService = service;
+    // 다운로드 가이드에서는 텍스트 박스 숨김
+    hideGuideTextBox();
     document.querySelector('.guide-content').style.display = 'block';
     updateGuideImage();
 }
@@ -432,12 +536,106 @@ function openDownloadGuide(kind, service) {
 function openOtherGuide(kind) {
     if (kind === 'block') {
         currentGuideType = 'stability';
+        // 기타 가이드에서는 텍스트 박스 숨김
+        hideGuideTextBox();
         document.querySelector('.guide-content').style.display = 'block';
         updateGuideImage();
     } else if (kind === 'radio') {
         alert('라디오 신청 가이드는 준비 중입니다.🐻');
     } else {
         alert('준비 중입니다.🐻');
+    }
+}
+
+// 공동구매 가이드 핸들러
+function openGroupBuyGuide(vendor) {
+    currentGuideType = 'groupbuy';
+    // active 스타일 토글
+    const grid = document.getElementById('groupbuy-grid');
+    if (grid) {
+        const buttons = grid.querySelectorAll('.guide-item');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        const activeBtn = Array.from(buttons).find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes(`openGroupBuyGuide('${vendor}')`));
+        if (activeBtn) activeBtn.classList.add('active');
+    }
+    const container = document.querySelector('.guide-image-container');
+    const textBox = document.getElementById('guideText');
+    const single = document.getElementById('guideImage');
+    
+    // 이미지 컨테이너 초기화 및 로딩 상태 표시
+    if (container) {
+        Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
+        // 로딩 placeholder 추가
+        container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; min-height: 200px; color: #9ca3af; font-size: 0.9rem;">이미지 로딩 중...</div>';
+    }
+    if (single) { single.style.display = 'none'; single.onclick = null; single.src = ''; }
+
+    // 벤더별 안내 텍스트 매핑 (상단 표시)
+    const vendorText = {
+        minirecord: `미니레코드 공동구매\n\n▪️공구 기간: ~ 9월 7일 23:59 (KST)\n\n▪️공구 특전: 엽서 1종\n\n▪️공구 가격&링크\n💿 Tin Case Ver. 29,700원\nhttps://minirecord.shop/product/detail.html?product_no=2326\n\n💿 Savory Ver. 14,500원\nhttps://minirecord.shop/product/detail.html?product_no=2325\n\n💿 Full Spread(랜덤) Ver. 14,500원\nhttps://minirecord.shop/product/detail.html?product_no=2328\n\n💿 Full Spread(세트) Ver. 43,500원\nhttps://minirecord.shop/product/detail.html?product_no=2327\n\n※ 앨범 발매 후 온•오프라인 물량에 차질이 있을 수 있으므로 최대한 >예약 판매 기간 내에< 에 많은 구매 부탁드립니다.`,
+        applemusic: `애플뮤직 공동구매\n\n▪️공구 기간: ~ 9월 7일 23:59(KST)\n\n▪️공구 특전: 스티커 1종\n\n🔗공구 가격 & 링크\n💿Tin Case Ver. 30,700원\nhttps://abit.ly/acaxvd\n\n💿 Savory Ver. 14,500원\nhttps://abit.ly/fvgwev\n\n💿 Full Spread(랜덤) Ver. 14,500원\nhttps://abit.ly/rvw5i6\n\n💿 Full Spread(세트) ver. 43,200원\nhttps://abit.ly/vvau2w\n\n※ 앨범 발매 후 온•오프라인 물량에 차질이 있을 수 있으므로 최대한 >예약 판매 기간 내에< 에 많은 구매 부탁드립니다.`,
+        everline: `에버라인 공동구매\n\n▪️공구 기간: ~ 9월 8일 23:59 (KST)\n\n▪️공구 특전: 핀버튼 3종 중 랜덤 1종\n\n▪️공구 가격&링크\n💿 Tin Case Ver. 30,500₩\nhttps://bit.ly/45XUyWC\n\n💿 Savory Ver. 14,700\nhttps://bit.ly/4fJkn01\n\n💿 Full Spread(랜덤) Ver. 14,700₩\nhttps://bit.ly/45XUGp4\n\n💿 Full Spread(세트) Ver. 43,600₩\nhttps://bit.ly/4mQLk40\n\n* 앨범 발매 후 온•오프라인 물량에 차질이 있을 수 있으므로\n최대한 >예약 판매 기간 내에< 많은 구매 부탁드립니다.`,
+        allmd: `올엠디 공동구매\n\n▪️공구 기간 : ~ 9월 7일 23:59 (KST)\n\n▪️공구 특전: 스티커 1종\n\n▪️공구 가격\n💿Tin Case Ver. 29,500원\n💿Savory Ver. 14,400원\n💿Full Spread Ver. (랜덤) 14,400원\n💿Full Spread Ver. (세트) 42,600원\n\n🔗공구 링크 \nhttps://buly.kr/9BWCsD7\n\n※ 앨범 발매 후 온•오프라인 물량에 차질이 있을 수 있으므로 최대한 >예약 판매 기간 내에< 에 많은 구매 부탁드립니다.`
+    };
+    if (textBox) {
+        const text = vendorText[vendor] || '';
+        if (text) {
+            textBox.style.display = '';
+            textBox.innerHTML = linkifyText(text);
+        } else {
+            textBox.style.display = 'none';
+            textBox.innerHTML = '';
+        }
+    }
+
+    const map = {
+        minirecord: [
+            encodeFilePath('assets/guide/groupbuy/미니레코드 국문.png'),
+            encodeFilePath('assets/guide/groupbuy/미니레코드 영문.png')
+        ],
+        applemusic: [
+            encodeFilePath('assets/guide/groupbuy/애플뮤직 국문.png'),
+            encodeFilePath('assets/guide/groupbuy/애플뮤직 영문.png')
+        ],
+        everline: [
+            encodeFilePath('assets/guide/groupbuy/에버라인 국문.png'),
+            encodeFilePath('assets/guide/groupbuy/에버라인 영문.png')
+        ],
+        allmd: [
+            encodeFilePath('assets/guide/groupbuy/올엠디.png')
+        ]
+    };
+    const paths = map[vendor] || [];
+    const list = paths.length ? paths : [];
+    // 투표 가이드와 동일: 두 이미지가 있으면 모두 표시, 하나면 하나만 표시
+    const frag = document.createDocumentFragment();
+    let loadedCount = 0;
+    const totalImages = list.length;
+    
+    list.forEach(src => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = '공동구매 가이드 이미지';
+        img.className = 'guide-image vote-image';
+        
+        // 이미지 로드 완료 시 placeholder 제거
+        img.onload = function() {
+            loadedCount++;
+            if (loadedCount === totalImages && container) {
+                // 모든 이미지 로드 완료 시 placeholder 제거
+                const placeholder = container.querySelector('div');
+                if (placeholder && placeholder.textContent.includes('로딩 중')) {
+                    placeholder.remove();
+                }
+            }
+        };
+        
+        frag.appendChild(img);
+    });
+    
+    if (container && totalImages > 0) {
+        container.appendChild(frag);
+        document.querySelector('.guide-content').style.display = 'block';
     }
 }
 
@@ -480,6 +678,8 @@ function openIdCategoryGrid(category, el) {
 
 function selectIdDetail(detail) {
     currentIdDetail = detail;
+    // 아이디 가이드에서는 텍스트 박스 숨김
+    hideGuideTextBox();
     document.querySelector('.guide-content').style.display = 'block';
     updateGuideImage();
 }

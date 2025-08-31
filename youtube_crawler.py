@@ -112,15 +112,37 @@ class YouTubeCrawler:
             print(f"❌ YouTube 통계 저장 실패: {e}")
 
 
+def _resolve_video_id() -> str | None:
+    """영상 ID 결정 우선순위 (기본값 없음)
+    1) 환경변수 YOUTUBE_VIDEO_ID
+    2) 기존 docs/youtube_stats.json의 video_id
+    둘 다 없으면 None 반환
+    """
+    env_id = os.getenv("YOUTUBE_VIDEO_ID", "").strip()
+    if env_id:
+        return env_id
+    try:
+        with open("docs/youtube_stats.json", "r", encoding="utf-8") as f:
+            data = json.load(f)
+            vid = str(data.get("video_id", "")).strip()
+            if vid:
+                return vid
+    except Exception:
+        pass
+    return None
+
+
 def get_youtube_stats_for_dashboard():
     """
-    대시보드용 YouTube 통계 가져오기 (NCT DREAM - BTTF)
+    대시보드용 YouTube 통계 가져오기 (영상 ID 동적 결정)
     
     Returns:
         Dict: YouTube 통계 정보
     """
-    # NCT DREAM - BTTF 뮤직비디오 ID
-    VIDEO_ID = "3rsBWr3JOUI"
+    VIDEO_ID = _resolve_video_id()
+    if not VIDEO_ID:
+        print("⚠️ YouTube 영상 ID가 설정되어 있지 않아 업데이트를 건너뜁니다. (env YOUTUBE_VIDEO_ID 또는 docs/youtube_stats.json의 video_id 사용)")
+        return {}
     
     crawler = YouTubeCrawler()
     stats = crawler.get_video_stats(VIDEO_ID)
@@ -134,7 +156,7 @@ def get_youtube_stats_for_dashboard():
         print("🔄 YouTube API 실패로 기본값 사용")
         default_stats = {
             'video_id': VIDEO_ID,
-            'title': 'NCT DREAM - BTTF',
+            'title': '',
             'view_count': 0,
             'like_count': 0,
             'view_count_formatted': '-',
