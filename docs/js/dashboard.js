@@ -75,7 +75,7 @@ async function updateRealTimeChartStatus() {
 
             if (rankElement && badgeElement) {
                 if (currentRank !== null) {
-                    rankElement.textContent = `${currentRank}위`;
+                    rankElement.innerHTML = `${currentRank}<span class="rank-unit">위</span>`;
                     badgeElement.textContent = 'IN';
                     badgeElement.className = 'rank-badge in-chart';
                 } else {
@@ -314,14 +314,23 @@ function openQuickModal(mode) {
         });
     } else if (mode === 'radio') {
         title.textContent = '원클릭 라디오 신청';
-        ['KBS','MBC','SBS'].forEach(label => {
-            const btn = document.createElement('a');
-            btn.className = 'btn';
-            btn.href = '#';
-            btn.onclick = function(e) { e.preventDefault(); alert('준비 중입니다.🐻'); };
-            btn.textContent = label;
-            body.appendChild(btn);
-        });
+
+        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        const sep = isIOS ? '&' : '?';
+        const smsBody = encodeURIComponent('NCT 해찬의 CRZY 신청합니다.');
+
+        function createSmsButton(label, number) {
+            const a = document.createElement('a');
+            a.className = 'btn';
+            a.href = `sms:${number}${sep}body=${smsBody}`;
+            a.textContent = label;
+            // 인앱 브라우저 일부에서 a 클릭을 막지 않도록 target 제거, noopener 생략
+            return a;
+        }
+
+        body.appendChild(createSmsButton('KBS', '8910'));
+        body.appendChild(createSmsButton('MBC', '8000'));
+        body.appendChild(createSmsButton('SBS', '1077'));
     } else if (mode === 'groupbuy') {
         title.textContent = '공동구매';
         const vendors = [

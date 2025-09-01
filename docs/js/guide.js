@@ -29,7 +29,7 @@ const serviceNames = {
     vibe: '바이브',
     flo: '플로',
     youtube: '유튜브',
-    kakao: '카카오 뮤직'
+    kakao: '카카오뮤직'
 };
 
 // 가이드 타입 이름 매핑
@@ -726,7 +726,7 @@ function openIdCategoryGrid(category, el) {
             <button class=\"guide-item text-only\" onclick=\"selectIdDetail('bugs')\">벅스</button>
             <button class=\"guide-item text-only\" onclick=\"selectIdDetail('vibe')\">바이브</button>
             <button class=\"guide-item text-only\" onclick=\"selectIdDetail('flo')\">플로</button>
-            <button class=\"guide-item text-only\" onclick=\"selectIdDetail('kakao')\">카카오 뮤직</button>
+            <button class=\"guide-item text-only\" onclick=\"selectIdDetail('kakao')\">카카오뮤직</button>
         `;
     }
     // 하위 첫 항목을 자동 선택하여 이미지가 즉시 보이도록 함 (렌더 뒤 이벤트 루프에서 실행)
