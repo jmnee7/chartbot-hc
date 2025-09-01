@@ -342,22 +342,39 @@ function openQuickModal(mode) {
     } else if (mode === 'radio') {
         title.textContent = '원클릭 라디오 신청';
 
-        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-        const sep = isIOS ? '&' : '?';
+        const ua = navigator.userAgent;
+        const isIOS = /iPhone|iPad|iPod/i.test(ua);
+        const isAndroid = /Android/i.test(ua);
+        const isMacOS = /Macintosh|Mac OS X/i.test(ua);
+        // 안드로이드는 smsto:, 그 외(iOS/맥/데스크톱)는 sms:
+        const scheme = isAndroid ? 'smsto:' : 'sms:';
+        const sep = isAndroid ? '?' : '&';
         const smsBody = encodeURIComponent('NCT 해찬의 CRZY 신청합니다.');
 
-        function createSmsButton(label, number) {
+        function createSmsButton(label, rawNumber) {
+            // iOS/맥/데스크톱은 '#' 그대로, Android는 인코딩
+            const recipient = (isAndroid ? encodeURIComponent(rawNumber) : rawNumber);
+            const href = `${scheme}${recipient}${sep}body=${smsBody}`;
             const a = document.createElement('a');
             a.className = 'btn';
-            a.href = `sms:${number}${sep}body=${smsBody}`;
+            a.href = href;
             a.textContent = label;
-            // 인앱 브라우저 일부에서 a 클릭을 막지 않도록 target 제거, noopener 생략
+            a.target = '_self';
+            // 일부 브라우저/인앱에서 스킴 링크가 무시되는 경우를 대비한 강제 네비게이션
+            a.addEventListener('click', function(e){
+                try {
+                    e.preventDefault();
+                    window.location.href = href;
+                } catch (err) {
+                    // 무시
+                }
+            });
             return a;
         }
 
-        body.appendChild(createSmsButton('KBS', '8910'));
-        body.appendChild(createSmsButton('MBC', '8000'));
-        body.appendChild(createSmsButton('SBS', '1077'));
+        body.appendChild(createSmsButton('KBS', '#8910'));
+        body.appendChild(createSmsButton('MBC', '#8000'));
+        body.appendChild(createSmsButton('SBS', '#1077'));
     } else if (mode === 'groupbuy') {
         title.textContent = '공동구매';
         const vendors = [
