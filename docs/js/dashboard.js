@@ -45,7 +45,34 @@ async function updateRealTimeChartStatus() {
     try {
         const response = await fetch('rank_history.json');
         const historyData = await response.json();
-        const timestamps = Object.keys(historyData).sort();
+        const timestamps = Object.keys(historyData || {}).sort();
+
+        // Helper: set placeholders when no data
+        function setEmptyState() {
+            const services = {
+                'melon_top100': { rankId: 'melon-top-rank', badgeId: 'melon-top-badge', changeId: 'melon-top-change' },
+                'melon_hot100': { rankId: 'melon-hot-rank', badgeId: 'melon-hot-badge', changeId: 'melon-hot-change' },
+                'bugs': { rankId: 'bugs-rank', badgeId: 'bugs-badge', changeId: 'bugs-change' },
+                'genie': { rankId: 'genie-rank', badgeId: 'genie-badge', changeId: 'genie-change' },
+                'vibe': { rankId: 'vibe-rank', badgeId: 'vibe-badge', changeId: 'vibe-change' },
+                'flo': { rankId: 'flo-rank', badgeId: 'flo-badge', changeId: 'flo-change' }
+            };
+            for (const elements of Object.values(services)) {
+                const rankElement = document.getElementById(elements.rankId);
+                const badgeElement = document.getElementById(elements.badgeId);
+                const changeElement = document.getElementById(elements.changeId);
+                if (rankElement) rankElement.textContent = '-';
+                if (badgeElement) { badgeElement.textContent = 'OUT'; badgeElement.className = 'rank-badge out-chart'; }
+                if (changeElement) changeElement.textContent = '';
+            }
+            const last = document.getElementById('lastUpdate');
+            if (last) last.textContent = '-';
+        }
+
+        if (!timestamps.length) {
+            setEmptyState();
+            return;
+        }
 
         const latestTimestamp = timestamps[timestamps.length - 1];
         const latestData = historyData[latestTimestamp];

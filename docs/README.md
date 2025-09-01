@@ -4,7 +4,7 @@
 
 ```
 docs/
-├── dashboard.html          # 메인 대시보드 페이지
+├── index.html              # 메인 대시보드 페이지
 ├── target_index.html       # 기본 차트 페이지
 ├── rank_history.json       # 차트 히스토리 데이터
 └── images/                 # 스트리밍 가이드 이미지 폴더
@@ -35,7 +35,7 @@ docs/
 
 1. 준비된 이미지 파일을 `docs/images/` 폴더에 저장
 2. 파일명을 위의 규칙에 맞게 변경
-3. 브라우저에서 `dashboard.html` 새로고침
+3. 브라우저에서 `index.html` 새로고침
 
 ## 💡 참고사항
 
@@ -45,7 +45,7 @@ docs/
 
 ## 📱 사용법
 
-1. 브라우저에서 `docs/dashboard.html` 열기
+1. 브라우저에서 `docs/index.html` 열기
 2. "원클릭 스트리밍" 섹션에서 원하는 플랫폼 클릭
 3. 모달 팝업에서 스트리밍 가이드 이미지 확인
 4. "바로 스트리밍하기" 버튼으로 사이트 이동 
