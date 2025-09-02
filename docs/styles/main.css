@@ -14,6 +14,9 @@ body {
   scrollbar-gutter: stable both-edges;
 }
 
+/* Lock body scroll when mobile menu open */
+.no-scroll { overflow: hidden; overscroll-behavior: none; }
+
 /* Top App Bar */
 .topbar {
   position: sticky;
@@ -65,7 +68,7 @@ body {
 .banner-slider { display: flex; transition: transform 0.4s ease; }
 .banner-slide { min-width: 100%; user-select: none; }
 .banner-slide img { width: 100%; height: auto; border-radius: 0; display: block; }
-.banner-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.35); color: #fff; border: none; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.banner-nav { position: absolute; top: 50%; transform: translateY(-50%); background: transparent; color: #fff; border: none; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 22px; }
 .banner-nav.prev { left: 10px; }
 .banner-nav.next { right: 10px; }
 .banner-dots { position: absolute; bottom: 10px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; }
@@ -187,6 +190,7 @@ button.home-shortcut { border-radius: 14px; background: #f8fafc; }
   .youtube-section .youtube-stats-display { grid-template-columns: 1fr 1fr; gap: 10px; }
   .youtube-section .stat-item { min-height: 56px; padding: 10px; }
   .youtube-section .stat-value { font-size: 1.35rem; }
+  .banner-nav { width: 28px; height: 28px; font-size: 20px; background: transparent; }
 }
 
 /* 더 작은 모바일 화면 (480px 이하) */
@@ -203,6 +207,7 @@ button.home-shortcut { border-radius: 14px; background: #f8fafc; }
   .youtube-section .youtube-stats-display { grid-template-columns: 1fr 1fr; gap: 8px; }
   .youtube-section .stat-item { min-height: 52px; padding: 8px; }
   .youtube-section .stat-value { font-size: 1.25rem; }
+  .banner-nav { width: 24px; height: 24px; font-size: 18px; background: transparent; }
 }
 
 .card h2 small { font-size: 0.6em; font-weight: normal; margin-left: 10px; color: #6c757d; }
