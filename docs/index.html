@@ -285,13 +285,18 @@
       const hamburgerBtn = document.getElementById('hamburgerBtn');
       const mobileMenu = document.getElementById('mobileMenu');
       const backdrop = document.getElementById('menuBackdrop');
+      let savedScrollY = 0;
 
       function openMenu() {
         mobileMenu.classList.add('open');
         backdrop.classList.add('visible');
         hamburgerBtn.setAttribute('aria-expanded', 'true');
         mobileMenu.setAttribute('aria-hidden', 'false');
+        // Robust body scroll lock (iOS-safe): fix body and restore scroll later
+        savedScrollY = window.scrollY || window.pageYOffset || 0;
+        document.body.style.top = `-${savedScrollY}px`;
         document.body.classList.add('no-scroll');
+        document.body.classList.add('no-scroll-fixed');
       }
       function closeMenu() {
         mobileMenu.classList.remove('open');
@@ -299,6 +304,11 @@
         hamburgerBtn.setAttribute('aria-expanded', 'false');
         mobileMenu.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('no-scroll');
+        document.body.classList.remove('no-scroll-fixed');
+        const y = savedScrollY || 0;
+        document.body.style.top = '';
+        if (y) { window.scrollTo(0, y); }
+        savedScrollY = 0;
       }
       function toggleMenu() {
         if (mobileMenu.classList.contains('open')) { closeMenu(); } else { openMenu(); }
@@ -307,6 +317,10 @@
       hamburgerBtn.addEventListener('click', toggleMenu);
       document.getElementById('menuCloseBtn').addEventListener('click', closeMenu);
       backdrop.addEventListener('click', closeMenu);
+      // Prevent accidental scroll chaining to body at top/bottom
+      mobileMenu.addEventListener('touchmove', function(e){
+        // nothing: overscroll-behavior handles it, but keep handler to anchor passive listeners
+      }, { passive: true });
       document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
 
       // Home title click -> go home (dashboard)
