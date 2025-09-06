@@ -7,20 +7,23 @@
     <meta property="og:title" content="해찬 스트리밍">
     <meta property="og:description" content="실시간 차트, 가이드, 공동구매 정보를 한 곳에서">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="https://raw.githubusercontent.com/doah/chartbot-hc/main/docs/assets/og.jpeg">
+    <meta property="og:image" content="https://doah.github.io/chartbot-hc/assets/og.jpeg">
+    <meta property="og:image:secure_url" content="https://doah.github.io/chartbot-hc/assets/og.jpeg">
+    <meta property="og:url" content="https://doah.github.io/chartbot-hc/">
+    <meta property="og:site_name" content="해찬 스트리밍">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://raw.githubusercontent.com/doah/chartbot-hc/main/docs/assets/og.jpeg">
+    <meta name="twitter:image" content="https://doah.github.io/chartbot-hc/assets/og.jpeg">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.8/dist/web/static/pretendard.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
-    <link rel="stylesheet" href="styles/main.css?v=3.4">
+    <link rel="stylesheet" href="styles/main.css?v=3.5">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E🐻%3C/text%3E%3C/svg%3E">
   </head>
   <body>
     <!-- Top App Bar -->
     <div class="topbar">
-      <div class="topbar__title" id="homeTitle" role="button" tabindex="0" aria-label="홈으로 이동">🐻 해찬 스트리밍</div>
+      <div class="topbar__title" id="homeTitle" role="button" tabindex="0" aria-label="홈으로 이동"><img src="assets/home/logo/logo.png" alt="로고" style="height:40px; width:auto; vertical-align:middle; margin-right:10px;"> 해찬 스트리밍</div>
       <div class="topbar__actions">
         <button class="hamburger" id="hamburgerBtn" aria-label="메뉴 열기" aria-expanded="false">
           <span class="hamburger__bars"></span>
@@ -34,7 +37,7 @@
         <button class="menu-close" id="menuCloseBtn" aria-label="닫기">✕</button>
       </div>
       <a href="#" onclick="openDashboardSection('rank-section'); return false;">스트리밍 리스트</a>
-      <a href="#" onclick="openChecklist('pre'); return false;">🌻음원 발매 전날 체크리스트🌻</a>
+      <a href="#" onclick="openChecklist('pre'); return false;">🌻해프 할 일🌻</a>
       <a href="#" onclick="openChecklist('release'); return false;">🌻음원 발매 당일 체크리스트🌻</a>
 
       <!-- 가이드 상위 및 하위 메뉴 -->
@@ -42,7 +45,7 @@
       <div class="submenu" id="guideSubmenu" style="display: none;">
         <a href="#" onclick="openGuideMenu('id'); closeMenu(); return false;">아이디 가이드</a>
         <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">스트리밍 가이드</a>
-        <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">다운로드 가이드</a>
+        <a href="#" onclick="openGuideMenu('music'); closeMenu(); return false;">다운로드 가이드</a>
         <a href="#" onclick="openGuideMenu('vote'); closeMenu(); return false;">투표 가이드</a>
         <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">기타 가이드</a>
       </div>
@@ -54,7 +57,6 @@
         <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">원클릭 라디오 신청</a>
         <a href="#" onclick="openGuideMenu('groupbuy'); closeMenu(); return false;">공동구매</a>
         <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">투표</a>
-        <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">차트</a>
         <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">공지사항</a>
       </div>
     </div>
@@ -190,7 +192,7 @@
       </div>
     </main>
 
-    <section id="guide-view" class="container" style="display: none;">
+    <section id="guide-view" class="container guide-section" style="display: none;">
       <div class="card">
         <div class="guide-hub">
           <div id="streaming-grid" style="display: none;">
@@ -213,13 +215,11 @@
 
           <div id="download-grid" style="display: none;">
             <div class="guide-grid">
-              <button class="guide-item" onclick="openDownloadGuide('music','melon')">멜론 음원 다운로드</button>
-              <button class="guide-item" onclick="openDownloadGuide('music','genie')">지니 음원 다운로드</button>
-              <button class="guide-item" onclick="openDownloadGuide('music','bugs')">벅스 음원 다운로드</button>
-              <button class="guide-item" onclick="openDownloadGuide('music','vibe')">바이브 음원 다운로드</button>
-              <button class="guide-item" onclick="openDownloadGuide('music','kakao')">카카오뮤직 음원 다운로드</button>
-              <button class="guide-item" onclick="openDownloadGuide('mv','melon')">멜론 뮤비 다운로드</button>
-              <button class="guide-item" onclick="openDownloadGuide('mv','bugs')">벅스 뮤비 다운로드</button>
+              <button class="guide-item" onclick="openMusicDlGuide('melon')">멜론 다운로드</button>
+              <button class="guide-item" onclick="openMusicDlGuide('vibe')">바이브 다운로드</button>
+              <button class="guide-item" onclick="openMusicDlGuide('bugs')">벅스 다운로드</button>
+              <button class="guide-item" onclick="openMusicDlGuide('genie')">지니 다운로드</button>
+              <button class="guide-item" onclick="openMusicDlGuide('kakao')">카카오뮤직 다운로드</button>
             </div>
           </div>
 
@@ -230,6 +230,7 @@
               <button class="guide-item" onclick="openVoteGuide('inkigayo')">인기가요</button>
               <button class="guide-item" onclick="openVoteGuide('showchampion')">쇼챔피언</button>
               <button class="guide-item" onclick="openVoteGuide('theshow')">더쇼</button>
+              <button class="guide-item" onclick="openVoteGuide('mcount')">엠카운트다운</button>
             </div>
           </div>
 
@@ -380,10 +381,118 @@
         }
       }
 
-      // Open simple checklists (placeholder)
+      // Open simple checklists
       function openChecklist(type) {
-        showView('dashboard');
+        // 가이드 뷰로 전환하여 이미지 형태로 표시 (음원 가이드와 동일 레이아웃 재사용)
+        showView('guide');
         closeMenu();
+        // 허브(버튼 그리드) 감추고 상세 이미지만 노출
+        const hub = document.querySelector('#guide-view .guide-hub');
+        if (hub) hub.style.display = 'none';
+        const content = document.querySelector('#guide-view .guide-content');
+        if (content) content.style.display = 'block';
+        const container = document.querySelector('.guide-image-container');
+        const single = document.getElementById('guideImage');
+        
+        if (type === 'release') {
+          // 발매 당일 체크리스트 - 투표 가이드와 동일한 다중 이미지 방식 사용
+          if (single) { single.style.display = 'none'; single.onclick = null; single.src = ''; }
+          if (container) {
+            Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
+            // 로딩 placeholder 추가
+            container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; min-height: 300px; color: #9ca3af; font-size: 0.9rem;">이미지 로딩 중...</div>';
+          }
+          
+          // guide.js의 encodeFilePath 함수와 동일한 방식 사용
+          function encodeFilePath(path) {
+            if (!path) return path;
+            const lastSlash = path.lastIndexOf('/');
+            if (lastSlash === -1) return encodeURIComponent(path);
+            const dir = path.slice(0, lastSlash + 1);
+            const file = path.slice(lastSlash + 1);
+            return dir + encodeURIComponent(file);
+          }
+          
+          const images = [
+            encodeFilePath('assets/checklist/발매 당일 해프 일정표.png')
+          ];
+          
+          let loadedCount = 0;
+          const totalImages = images.length;
+          
+          images.forEach(src => {
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = '발매 당일 체크리스트';
+            img.className = 'guide-image vote-image';
+            
+            // 이미지 로드 완료 시 placeholder 제거
+            img.onload = function() {
+              loadedCount++;
+              console.log('체크리스트 이미지 로드 성공:', src);
+              if (loadedCount === totalImages && container) {
+                const placeholder = container.querySelector('div');
+                if (placeholder && placeholder.textContent.includes('로딩 중')) {
+                  placeholder.remove();
+                }
+              }
+            };
+            
+            img.onerror = function() {
+              console.log('체크리스트 이미지 로드 실패:', src);
+              alert('체크리스트 이미지를 불러오지 못했습니다: ' + src);
+            };
+            
+            if (container) container.appendChild(img);
+          });
+          return;
+        }
+        
+        if (type === 'pre') {
+          // 해프 할 일 - 다중 이미지 (투표 가이드와 동일한 방식)
+          if (single) { single.style.display = 'none'; single.onclick = null; single.src = ''; }
+          if (container) {
+            Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
+            // 로딩 placeholder 추가
+            container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; min-height: 300px; color: #9ca3af; font-size: 0.9rem;">이미지 로딩 중...</div>';
+          }
+          
+          const images = [
+            'assets/checklist/before/화력체크 총공.png',
+            'assets/checklist/before/해시태그 총공.png'
+          ];
+          
+          let loadedCount = 0;
+          const totalImages = images.length;
+          
+          images.forEach(src => {
+            const img = document.createElement('img');
+            img.src = encodeURI(src);
+            img.alt = '해프 할 일 체크리스트';
+            img.className = 'guide-image vote-image';
+            
+            // 이미지 로드 완료 시 placeholder 제거
+            img.onload = function() {
+              loadedCount++;
+              if (loadedCount === totalImages && container) {
+                const placeholder = container.querySelector('div');
+                if (placeholder && placeholder.textContent.includes('로딩 중')) {
+                  placeholder.remove();
+                }
+              }
+            };
+            
+            img.onerror = function() {
+              console.log('이미지 로드 실패:', src);
+            };
+            
+            if (container) container.appendChild(img);
+          });
+          return;
+        }
+        
+        // 기본(준비중)
+        showView('dashboard');
         alert('준비 중입니다.🐻');
       }
 

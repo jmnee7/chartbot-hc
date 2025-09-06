@@ -24,31 +24,31 @@ body {
   top: 0;
   z-index: 200;
   height: 56px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #e9ecef;
+  background-color: #966e4b;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
-.topbar__title { font-size: 1.1rem; font-weight: 800; color: #111827; letter-spacing: -0.01em; }
+.topbar__title { font-size: 1.1rem; font-weight: 800; color: #ffffff; letter-spacing: -0.01em; }
 .topbar__actions { display: flex; align-items: center; gap: 8px; }
 .hamburger { width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; border: none; border-radius: 8px; background: transparent; cursor: pointer; }
 .hamburger:focus { outline: 2px solid #cfe2ff; outline-offset: 2px; }
-.hamburger__bars, .hamburger__bars::before, .hamburger__bars::after { content: ''; display: block; width: 20px; height: 2px; background: #111827; border-radius: 2px; transition: transform 0.2s ease, opacity 0.2s ease; }
+.hamburger__bars, .hamburger__bars::before, .hamburger__bars::after { content: ''; display: block; width: 20px; height: 2px; background: #ffffff; border-radius: 2px; transition: transform 0.2s ease, opacity 0.2s ease; }
 .hamburger__bars::before { transform: translateY(-6px); }
 .hamburger__bars::after { transform: translateY(6px); }
 
 /* Slide-out Menu */
-.mobile-menu { position: fixed; top: 0; right: 0; height: 100vh; height: 100dvh; max-height: 100dvh; width: 280px; background: #ffffff; box-shadow: -8px 0 24px rgba(0,0,0,0.08); border-left: 1px solid #f1f3f5; transform: translateX(100%); opacity: 0; transition: transform 0.22s ease-out, opacity 0.18s ease-out; will-change: transform, opacity; z-index: 300; padding: 16px; padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; gap: 8px; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+.mobile-menu { position: fixed; top: 0; right: 0; height: 100vh; height: 100dvh; max-height: 100dvh; width: 280px; background: #966e4b; box-shadow: -8px 0 24px rgba(0,0,0,0.08); border-left: 1px solid #7d5b3f; transform: translateX(100%); opacity: 0; transition: transform 0.22s ease-out, opacity 0.18s ease-out; will-change: transform, opacity; z-index: 300; padding: 16px; padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; gap: 8px; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
 .mobile-menu.open { transform: translateX(0); opacity: 1; }
 .mobile-menu__header { display: flex; justify-content: flex-end; align-items: center; height: 40px; }
 .mobile-menu::after { content: ""; display: block; height: calc(48px + env(safe-area-inset-bottom, 0px)); flex: 0 0 auto; }
 .menu-close { border: none; background: #f1f3f5; color: #111827; border-radius: 8px; padding: 6px 10px; cursor: pointer; }
 .menu-close:hover { background: #e9ecef; }
-.mobile-menu a { display: block; padding: 12px 10px; border-radius: 10px; color: #212529; text-decoration: none; font-weight: 600; }
-.mobile-menu a:hover { background: #f1f3f5; }
+.mobile-menu a { display: block; padding: 12px 10px; border-radius: 10px; color: #ffffff; text-decoration: none; font-weight: 700; }
+.mobile-menu a:hover { background: rgba(255,255,255,0.08); }
 .backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.25); opacity: 0; pointer-events: none; transition: opacity 0.25s ease; z-index: 250; }
 .backdrop.visible { opacity: 1; pointer-events: auto; }
 
@@ -193,6 +193,29 @@ button.home-shortcut { border-radius: 14px; background: #f8fafc; }
   .youtube-section .stat-item { min-height: 56px; padding: 10px; }
   .youtube-section .stat-value { font-size: 1.35rem; }
   .banner-nav { width: 28px; height: 28px; font-size: 20px; background: transparent; }
+  
+  /* 모바일에서 가이드 이미지 최적화 */
+  .guide-image-container {
+    padding: 0 10px; /* 모바일에서 좌우 여백 */
+    min-height: 300px; /* 모바일에서 최소 높이 줄임 */
+    width: 100%; /* 모바일에서 부모 컨테이너 너비 */
+    max-width: 100%; /* 모바일에서 최대 너비 제한 */
+  }
+  .guide-image.vote-image {
+    max-height: 60vh; /* 모바일에서 더 작은 높이 제한 */
+    margin: 8px auto; /* 모바일에서 여백 줄임 */
+    width: 100%; /* 모바일에서 전체 너비 */
+    max-width: 100%; /* 모바일에서 최대 너비 제한 */
+  }
+  .guide-content {
+    min-height: 300px; /* 모바일에서 최소 높이 줄임 */
+    padding: 0 10px; /* 모바일에서 좌우 패딩 */
+    width: 100%; /* 모바일에서 부모 컨테이너 너비 */
+    max-width: 100%; /* 모바일에서 최대 너비 제한 */
+  }
+  .guide-section {
+    padding: 0 10px; /* 모바일에서 전체 섹션 패딩 */
+  }
 }
 
 /* 더 작은 모바일 화면 (480px 이하) */
@@ -210,6 +233,23 @@ button.home-shortcut { border-radius: 14px; background: #f8fafc; }
   .youtube-section .stat-item { min-height: 52px; padding: 8px; }
   .youtube-section .stat-value { font-size: 1.25rem; }
   .banner-nav { width: 24px; height: 24px; font-size: 18px; background: transparent; }
+  
+  /* 작은 모바일에서 가이드 이미지 더 최적화 */
+  .guide-image-container {
+    padding: 0 5px; /* 작은 화면에서 패딩 더 줄임 */
+    min-height: 250px; /* 작은 화면에서 최소 높이 더 줄임 */
+  }
+  .guide-image.vote-image {
+    max-height: 50vh; /* 작은 화면에서 높이 더 제한 */
+    margin: 5px auto; /* 작은 화면에서 여백 더 줄임 */
+  }
+  .guide-content {
+    min-height: 250px; /* 작은 화면에서 최소 높이 더 줄임 */
+    padding: 0 5px; /* 작은 화면에서 패딩 더 줄임 */
+  }
+  .guide-section {
+    padding: 0 5px; /* 작은 화면에서 섹션 패딩 더 줄임 */
+  }
 }
 
 .card h2 small { font-size: 0.6em; font-weight: normal; margin-left: 10px; color: #6c757d; }
@@ -232,23 +272,44 @@ button.home-shortcut { border-radius: 14px; background: #f8fafc; }
 /* Guide image responsive */
 .guide-image-container { 
   text-align: center; 
-  min-height: 360px; /* 고정된 표시 영역 확보로 레이아웃 흔들림 방지 */
-  width: 100%; /* 넓이 고정 */
-  max-width: 100%; /* 최대 넓이 제한 */
+  min-height: 400px; /* 고정된 표시 영역 확보로 레이아웃 흔들림 방지 */
+  width: 100%; /* 부모 컨테이너 전체 너비 */
+  max-width: 100%; /* 부모 컨테이너 너비 제한 */
+  box-sizing: border-box; /* 패딩/보더 포함 계산 */
   display: flex;
   flex-direction: column;
   justify-content: flex-start; /* 위쪽 정렬로 본문을 더 올림 */
   overflow: hidden; /* 넘치는 내용 숨김 */
+  position: relative; /* 로딩 상태 표시를 위한 기준점 */
+  padding: 0 15px; /* 좌우 여백 확보 */
 }
 .guide-content { 
-  min-height: 360px; 
-  width: 100%; /* 넓이 고정 */
-  max-width: 100%; /* 최대 넓이 제한 */
+  min-height: 400px; 
+  width: 100%; /* 부모 컨테이너 전체 너비 */
+  max-width: 100%; /* 부모 컨테이너 너비 제한 */
+  box-sizing: border-box; /* 패딩/보더 포함 계산 */
   margin-top: 0; /* 상단 여백 최소화 */
 }
-.guide-image { width: 100%; max-width: 100%; height: auto; max-height: 80vh; object-fit: contain; border-radius: 8px; display: block; }
+.guide-image { 
+  width: 100%; 
+  max-width: 100%; 
+  height: auto; 
+  max-height: 80vh; 
+  object-fit: contain; 
+  border-radius: 8px; 
+  display: block; 
+  box-sizing: border-box;
+}
 /* Vote multi image spacing */
-.guide-image.vote-image { display: block; margin: 10px auto; }
+.guide-image.vote-image { 
+  display: block; 
+  margin: 10px auto; 
+  width: 100%; 
+  max-width: 100%; 
+  box-sizing: border-box;
+  object-fit: contain; /* 이미지 비율 유지하며 컨테이너에 맞춤 */
+  max-height: 70vh; /* 모바일에서 화면 높이 제한 */
+}
 
 /* Guide rich text (groupbuy descriptions) */
 .guide-text { 
@@ -271,12 +332,27 @@ button.home-shortcut { border-radius: 14px; background: #f8fafc; }
 .guide-hub { 
   margin-top: 8px; 
   min-height: 120px; /* 버튼 영역 레이아웃 안정화 */
-  width: 100%; /* 넓이 고정 */
-  max-width: 100%; /* 최대 넓이 제한 */
+  width: 100%; /* 부모 컨테이너 전체 너비 */
+  max-width: 100%; /* 부모 컨테이너 너비 제한 */
+  box-sizing: border-box; /* 패딩/보더 포함 계산 */
+}
+/* Guide section layout stability */
+.guide-section { 
+  width: 100%; 
+  max-width: 100%; 
+  box-sizing: border-box; 
+  overflow-x: hidden; 
 }
 .guide-section-title { font-size: 1rem; font-weight: 700; color: #374151; margin: 18px 0 10px; }
-.guide-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
-.guide-item { padding: 10px 10px; background: #fff; border: 1.5px solid #a7f3d0; border-radius: 10px; color: #111827; text-align: center; cursor: pointer; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; min-height: 48px; }
+.guide-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+  gap: 10px; 
+  width: 100%; 
+  max-width: 100%; 
+  box-sizing: border-box;
+}
+.guide-item { padding: 12px 10px; background: #fff; border: 1.5px solid #a7f3d0; border-radius: 10px; color: #111827; text-align: center; cursor: pointer; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; min-height: 52px; white-space: nowrap; }
 .guide-item:hover { background: #f0fdf4; border-color: #34d399; }
 .guide-item.active { background: #c81054; color: #fff; border-color: #c81054; }
 .guide-item:active { transform: none !important; }
@@ -304,6 +380,14 @@ button.home-shortcut { border-radius: 14px; background: #f8fafc; }
 #vote-grid { min-height: 64px; }
 #vote-grid .guide-grid { display: flex; flex-wrap: wrap; gap: 12px; min-height: 56px; }
 #vote-grid .guide-item { border: none !important; background: #fff; box-shadow: none; white-space: nowrap; min-height: 40px; padding: 8px 12px; border-radius: 12px; line-height: 1.2; }
+
+/* Download guide buttons: match vote guide button design */
+#download-grid { min-height: 64px; }
+#download-grid .guide-grid { display: flex; flex-wrap: wrap; gap: 12px; min-height: 56px; }
+#download-grid .guide-item { border: none !important; background: #fff; box-shadow: none; white-space: nowrap; min-height: 40px; padding: 8px 12px; border-radius: 12px; line-height: 1.2; }
+#download-grid .guide-item:active { transform: none !important; }
+#download-grid .guide-item:hover { background: #f8fafc; }
+#download-grid .guide-item.active { background: #c81054; color: #fff; box-shadow: 0 4px 14px rgba(200, 16, 84, 0.18); }
 #vote-grid .guide-item:active { transform: none !important; }
 #vote-grid .guide-item:hover { background: #f8fafc; }
 #vote-grid .guide-item.active { background: #c81054; color: #fff; box-shadow: 0 4px 14px rgba(200, 16, 84, 0.18); }

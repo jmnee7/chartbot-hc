@@ -94,7 +94,8 @@ function encodeFilePath(path) {
             'assets/guide/vote/팬캐스트 투표권 모으기.png',
             'assets/guide/vote/팬캐스트 투표하기.png',
             'assets/guide/vote/하이어1.png',
-            'assets/guide/vote/하이어2.png'
+            'assets/guide/vote/하이어2.png',
+            'assets/guide/vote/엠카운트다운.png'
         ].map(encodeFilePath);
         sources.forEach(src => { const img = new Image(); img.src = src; });
     } catch (_) {}
@@ -281,6 +282,11 @@ function switchGuideTab(type) {
     // 디바이스 탭 표시 (음원 다운로드나 뮤비 다운로드인 경우)
     if (type === 'music' || type === 'mv') {
         if (downloadGrid) downloadGrid.style.display = 'block';
+        // 기본(첫 번째) 버튼 자동 선택 - 투표 가이드와 동일한 방식
+        if (downloadGrid) {
+            const firstGridBtn = downloadGrid.querySelector('.guide-item');
+            if (firstGridBtn && typeof firstGridBtn.click === 'function') firstGridBtn.click();
+        }
         const availableDevices = availableGuides[type][currentService];
         if (availableDevices && availableDevices.length > 1) {
             // PC/모바일 둘 다 있는 경우
@@ -510,6 +516,9 @@ function updateVoteGuideImage(key) {
         theshow: [
             encodeFilePath('assets/guide/vote/스타플래닛1.png'),
             encodeFilePath('assets/guide/vote/스타플래닛2.png')
+        ],
+        mcount: [
+            encodeFilePath('assets/guide/vote/엠카운트다운.png')
         ]
     };
     const paths = listMap[key] || [];
@@ -586,6 +595,86 @@ function openDownloadGuide(kind, service) {
     hideGuideTextBox();
     document.querySelector('.guide-content').style.display = 'block';
     updateGuideImage();
+}
+
+// 음원 다운로드 가이드를 투표 가이드처럼 다중 이미지로 표시
+function openMusicDlGuide(service) {
+    try {
+        currentGuideType = 'music';
+        document.querySelector('.guide-content').style.display = 'block';
+        const container = document.querySelector('.guide-image-container');
+        const single = document.getElementById('guideImage');
+        if (!container) return;
+        
+        // single 숨기고 리스트로
+        if (single) { single.style.display = 'none'; single.onclick = null; single.src = ''; }
+        Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
+        
+        // 로딩 placeholder 추가 (사이즈 변화 방지)
+        container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; min-height: 300px; color: #9ca3af; font-size: 0.9rem;">이미지 로딩 중...</div>';
+
+        const map = {
+            melon: [
+                encodeFilePath('assets/guide/download/멜론/음원 다운 가이드-01.png'),
+                encodeFilePath('assets/guide/download/멜론/음원 다운 가이드-02.png')
+            ],
+            vibe: [
+                encodeFilePath('assets/guide/download/바이브/음원 다운 가이드-07.png'),
+                encodeFilePath('assets/guide/download/바이브/음원 다운 가이드-08.png')
+            ],
+            bugs: [
+                encodeFilePath('assets/guide/download/벅스/음원 다운 가이드-05.png'),
+                encodeFilePath('assets/guide/download/벅스/음원 다운 가이드-06.png')
+            ],
+            genie: [
+                encodeFilePath('assets/guide/download/지니/음원 다운 가이드-03.png'),
+                encodeFilePath('assets/guide/download/지니/음원 다운 가이드-04.png')
+            ],
+            kakao: [
+                encodeFilePath('assets/guide/download/카카오뮤직/음원 다운 가이드-09.png')
+            ]
+        };
+        const list = map[service] || [];
+        
+        // 이미지 로드 카운터
+        let loadedCount = 0;
+        const totalImages = list.length;
+        
+        list.forEach(src => {
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = '음원 다운로드 가이드';
+            img.className = 'guide-image vote-image';
+            
+            // 이미지 로드 완료 시 placeholder 제거
+            img.onload = function() {
+                loadedCount++;
+                if (loadedCount === totalImages && container) {
+                    const placeholder = container.querySelector('div');
+                    if (placeholder && placeholder.textContent.includes('로딩 중')) {
+                        placeholder.remove();
+                    }
+                }
+            };
+            
+            container.appendChild(img);
+        });
+        
+        // 버튼 활성 토글
+        const grid = document.getElementById('download-grid');
+        if (grid) {
+            const buttons = grid.querySelectorAll('.guide-item');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            const label = serviceToKorean(service) + ' 다운로드';
+            const activeBtn = Array.from(buttons).find(b => b.textContent.trim() === label);
+            if (activeBtn) activeBtn.classList.add('active');
+        }
+    } catch (e) { console.log(e); }
+}
+
+function serviceToKorean(key){
+    const map = { melon:'멜론', vibe:'바이브', bugs:'벅스', genie:'지니', kakao:'카카오뮤직' };
+    return map[key] || key;
 }
 
 function openOtherGuide(kind) {
