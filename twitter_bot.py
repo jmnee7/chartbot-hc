@@ -151,6 +151,12 @@ class TwitterBot:
         formatted_time = f"{today} {current_time}"
         
         tweets = []
+
+        # 유튜브 조회수 한 줄 텍스트 준비 (있으면 포함)
+        youtube_line = self._get_youtube_view_line()
+
+        # 트윗 제목 프리픽스: 현재 크롤링 중인 곡명 사용 (기본값 없음)
+        title_prefix = self._extract_title_from_changes(rank_changes)
         
         # 모든 타겟 곡들 수집 (변화 유무 상관없이, 효율적인 처리)
         all_target_songs = {}
@@ -172,10 +178,7 @@ class TwitterBot:
         
         # 모든 타겟 곡에 대해 트윗 생성
         for song_key, song_changes in all_target_songs.items():
-            tweet_parts = [
-                formatted_time,
-                ""
-            ]
+            tweet_parts = [f"{title_prefix} | {formatted_time}", ""]
             
             for change in song_changes:
                 service = change['service']
@@ -185,6 +188,14 @@ class TwitterBot:
                 # 변화 텍스트에 따른 포맷팅 (효율적인 처리)
                 tweet_parts.append(self._format_service_line(service, rank, change_text))
             
+            # 하단에 유튜브 조회수 및 해시태그 추가
+            tweet_parts.append("")
+            if youtube_line:
+                tweet_parts.append(youtube_line)
+            tweet_parts.append("")
+            tweet_parts.append("#HAECHAN #해찬")
+            tweet_parts.append("#CRZY #HAECHAN_CRZY")
+            
             tweet_content = "\n".join(tweet_parts)
             
             # 트윗 길이 제한 (280자)
@@ -192,10 +203,7 @@ class TwitterBot:
                 tweets.append(tweet_content)
             else:
                 # 길면 줄여서 작성 (서비스별 정보 축약)
-                short_tweet = [
-                    formatted_time,
-                    ""
-                ]
+                short_tweet = [f"{title_prefix} | {formatted_time}", ""]
                 
                 for change in song_changes:
                     service = change['service']
@@ -206,9 +214,57 @@ class TwitterBot:
                     else:
                         short_tweet.append(f"{service} {rank}위")
                 
+                # 하단에 유튜브/해시태그 추가
+                short_tweet.append("")
+                if youtube_line:
+                    short_tweet.append(youtube_line)
+                short_tweet.append("")
+                short_tweet.append("#HAECHAN #해찬")
+                short_tweet.append("#CRZY #HAECHAN_CRZY")
                 tweets.append("\n".join(short_tweet))
         
         return tweets
+
+    def _extract_title_from_changes(self, rank_changes: Dict) -> Optional[str]:
+        """
+        rank_changes 구조에서 현재 대상 곡 제목을 추출
+        Returns: 곡명 문자열 또는 None
+        """
+        try:
+            for service_key, changes in (rank_changes or {}).items():
+                if changes and isinstance(changes, list):
+                    first = changes[0]
+                    title = first.get('title') if isinstance(first, dict) else None
+                    if title:
+                        return title
+        except Exception:
+            pass
+        return None
+
+    def _get_youtube_view_line(self) -> Optional[str]:
+        """
+        docs/youtube_stats.json에서 최신 조회수를 읽어 트윗용 한 줄을 생성
+        Returns: '🎬 뮤비 조회수 123,456' 형태의 문자열 또는 None
+        """
+        stats_path = os.path.join('docs', 'youtube_stats.json')
+        try:
+            if not os.path.exists(stats_path):
+                return None
+            with open(stats_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            # 우선 형식화된 값 사용, 없으면 숫자를 포맷팅
+            formatted = data.get('view_count_formatted')
+            if not formatted:
+                count = data.get('view_count')
+                if isinstance(count, int):
+                    formatted = f"{count:,}"
+                elif isinstance(count, str) and count.isdigit():
+                    formatted = f"{int(count):,}"
+            if formatted:
+                return f"🎬 뮤비 조회수 {formatted}"
+            return None
+        except Exception:
+            return None
     
     def _format_service_line(self, service: str, rank: Optional[int], change_text: str) -> str:
         """
@@ -239,15 +295,17 @@ class TwitterBot:
     
     def is_tweet_time(self) -> bool:
         """
-        트윗 가능한 시간대인지 확인 (새벽 6시 ~ 오후 10시)
-        
-        Returns:
-            bool: 트윗 가능 시간 여부
+        트윗 허용 시작 시각 이후인지 확인 (KST 기준)
+        - 시작 시각: 2025-09-07 19:00 KST
+        - 그 전에는 전송하지 않음, 이후에는 항상 전송 허용
         """
-        # KST 현재 시간 (utils 함수 사용)
-        now_kst = datetime.fromisoformat(get_current_kst_iso())
-        current_hour = now_kst.hour
-        return 6 <= current_hour <= 22
+        try:
+            now_kst = datetime.fromisoformat(get_current_kst_iso())
+            allow_from = datetime(2025, 9, 8, 19, 0, 0)
+            return now_kst >= allow_from
+        except Exception:
+            # 시간 계산 실패 시 보수적으로 전송을 막지 않음
+            return True
     
     def tweet_rank_changes(self, rank_changes: Dict, current_time: Optional[str] = None) -> bool:
         """
@@ -268,9 +326,9 @@ class TwitterBot:
         current_hour_str = get_current_kst_timestamp_short()  # KST 정각 형식 (2025-07-24 22:00)
         now_kst = datetime.fromisoformat(get_current_kst_iso())
 
-        # 시간대 체크
+        # 허용 시작 시각 체크 (이전에는 전송하지 않음)
         if not self.is_tweet_time():
-            print(f"🌙 현재 시간 {now_kst.hour:02d}시는 트윗 금지 시간대입니다. (허용: 06시~22시)")
+            print("⏸️ 트윗 허용 시작 시각 이전입니다. (기준: 2025-09-07 19:00 KST)")
             return True
 
         # 같은 시간대에 이미 트윗을 보냈는지 확인

@@ -6,10 +6,10 @@
 TARGET_ARTIST = "해찬 (HAECHAN)"
 
 # 찾고 싶은 특정 곡 (단일 문자열로 최적화)
-TARGET_SONG = "좋은 사람 (2022)"
+TARGET_SONG = "CRZY"
 
 # 특정 가수의 특정 곡 조합 (튜플로 최적화)
-TARGET_ARTIST_SONG = ("해찬 (HAECHAN)", "좋은 사람 (2022)")
+TARGET_ARTIST_SONG = ("해찬 (HAECHAN)", "CRZY")
 
 # 검색 모드 설정
 # "artists" - 지정된 가수들의 모든 곡
