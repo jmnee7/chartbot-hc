@@ -11,7 +11,7 @@ TARGET_SONG = "CRZY"
 # 특정 가수의 특정 곡 조합 (튜플로 최적화)
 TARGET_ARTIST_SONG = ("해찬 (HAECHAN)", "CRZY")
 
-# 검색 모드 설정
+# 검색 모드 설정 
 # "artists" - 지정된 가수들의 모든 곡
 # "songs" - 지정된 곡들만 (가수 무관)  
 # "artist_songs" - 지정된 가수의 지정된 곡들만
