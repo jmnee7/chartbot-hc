@@ -182,6 +182,7 @@ function switchGuideTab(type) {
     const idCategoryTabs = document.getElementById('idCategoryTabs');
     const idDetailTabs = document.getElementById('idDetailTabs');
     const voteDetailTabs = document.getElementById('voteDetailTabs');
+    const otherSubgrid = document.getElementById('other-subgrid');
     const streamingGrid = document.getElementById('streaming-grid');
     const idGrid = document.getElementById('id-grid');
     const downloadGrid = document.getElementById('download-grid');
@@ -191,6 +192,7 @@ function switchGuideTab(type) {
 
     // 먼저 모두 숨김 및 이미지 영역 초기화(잔상 제거)
     [streamingGrid, idGrid, downloadGrid, voteGrid, otherGrid, groupbuyGrid].forEach(el => { if (el) el.style.display = 'none'; });
+    if (otherSubgrid) { otherSubgrid.style.display = 'none'; otherSubgrid.innerHTML = ''; }
     const container = document.querySelector('.guide-image-container');
     const single = document.getElementById('guideImage');
     const guideTextBox = document.getElementById('guideText');
@@ -277,6 +279,19 @@ function switchGuideTab(type) {
         return;
     } else {
         if (voteDetailTabs) voteDetailTabs.style.display = 'none';
+    }
+
+    // 기타 가이드 하위 탭
+    if (type === 'other') {
+        if (otherGrid) otherGrid.style.display = 'block';
+        // 기본(첫 번째) 버튼 자동 선택
+        if (otherGrid) {
+            const firstGridBtn = otherGrid.querySelector('.guide-item');
+            if (firstGridBtn && typeof firstGridBtn.click === 'function') firstGridBtn.click();
+        }
+        document.getElementById('deviceTabs').style.display = 'none';
+        document.querySelector('.guide-content').style.display = 'block';
+        return;
     }
 
     // 디바이스 탭 표시 (음원 다운로드나 뮤비 다운로드인 경우)
@@ -678,17 +693,172 @@ function serviceToKorean(key){
 }
 
 function openOtherGuide(kind) {
-    if (kind === 'block') {
-        currentGuideType = 'stability';
-        // 기타 가이드에서는 텍스트 박스 숨김
+    currentGuideType = 'other';
+    // active 스타일 토글
+    const grid = document.getElementById('other-grid');
+    if (grid) {
+        const buttons = grid.querySelectorAll('.guide-item');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        // block_* → stability, simul_* → simul 상단 버튼 활성화
+        let keyForTop = kind;
+        if (typeof kind === 'string') {
+            if (kind.indexOf('block_') === 0) keyForTop = 'stability';
+            if (kind.indexOf('simul_') === 0) keyForTop = 'simul';
+        }
+        const activeBtn = Array.from(buttons).find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes(`openOtherGuide('${keyForTop}')`));
+        if (activeBtn) activeBtn.classList.add('active');
+    }
+    
+    // stability: 아이디 가이드처럼 2단계 하위 메뉴 렌더링
+    const subgrid = document.getElementById('other-subgrid');
+    if (kind === 'stability' && subgrid) {
+        subgrid.style.display = 'flex';
+        // 버튼 렌더링
+        subgrid.innerHTML = `
+            <button class="guide-item text-only" onclick="openOtherGuide('block_airdroid')">Android - AirDroid</button>
+            <button class="guide-item text-only" onclick="openOtherGuide('block_automate')">Android - Automate</button>
+            <button class="guide-item text-only" onclick="openOtherGuide('block_ios_shortcut')">iOS - 단축어</button>
+            <button class="guide-item text-only" onclick="openOtherGuide('block_ios_melon')">iOS - 멜론</button>
+        `;
+        // 첫 항목 자동 선택
+        setTimeout(() => {
+            const first = subgrid.querySelector('.guide-item');
+            if (first && typeof first.click === 'function') first.click();
+        }, 0);
+        // 콘텐츠 영역 표시 및 텍스트 박스 숨김
         hideGuideTextBox();
         document.querySelector('.guide-content').style.display = 'block';
-        updateGuideImage();
-    } else if (kind === 'radio') {
-        alert('라디오 신청 가이드는 준비 중입니다.🐻');
-    } else {
-        alert('준비 중입니다.🐻');
+        return;
     }
+
+    // 동시스밍 가이드: 하위 2개 메뉴 (사운드 어시스턴트 / 삼성 뮤직)
+    if (kind === 'simul' && subgrid) {
+        subgrid.style.display = 'flex';
+        subgrid.innerHTML = `
+            <button class="guide-item text-only" onclick="openOtherGuide('simul_soundassistant')">Android - 사운드 어시스턴트</button>
+            <button class="guide-item text-only" onclick="openOtherGuide('simul_samsung')">Android - 삼성 뮤직</button>
+        `;
+        setTimeout(() => {
+            const first = subgrid.querySelector('.guide-item');
+            if (first && typeof first.click === 'function') first.click();
+        }, 0);
+        hideGuideTextBox();
+        document.querySelector('.guide-content').style.display = 'block';
+        return;
+    }
+
+    // stability 외 메뉴를 클릭하면 하단 서브그리드 숨김/초기화
+    if (subgrid && !(
+        kind === 'stability' ||
+        kind === 'simul' ||
+        (typeof kind === 'string' && (kind.indexOf('block_') === 0 || kind.indexOf('simul_') === 0))
+    )) {
+        subgrid.style.display = 'none';
+        subgrid.innerHTML = '';
+    }
+
+    // block_* / simul_* 하위 메뉴 클릭 시, 하단 버튼 active 토글
+    if (subgrid && typeof kind === 'string' && (kind.indexOf('block_') === 0 || kind.indexOf('simul_') === 0)) {
+        const subButtons = subgrid.querySelectorAll('.guide-item');
+        subButtons.forEach(btn => btn.classList.remove('active'));
+        const activeSub = Array.from(subButtons).find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes(`openOtherGuide('${kind}')`));
+        if (activeSub) activeSub.classList.add('active');
+    }
+
+    // 기타 가이드에서는 텍스트 박스 숨김
+    hideGuideTextBox();
+    const container = document.querySelector('.guide-image-container');
+    const single = document.getElementById('guideImage');
+    document.querySelector('.guide-content').style.display = 'block';
+
+    // 컨테이너 초기화 및 placeholder
+    if (container) {
+        Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
+        container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; min-height: 140px; color: #9ca3af; font-size: 0.9rem;">이미지 로딩 중...</div>';
+    }
+    if (single) { single.style.display = 'none'; single.onclick = null; single.src = ''; }
+
+    const map = {
+        // 동시스밍 가이드 하위 메뉴
+        simul_soundassistant: [
+            encodeFilePath('assets/guide/etc/동시스밍 가이드/삼성뮤직 활용 가이드/동시스트리밍 가이드_사운드어시스턴트 (1).png'),
+            encodeFilePath('assets/guide/etc/동시스밍 가이드/삼성뮤직 활용 가이드/동시스트리밍 가이드_사운드어시스턴트 (2).png')
+        ],
+        simul_samsung: [
+            encodeFilePath('assets/guide/etc/동시스밍 가이드/삼성뮤직 활용 가이드/동시스트리밍_삼성뮤직활용 (1).png'),
+            encodeFilePath('assets/guide/etc/동시스밍 가이드/삼성뮤직 활용 가이드/동시스트리밍_삼성뮤직활용 (2).png')
+        ],
+        // 멜론 선물하기 가이드
+        gift_melon: [
+            encodeFilePath('assets/guide/etc/멜론 선물하기 가이드/스밍팀 멜론 선물.png'),
+            encodeFilePath('assets/guide/etc/멜론 선물하기 가이드/일반 멜론 선물.png')
+        ],
+        // 스포티파이 사전 저장 가이드
+        spotify_pre: [
+            encodeFilePath('assets/guide/etc/스포티파이 사전 저장 가이드/스포티파이 사전 저장 가이드 국문.png'),
+            encodeFilePath('assets/guide/etc/스포티파이 사전 저장 가이드/스포티파이 사전 저장 가이드 영문.png')
+        ],
+        // 스밍 끊김 방지
+        block_airdroid: [
+            encodeFilePath('assets/guide/etc/스밍 끊김 방지 가이드/스트리밍끊김방지가이드_에어안드로이드 (1).png'),
+            encodeFilePath('assets/guide/etc/스밍 끊김 방지 가이드/스트리밍끊김방지가이드_에어안드로이드 (2).png'),
+            encodeFilePath('assets/guide/etc/스밍 끊김 방지 가이드/스트리밍끊김방지가이드_에어안드로이드 (3).png'),
+            encodeFilePath('assets/guide/etc/스밍 끊김 방지 가이드/스트리밍끊김방지가이드_에어안드로이드 (4).png')
+        ],
+        block_automate: [
+            encodeFilePath('assets/guide/etc/스밍 끊김 방지 가이드/스트리밍끊김방지가이드_오토메이트 (1).png'),
+            encodeFilePath('assets/guide/etc/스밍 끊김 방지 가이드/스트리밍끊김방지가이드_오토메이트 (2).png')
+        ],
+        block_ios_shortcut: [
+            encodeFilePath('assets/guide/etc/스밍 끊김 방지 가이드/스트리밍끊김방지가이드_ios 단축어.png')
+        ],
+        block_ios_melon: [
+            encodeFilePath('assets/guide/etc/스밍 끊김 방지 가이드/스트리밍끊김방지가이드_ios,안드로이드 멜론.png')
+        ],
+        // 단일 정보 가이드들 (music etc)
+        cost: [
+            encodeFilePath('assets/guide/etc/music etc/음원 다운로드 비용 안내.png')
+        ],
+        pre_vote: [
+            encodeFilePath('assets/guide/etc/music etc/CRZY 음악방송 사전투표 안내.png')
+        ],
+        site_reco: [
+            encodeFilePath('assets/guide/etc/music etc/음원 사이트 추천.png')
+        ]
+    };
+
+    const paths = map[kind] || [];
+    if (!container || paths.length === 0) { return; }
+
+    const frag = document.createDocumentFragment();
+    let loadedCount = 0;
+    const totalImages = paths.length;
+    
+    paths.forEach((src, idx) => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = '기타 가이드 이미지';
+        img.className = 'guide-image vote-image';
+        img.decoding = 'async';
+        if (idx === 0) {
+            img.loading = 'eager';
+            img.setAttribute('fetchpriority', 'high');
+        } else {
+            img.loading = 'lazy';
+        }
+        img.onload = function(){
+            loadedCount++;
+            if (loadedCount === totalImages && container) {
+                const placeholder = container.querySelector('div');
+                if (placeholder && placeholder.textContent.includes('로딩 중')) {
+                    placeholder.remove();
+                }
+            }
+        };
+        frag.appendChild(img);
+    });
+
+    container.appendChild(frag);
 }
 
 // 공동구매 가이드 핸들러

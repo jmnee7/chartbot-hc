@@ -47,7 +47,7 @@
         <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">스트리밍 가이드</a>
         <a href="#" onclick="openGuideMenu('music'); closeMenu(); return false;">다운로드 가이드</a>
         <a href="#" onclick="openGuideMenu('vote'); closeMenu(); return false;">투표 가이드</a>
-        <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">기타 가이드</a>
+        <a href="#" onclick="openGuideMenu('other'); closeMenu(); return false;">기타 가이드</a>
       </div>
 
       <!-- 기타 상위 및 하위 메뉴 -->
@@ -236,14 +236,16 @@
 
           <div id="other-grid" style="display: none;">
             <div class="guide-grid">
-              <button class="guide-item" onclick="openOtherGuide('radio')">라디오 신청 가이드</button>
-              <button class="guide-item" onclick="openOtherGuide('vcoloring')">V 컬러링 가이드</button>
-              <button class="guide-item" onclick="openOtherGuide('block')">끊김 방지 가이드</button>
-              <button class="guide-item" onclick="openOtherGuide('samsung')">삼성뮤직 활용 가이드</button>
-              <button class="guide-item" onclick="openOtherGuide('shorts')">숏폼 제작 가이드</button>
-              <button class="guide-item" onclick="openOtherGuide('gift')">멜론 선물하기</button>
+              <button class="guide-item" onclick="openOtherGuide('simul')">동시스밍 가이드</button>
+              <button class="guide-item" onclick="openOtherGuide('gift_melon')">멜론 선물하기 가이드</button>
+              <button class="guide-item" onclick="openOtherGuide('spotify_pre')">스포티파이 사전 저장 가이드</button>
+              <button class="guide-item" onclick="openOtherGuide('stability')">스밍 끊김 방지 가이드</button>
+              <button class="guide-item" onclick="openOtherGuide('cost')">음원 다운로드 비용 안내</button>
+              <button class="guide-item" onclick="openOtherGuide('pre_vote')">음악 방송 사전 투표 안내</button>
+              <button class="guide-item" onclick="openOtherGuide('site_reco')">음원 사이트 추천</button>
             </div>
           </div>
+          <div id="other-subgrid" class="guide-grid" style="display: none;"></div>
 
           <div id="groupbuy-grid" style="display: none;">
             <div class="guide-grid">
