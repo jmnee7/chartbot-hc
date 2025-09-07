@@ -699,11 +699,12 @@ function openOtherGuide(kind) {
     if (grid) {
         const buttons = grid.querySelectorAll('.guide-item');
         buttons.forEach(btn => btn.classList.remove('active'));
-        // block_* → stability, simul_* → simul 상단 버튼 활성화
+        // block_* → stability, simul_* → simul, radio_* → radio 상단 버튼 활성화
         let keyForTop = kind;
         if (typeof kind === 'string') {
             if (kind.indexOf('block_') === 0) keyForTop = 'stability';
             if (kind.indexOf('simul_') === 0) keyForTop = 'simul';
+            if (kind.indexOf('radio_') === 0) keyForTop = 'radio';
         }
         const activeBtn = Array.from(buttons).find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes(`openOtherGuide('${keyForTop}')`));
         if (activeBtn) activeBtn.classList.add('active');
@@ -731,6 +732,55 @@ function openOtherGuide(kind) {
         return;
     }
 
+    // 라디오 신청 가이드: 하위 4개 메뉴
+    if (kind === 'radio' && subgrid) {
+        subgrid.style.display = 'flex';
+        subgrid.innerHTML = `
+            <button class="guide-item text-only" onclick="openOtherGuide('radio_guide')">라디오 신청 가이드</button>
+            <button class="guide-item text-only" onclick="openOtherGuide('radio_kbs')">KBS</button>
+            <button class="guide-item text-only" onclick="openOtherGuide('radio_mbc')">MBC</button>
+            <button class="guide-item text-only" onclick="openOtherGuide('radio_sbs')">SBS</button>
+        `;
+        setTimeout(() => {
+            const first = subgrid.querySelector('.guide-item');
+            if (first && typeof first.click === 'function') first.click();
+        }, 0);
+        hideGuideTextBox();
+        document.querySelector('.guide-content').style.display = 'block';
+        return;
+    }
+
+    // 숏폼 제작 가이드: 단일 이미지 표시
+    if (kind === 'shorts') {
+        if (subgrid) { subgrid.style.display = 'none'; subgrid.innerHTML = ''; }
+        hideGuideTextBox();
+        const container = document.querySelector('.guide-image-container');
+        document.querySelector('.guide-content').style.display = 'block';
+        if (container) {
+            // 기존 다중 이미지/placeholder 정리
+            Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
+            const placeholder = container.querySelector('div');
+            if (placeholder && placeholder.textContent && placeholder.textContent.includes('로딩 중')) {
+                placeholder.remove();
+            }
+            // guideImage 보장
+            let img = document.getElementById('guideImage');
+            if (!img) {
+                img = document.createElement('img');
+                img.id = 'guideImage';
+                img.className = 'guide-image';
+                container.appendChild(img);
+            }
+            img.onload = function(){ this.style.display=''; };
+            img.onerror = function(){ this.style.display='none'; };
+            // 디렉토리명에 공백이 있어 전체 경로를 안전하게 인코딩
+            const path = 'assets/guide/etc/숏폼 제작 가이드/숏폼 제작 가이드.png';
+            img.src = encodeURI(path);
+            img.alt = '숏폼 제작 가이드';
+        }
+        return;
+    }
+
     // 동시스밍 가이드: 하위 2개 메뉴 (사운드 어시스턴트 / 삼성 뮤직)
     if (kind === 'simul' && subgrid) {
         subgrid.style.display = 'flex';
@@ -751,14 +801,15 @@ function openOtherGuide(kind) {
     if (subgrid && !(
         kind === 'stability' ||
         kind === 'simul' ||
-        (typeof kind === 'string' && (kind.indexOf('block_') === 0 || kind.indexOf('simul_') === 0))
+        kind === 'radio' ||
+        (typeof kind === 'string' && (kind.indexOf('block_') === 0 || kind.indexOf('simul_') === 0 || kind.indexOf('radio_') === 0))
     )) {
         subgrid.style.display = 'none';
         subgrid.innerHTML = '';
     }
 
-    // block_* / simul_* 하위 메뉴 클릭 시, 하단 버튼 active 토글
-    if (subgrid && typeof kind === 'string' && (kind.indexOf('block_') === 0 || kind.indexOf('simul_') === 0)) {
+    // block_* / simul_* / radio_* 하위 메뉴 클릭 시, 하단 버튼 active 토글
+    if (subgrid && typeof kind === 'string' && (kind.indexOf('block_') === 0 || kind.indexOf('simul_') === 0 || kind.indexOf('radio_') === 0)) {
         const subButtons = subgrid.querySelectorAll('.guide-item');
         subButtons.forEach(btn => btn.classList.remove('active'));
         const activeSub = Array.from(subButtons).find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes(`openOtherGuide('${kind}')`));
@@ -814,6 +865,19 @@ function openOtherGuide(kind) {
         ],
         block_ios_melon: [
             encodeFilePath('assets/guide/etc/스밍 끊김 방지 가이드/스트리밍끊김방지가이드_ios,안드로이드 멜론.png')
+        ],
+        // 라디오 신청 가이드 하위 메뉴
+        radio_guide: [
+            encodeFilePath('assets/guide/etc/라디오 신청 가이드/라디오 신청  가이드.png')
+        ],
+        radio_kbs: [
+            encodeFilePath('assets/guide/etc/라디오 신청 가이드/KBS  KONG.png')
+        ],
+        radio_mbc: [
+            encodeFilePath('assets/guide/etc/라디오 신청 가이드/MBC MINI.png')
+        ],
+        radio_sbs: [
+            encodeFilePath('assets/guide/etc/라디오 신청 가이드/SBS  고릴라.png')
         ],
         // 단일 정보 가이드들 (music etc)
         cost: [
