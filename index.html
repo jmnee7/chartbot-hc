@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>해찬 스트리밍</title>
+    <meta property="og:title" content="해찬 스트리밍">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://jmnee7.github.io/chartbot-hc/assets/og.jpeg">
+    <meta property="og:image:secure_url" content="https://jmnee7.github.io/chartbot-hc/assets/og.jpeg">
+    <meta property="og:url" content="https://hcstrm.com/">
+    <meta property="og:site_name" content="해찬 스트리밍">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="해찬 스트리밍">
+    <meta name="twitter:image" content="https://jmnee7.github.io/chartbot-hc/assets/og.jpeg">
+    <!-- 카카오톡 미리보기를 위한 추가 메타태그 -->
+    <meta name="description" content="해찬 스트리밍 음원 총공팀">
+    <meta name="keywords" content="해찬 음원 총공팀">
+    <meta name="author" content="해찬 스트리밍">
+    <!-- 추가 OG 태그 -->
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:image:type" content="image/jpeg">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.8/dist/web/static/pretendard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <link rel="stylesheet" href="styles/main.css?v=3.7">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E🐻%3C/text%3E%3C/svg%3E">
+  </head>
+  <body>
+    <!-- Top App Bar -->
+    <div class="topbar">
+      <div class="topbar__title" id="homeTitle" role="button" tabindex="0" aria-label="홈으로 이동"><img src="assets/home/logo/logo.png" alt="로고" style="height:40px; width:auto; vertical-align:middle; margin-right:10px;"> 해찬 스트리밍</div>
+      <div class="topbar__actions">
+        <button class="hamburger" id="hamburgerBtn" aria-label="메뉴 열기" aria-expanded="false">
+          <span class="hamburger__bars"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Slide-out Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+      <div class="mobile-menu__header">
+        <button class="menu-close" id="menuCloseBtn" aria-label="닫기">✕</button>
+      </div>
+      <a href="#" onclick="openDashboardSection('rank-section'); return false;">스트리밍 리스트</a>
+      <a href="#" onclick="openChecklist('pre'); return false;">🌻해프 할 일🌻</a>
+      <a href="#" onclick="openChecklist('release'); return false;">🌻음원 발매 당일 체크리스트🌻</a>
+
+      <!-- 가이드 상위 및 하위 메뉴 -->
+      <a href="#" id="guideParent" onclick="toggleSubmenu('guide'); return false;">가이드 ▾</a>
+      <div class="submenu" id="guideSubmenu" style="display: none;">
+        <a href="#" onclick="openGuideMenu('id'); closeMenu(); return false;">아이디 가이드</a>
+        <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">스트리밍 가이드</a>
+        <a href="#" onclick="openGuideMenu('music'); closeMenu(); return false;">음원 다운로드 가이드</a>
+        <a href="#" onclick="openGuideMenu('vote'); closeMenu(); return false;">투표 가이드</a>
+        <a href="#" onclick="openGuideMenu('other'); closeMenu(); return false;">기타 가이드</a>
+      </div>
+
+      <!-- 기타 상위 및 하위 메뉴 -->
+      <a href="#" id="etcParent" onclick="toggleSubmenu('etc'); return false;">기타 ▾</a>
+      <div class="submenu" id="etcSubmenu" style="display: none;">
+        <a href="#" onclick="openQuickModal('streaming'); closeMenu(); return false;">원클릭 스트리밍</a>
+        <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">원클릭 라디오 신청</a>
+        <a href="#" onclick="openGuideMenu('groupbuy'); closeMenu(); return false;">공동구매</a>
+        <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">투표</a>
+        <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">이벤트</a>
+        <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">공지사항</a>
+      </div>
+    </div>
+    <div class="backdrop" id="menuBackdrop"></div>
+
+    <main id="dashboard-view" class="container">
+      <div class="dashboard-grid">
+
+        <!-- Home Banner Slider (auto) -->
+        <div class="banner-section" id="home-banner">
+          <div class="banner-slider" id="bannerSlider">
+            <div class="banner-slide">
+              <a href="https://into.melon.com/bridge/kakaotalk/musicwave/j_hRlIdLiwdByFCA3w6woQ?type=channel&t=1757306429748" target="_blank" rel="noopener">
+                <img src="assets/home/banner/musicwave.jpeg" alt="뮤직웨이브 배너">
+              </a>
+            </div>
+            <div class="banner-slide">
+              <a href="https://x.com/haechanstrm/status/1958163414007918855?s=46&t=v_6BPoVYQREP02R8RyJyuA" target="_blank" rel="noopener">
+                <img src="assets/home/banner/공동구매.jpeg" alt="공동구매 배너">
+              </a>
+            </div>
+          </div>
+          <button class="banner-nav prev" id="bannerPrev" aria-label="이전">‹</button>
+          <button class="banner-nav next" id="bannerNext" aria-label="다음">›</button>
+          <div class="banner-dots" id="bannerDots"></div>
+        </div>
+
+        <!-- Shortcut buttons under banner -->
+        <div class="card" id="home-shortcuts">
+          <div class="home-shortcuts-grid">
+            <button type="button" class="home-shortcut" onclick="openQuickModal('streaming')">원클릭 스트리밍</button>
+            <button type="button" class="home-shortcut" onclick="openQuickModal('radio')">원클릭 라디오 신청</button>
+            <button type="button" class="home-shortcut" onclick="openQuickModal('groupbuy')">공동구매</button>
+            <button type="button" class="home-shortcut" onclick="openStreamList()">스트리밍 리스트</button>
+          </div>
+        </div>
+
+        <!-- Quick Actions row currently empty (all consolidated into modals) -->
+
+        <!-- Streaming list THIRD -->
+        <section class="chart-layout" id="rank-section-container">
+          <div class="card" id="rank-section">
+            <h2><span class="card-icon">🏆</span>실시간 순위 <small>(<span id="lastUpdate"></span>)</small></h2>
+            <div class="rank-grid">
+              <div class="rank-card">
+                <div class="rank-header">
+                  <span class="rank-service-name"><img src="images/melon.png" class="service-logo">멜론 TOP100</span>
+                  <span class="rank-badge" id="melon-top-badge"></span>
+                </div>
+                <div class="rank-info">
+                  <span class="rank-number" id="melon-top-rank">-</span>
+                  <span class="rank-change" id="melon-top-change"></span>
+                </div>
+              </div>
+              <div class="rank-card">
+                <div class="rank-header">
+                  <span class="rank-service-name"><img src="images/melon.png" class="service-logo">멜론 HOT100</span>
+                  <span class="rank-badge" id="melon-hot-badge"></span>
+                </div>
+                <div class="rank-info">
+                  <span class="rank-number" id="melon-hot-rank">-</span>
+                  <span class="rank-change" id="melon-hot-change"></span>
+                </div>
+              </div>
+              <div class="rank-card">
+                <div class="rank-header">
+                  <span class="rank-service-name"><img src="images/bugs.ico" class="service-logo">벅스</span>
+                  <span class="rank-badge" id="bugs-badge"></span>
+                </div>
+                <div class="rank-info">
+                  <span class="rank-number" id="bugs-rank">-</span>
+                  <span class="rank-change" id="bugs-change"></span>
+                </div>
+              </div>
+              <div class="rank-card">
+                <div class="rank-header">
+                  <span class="rank-service-name"><img src="images/genie.png" class="service-logo">지니</span>
+                  <span class="rank-badge" id="genie-badge"></span>
+                </div>
+                <div class="rank-info">
+                  <span class="rank-number" id="genie-rank">-</span>
+                  <span class="rank-change" id="genie-change"></span>
+                </div>
+              </div>
+              <div class="rank-card">
+                <div class="rank-header">
+                  <span class="rank-service-name"><img src="images/vibe.ico" class="service-logo">바이브</span>
+                  <span class="rank-badge" id="vibe-badge"></span>
+                </div>
+                <div class="rank-info">
+                  <span class="rank-number" id="vibe-rank">-</span>
+                  <span class="rank-change" id="vibe-change"></span>
+                </div>
+              </div>
+              <div class="rank-card">
+                <div class="rank-header">
+                  <span class="rank-service-name"><img src="images/flo.ico" class="service-logo">플로</span>
+                  <span class="rank-badge" id="flo-badge"></span>
+                </div>
+                <div class="rank-info">
+                  <span class="rank-number" id="flo-rank">-</span>
+                  <span class="rank-change" id="flo-change"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <div class="quick-actions-row">
+          <div class="card youtube-section" style="grid-column: 1 / -1;">
+            <h2 class="section-title"><span class="emoji">📈</span>유튜브 추이</h2>
+            <div class="video-container">
+              <iframe src="https://www.youtube.com/embed/pqMCgfnBx74" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="youtube-stats-display">
+              <div class="stat-item">
+                <span class="stat-label">조회수</span>
+                <span class="stat-value" id="viewCount">-</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">좋아요</span>
+                <span class="stat-value" id="likeCount">-</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Move Rank section to the very bottom of dashboard grid -->
+        <section class="chart-layout" style="grid-column: 1 / -1;">
+          <div class="card" aria-hidden="true" style="display:none"></div>
+        </section>
+      </div>
+    </main>
+
+    <section id="guide-view" class="container guide-section" style="display: none;">
+      <div class="card">
+        <div class="guide-hub">
+          <div id="streaming-grid" style="display: none;">
+            <div class="guide-grid">
+              <button class="guide-item" onclick="openStreamingGuide('melon')">멜론 스트리밍 가이드</button>
+              <button class="guide-item" onclick="openStreamingGuide('genie')">지니 스트리밍 가이드</button>
+              <button class="guide-item" onclick="openStreamingGuide('bugs')">벅스 스트리밍 가이드</button>
+              <button class="guide-item" onclick="openStreamingGuide('vibe')">바이브 스트리밍 가이드</button>
+              <button class="guide-item" onclick="openStreamingGuide('flo')">플로 스트리밍 가이드</button>
+            </div>
+          </div>
+
+          <div id="id-grid" style="display: none;">
+            <div class="guide-grid">
+              <button class="guide-item" onclick="openIdCategoryGrid('id', this)">아이디 생성 가이드</button>
+              <button class="guide-item" onclick="openIdCategoryGrid('dualnumber', this)">듀얼 넘버 생성 가이드</button>
+            </div>
+            <div id="id-subgrid" class="guide-grid" style="display: none;"></div>
+          </div>
+
+          <div id="download-grid" style="display: none;">
+            <div class="guide-grid">
+              <button class="guide-item" onclick="openMusicDlGuide('melon')">멜론 다운로드</button>
+              <button class="guide-item" onclick="openMusicDlGuide('genie')">지니 다운로드</button>
+              <button class="guide-item" onclick="openMusicDlGuide('bugs')">벅스 다운로드</button>
+              <button class="guide-item" onclick="openMusicDlGuide('vibe')">바이브 다운로드</button>
+              <button class="guide-item" onclick="openMusicDlGuide('kakao')">카카오뮤직 다운로드</button>
+            </div>
+          </div>
+
+          <div id="vote-grid" style="display: none;">
+            <div class="guide-grid">
+              <button class="guide-item" onclick="openVoteGuide('musicbank')">뮤직뱅크</button>
+              <button class="guide-item" onclick="openVoteGuide('musiccore')">음악중심</button>
+              <button class="guide-item" onclick="openVoteGuide('inkigayo')">인기가요</button>
+              <button class="guide-item" onclick="openVoteGuide('showchampion')">쇼챔피언</button>
+              <button class="guide-item" onclick="openVoteGuide('theshow')">더쇼</button>
+              <button class="guide-item" onclick="openVoteGuide('mcount')">엠카운트다운</button>
+            </div>
+          </div>
+
+          <div id="other-grid" style="display: none;">
+            <div class="guide-grid">
+              <button class="guide-item" onclick="openOtherGuide('spotify_pre')">스포티파이 사전 저장 가이드</button>
+              <button class="guide-item" onclick="openOtherGuide('radio')">라디오 신청 가이드</button>
+              <button class="guide-item" onclick="openOtherGuide('coloring')">컬러링 가이드</button>
+              <button class="guide-item" onclick="openOtherGuide('simul')">동시스밍 가이드</button>
+              <button class="guide-item" onclick="openOtherGuide('stability')">스밍 끊김 방지 가이드</button>
+              <button class="guide-item" onclick="openOtherGuide('shorts')">숏폼 제작 가이드</button>
+              <button class="guide-item" onclick="openOtherGuide('etc')">기타</button>
+            </div>
+          </div>
+          <div id="other-subgrid" class="guide-grid" style="display: none;"></div>
+          <div id="other-etc-subgrid" class="guide-grid" style="display: none; overflow: hidden; max-height: 0px; transition: max-height 0.3s ease-out;"></div>
+
+          <div id="groupbuy-grid" style="display: none;">
+            <div class="guide-grid">
+              <button class="guide-item" onclick="openGroupBuyGuide('minirecord')">미니레코드</button>
+              <button class="guide-item" onclick="openGroupBuyGuide('applemusic')">애플뮤직</button>
+              <button class="guide-item" onclick="openGroupBuyGuide('everline')">에버라인</button>
+              <button class="guide-item" onclick="openGroupBuyGuide('allmd')">올엠디</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-content" style="display: none;">
+          <div id="guideText" class="guide-text" style="display: none;"></div>
+          <div class="guide-image-container" aria-live="polite">
+            <img id="guideImage" class="guide-image" alt="가이드 이미지" decoding="async" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>해찬 스트리밍</p>
+      <p>e-mail : haechanstreamteam@gmail.com</p>
+      <p>Copyright 2025. HAECHAN STREAM All Rights Reserved.</p>
+    </footer>
+
+    <!-- Group Buy Modal -->
+    <div id="gbModal" class="modal">
+      <div class="modal-content">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <h3 id="gbTitle" style="margin:0;">공동구매</h3>
+          <button onclick="closeGbModal()" class="btn" aria-label="닫기">✕</button>
+        </div>
+        <div id="gbBody" class="guide-grid"></div>
+      </div>
+    </div>    <script src="js/dashboard.js?v=20250901d"></script>
+    <script src="js/chart.js?v=20250901d"></script>
+    <script src="js/guide.js?v=20250901n"></script>
+    <script>
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const backdrop = document.getElementById('menuBackdrop');
+      let savedScrollY = 0;
+
+      function openMenu() {
+        mobileMenu.classList.add('open');
+        backdrop.classList.add('visible');
+        hamburgerBtn.setAttribute('aria-expanded', 'true');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        // Robust body scroll lock (iOS-safe): fix body and restore scroll later
+        savedScrollY = window.scrollY || window.pageYOffset || 0;
+        document.body.style.top = `-${savedScrollY}px`;
+        document.body.classList.add('no-scroll');
+        document.body.classList.add('no-scroll-fixed');
+      }
+      function closeMenu() {
+        mobileMenu.classList.remove('open');
+        backdrop.classList.remove('visible');
+        hamburgerBtn.setAttribute('aria-expanded', 'false');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('no-scroll');
+        document.body.classList.remove('no-scroll-fixed');
+        const y = savedScrollY || 0;
+        document.body.style.top = '';
+        if (y) { window.scrollTo(0, y); }
+        savedScrollY = 0;
+      }
+      function toggleMenu() {
+        if (mobileMenu.classList.contains('open')) { closeMenu(); } else { openMenu(); }
+      }
+
+      hamburgerBtn.addEventListener('click', toggleMenu);
+      document.getElementById('menuCloseBtn').addEventListener('click', closeMenu);
+      backdrop.addEventListener('click', closeMenu);
+      // Prevent accidental scroll chaining to body at top/bottom
+      mobileMenu.addEventListener('touchmove', function(e){
+        // nothing: overscroll-behavior handles it, but keep handler to anchor passive listeners
+      }, { passive: true });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+
+      // Home title click -> go home (dashboard)
+      const homeTitle = document.getElementById('homeTitle');
+      if (homeTitle) {
+        homeTitle.addEventListener('click', () => { showView('dashboard'); });
+        homeTitle.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { showView('dashboard'); } });
+      }
+
+      // Submenu toggle for '가이드' and '기타'
+      function toggleSubmenu(menu) {
+        const submenu = document.getElementById(`${menu}Submenu`);
+        const parent = document.getElementById(`${menu}Parent`);
+        const isOpen = submenu.style.display === 'block';
+        submenu.style.display = isOpen ? 'none' : 'block';
+        if (parent) {
+          const label = menu === 'guide' ? '가이드' : '기타';
+          parent.textContent = isOpen ? `${label} ▾` : `${label} ▴`;
+        }
+      }
+
+      // Robust banner routing (fallback if inline handler blocked)
+      (function(){
+        const slider = document.getElementById('bannerSlider');
+        if (!slider) return;
+        slider.addEventListener('click', function(e){
+          const a = e.target.closest('a[data-action]');
+          if (!a) return;
+          const action = a.getAttribute('data-action');
+          if (action === 'guide-id') {
+            e.preventDefault();
+            openGuideMenu('id');
+          } else if (action === 'guide-vote') {
+            e.preventDefault();
+            openGuideMenu('vote');
+          }
+        });
+      })();
+
+      // Open guide view with specific type (direct routing)
+      function openGuideMenu(type) {
+        showView('guide');
+        closeMenu();
+        if (typeof switchGuideTab === 'function') {
+          switchGuideTab(type);
+        }
+      }
+
+      // Open dashboard specific section helper
+      function openDashboardSection(sectionId) {
+        showView('dashboard');
+        closeMenu();
+        if (!sectionId) return;
+        const el = document.getElementById(sectionId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+
+      // Open simple checklists
+      function openChecklist(type) {
+        // 가이드 뷰로 전환하여 이미지 형태로 표시 (음원 가이드와 동일 레이아웃 재사용)
+        showView('guide');
+        closeMenu();
+        // 허브(버튼 그리드) 감추고 상세 이미지만 노출
+        const hub = document.querySelector('#guide-view .guide-hub');
+        if (hub) hub.style.display = 'none';
+        const content = document.querySelector('#guide-view .guide-content');
+        if (content) content.style.display = 'block';
+        const container = document.querySelector('.guide-image-container');
+        const single = document.getElementById('guideImage');
+        
+        if (type === 're, e') {
+          // 발매 당일 체크리스트 - 투표 가이드와 동일한 다중 이미지 방식 사용
+          if (single) { single.style.display = 'none'; single.onclick = null; single.src = ''; }
+          if (container) {
+            Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
+            // 로딩 placeholder 추가
+            container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; min-height: 300px; color: #9ca3af; font-size: 0.9rem;">이미지 로딩 중...</div>';
+          }
+          
+          // guide.js의 encodeFilePath 함수와 동일한 방식 사용
+          function encodeFilePath(path) {
+            if (!path) return path;
+            const lastSlash = path.lastIndexOf('/');
+            if (lastSlash === -1) return encodeURIComponent(path);
+            const dir = path.slice(0, lastSlash + 1);
+            const file = path.slice(lastSlash + 1);
+            return dir + encodeURIComponent(file);
+          }
+          
+          const images = [
+            encodeFilePath('assets/checklist/발매 당일 해프 일정표.png')
+          ];
+          
+          let loadedCount = 0;
+          const totalImages = images.length;
+          
+          images.forEach(src => {
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = '발매 당일 체크리스트';
+            img.className = 'guide-image vote-image';
+            
+            // 이미지 로드 완료 시 placeholder 제거
+            img.onload = function() {
+              loadedCount++;
+              if (loadedCount === totalImages && container) {
+                const placeholder = container.querySelector('div');
+                if (placeholder && placeholder.textContent.includes('로딩 중')) {
+                  placeholder.remove();
+                }
+              }
+            };
+            
+            
+            if (container) container.appendChild(img);
+          });
+          return;
+        }
+        
+        if (type === 'pre') {
+          // 해프 할 일 - 다중 이미지 (투표 가이드와 동일한 방식)
+          if (single) { single.style.display = 'none'; single.onclick = null; single.src = ''; }
+          if (container) {
+            Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
+            // 로딩 placeholder 추가
+            container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; min-height: 300px; color: #9ca3af; font-size: 0.9rem;">이미지 로딩 중...</div>';
+          }
+          
+          const images = [
+            'assets/checklist/before/화력체크 총공.png',
+            'assets/checklist/before/해시태그 총공.png'
+          ];
+          
+          let loadedCount = 0;
+          const totalImages = images.length;
+          
+          images.forEach(src => {
+            const img = document.createElement('img');
+            img.src = encodeURI(src);
+            img.alt = '해프 할 일 체크리스트';
+            img.className = 'guide-image vote-image';
+            
+            // 이미지 로드 완료 시 placeholder 제거
+            img.onload = function() {
+              loadedCount++;
+              if (loadedCount === totalImages && container) {
+                const placeholder = container.querySelector('div');
+                if (placeholder && placeholder.textContent.includes('로딩 중')) {
+                  placeholder.remove();
+                }
+              }
+            };
+            
+            
+            if (container) container.appendChild(img);
+          });
+          return;
+        }
+        
+        // 기본(준비중)
+        showView('dashboard');
+        alert('준비 중입니다.🐻');
+      }
+
+      // Open stream list (similar to checklist)
+      function openStreamList() {
+        // 가이드 뷰로 전환하여 이미지 형태로 표시 (해프 할 일과 동일 레이아웃 재사용)
+        showView('guide');
+        // 허브(버튼 그리드) 감추고 상세 이미지만 노출
+        const hub = document.querySelector('#guide-view .guide-hub');
+        if (hub) hub.style.display = 'none';
+        const content = document.querySelector('#guide-view .guide-content');
+        if (content) content.style.display = 'block';
+        const container = document.querySelector('.guide-image-container');
+        const single = document.getElementById('guideImage');
+        
+        // 단일 이미지 표시 (해프 할 일과 동일한 방식)
+        if (single) { single.style.display = 'none'; single.onclick = null; single.src = ''; }
+        if (container) {
+          Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
+          // 로딩 placeholder 추가
+          container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; min-height: 300px; color: #9ca3af; font-size: 0.9rem;">이미지 로딩 중...</div>';
+        }
+        
+        // guide.js의 encodeFilePath 함수와 동일한 방식 사용
+        function encodeFilePath(path) {
+          if (!path) return path;
+          const lastSlash = path.lastIndexOf('/');
+          if (lastSlash === -1) return encodeURIComponent(path);
+          const dir = path.slice(0, lastSlash + 1);
+          const file = path.slice(lastSlash + 1);
+          return dir + encodeURIComponent(file);
+        }
+        
+        const images = [
+          encodeFilePath('assets/home/streamlist/streamlist.png')
+        ];
+        
+        let loadedCount = 0;
+        const totalImages = images.length;
+        
+        images.forEach(src => {
+          const img = document.createElement('img');
+          img.src = src;
+          img.alt = '스트리밍 리스트';
+          img.className = 'guide-image vote-image';
+          
+          // 이미지 로드 완료 시 placeholder 제거
+          img.onload = function() {
+            loadedCount++;
+            if (loadedCount === totalImages && container) {
+              const placeholder = container.querySelector('div');
+              if (placeholder && placeholder.textContent.includes('로딩 중')) {
+                placeholder.remove();
+              }
+            }
+          };
+          
+          if (container) container.appendChild(img);
+        });
+      }
+
+      // Open notice (placeholder)
+      function openNotice() {
+        showView('dashboard');
+        closeMenu();
+        alert('공지사항은 곧 업데이트됩니다.');
+      }
+
+      // Prevent '#' from appearing in URL for placeholder links
+      document.addEventListener('click', function(e) {
+        const anchor = e.target.closest('a[href="#"]');
+        if (anchor) {
+          e.preventDefault();
+        }
+      });
+    </script>
+  </body>
+  </html>
