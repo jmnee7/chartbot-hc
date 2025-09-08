@@ -28,30 +28,32 @@ document.addEventListener('DOMContentLoaded', () => {
 // 원클릭 스트리밍 하위 버튼 링크 매핑(링크 전달 시 여기만 채우면 됩니다)
 const STREAMING_LINKS = {
     melon: [
-        { label: '아이폰', url: '' },
-        { label: '안드로이드1', url: '' },
-        { label: '안드로이드2', url: '' },
-        { label: '안드로이드3', url: '' },
-        { label: '안드로이드4', url: '' },
+        { label: '아이폰', url: 'https://tinyurl.com/tp67xc6x' },
+        { label: '안드로이드1', url: 'https://tinyurl.com/5n77rvkp' },
+        { label: '안드로이드2', url: 'https://tinyurl.com/bdh26ybr' },
+        { label: '안드로이드3', url: 'https://tinyurl.com/57b6ycxm' },
+        { label: '안드로이드4', url: 'https://tinyurl.com/4xmnk9kd' },
         { label: 'Window PC', url: '' },
-        { label: 'Mac PC', url: '' },
-        { label: '아이패드', url: '' }
+        { label: 'Mac PC', url: 'https://tinyurl.com/hjsyn95b' },
+        { label: '아이패드', url: 'https://tinyurl.com/ycyrb3hu' }
     ],
     genie: [
-        { label: '아이폰', url: '' },
-        { label: '안드로이드', url: '' },
-        { label: 'PC', url: '' }
+        { label: '아이폰', url: 'https://tinyurl.com/bdmp2fzk' },
+        { label: '안드로이드', url: 'https://tinyurl.com/cz8fnhez' },
+        { label: 'PC', url: 'https://tinyurl.com/8tuk8v76' }
     ],
     bugs: [
-        { label: '아이폰', url: '' },
-        { label: '안드로이드', url: '' },
-        { label: 'PC', url: '' }
+        { label: '안드로이드, 아이폰', url: 'https://tinyurl.com/dmm5yyrp' },
+        { label: 'PC', url: 'https://tinyurl.com/t8pxtpbf' }
     ],
     vibe: [
-        { label: '바이브1', url: '' },
-        { label: '바이브2', url: '' },
-        { label: '바이브3', url: '' },
-        { label: '바이브4', url: '' }
+        { label: '바이브1', url: 'https://tinyurl.com/42dp5pe3' },
+        { label: '바이브2', url: 'https://tinyurl.com/bc96bbvf' },
+        { label: '바이브3', url: 'https://tinyurl.com/ycyjsbv3' },
+        { label: '바이브4', url: 'https://tinyurl.com/3thdtt2y' }
+    ],
+    flo: [
+        { label: '플로', url: 'https://tinyurl.com/4e2npphs' }
     ]
 };
 
