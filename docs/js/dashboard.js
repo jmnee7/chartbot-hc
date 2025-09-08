@@ -33,7 +33,10 @@ const STREAMING_LINKS = {
         { label: '안드로이드2', url: 'https://tinyurl.com/bdh26ybr' },
         { label: '안드로이드3', url: 'https://tinyurl.com/57b6ycxm' },
         { label: '안드로이드4', url: 'https://tinyurl.com/4xmnk9kd' },
-        { label: 'Window PC', url: '' },
+        { label: 'Window PC1', url: 'https://tinyurl.com/ysb3kvx6' },
+        { label: 'Window PC2', url: 'https://tinyurl.com/54fzw6z9' },
+        { label: 'Window PC3', url: 'https://tinyurl.com/y9ru7drx' },
+        { label: 'Window PC4', url: 'https://tinyurl.com/mr3sj4et' },
         { label: 'Mac PC', url: 'https://tinyurl.com/hjsyn95b' },
         { label: '아이패드', url: 'https://tinyurl.com/ycyrb3hu' }
     ],
@@ -465,9 +468,22 @@ function openQuickModal(mode) {
             { label: '멜론', key: 'melon' },
             { label: '지니', key: 'genie' },
             { label: '벅스', key: 'bugs' },
-            { label: '바이브', key: 'vibe' }
+            { label: '바이브', key: 'vibe' },
+            { label: '플로', key: 'flo', directLink: 'https://tinyurl.com/3hwajfyd' }
         ];
         services.forEach(s => {
+            // 플로는 직접 링크로 처리
+            if (s.directLink) {
+                const directButton = document.createElement('a');
+                directButton.className = 'btn accordion-header';
+                directButton.href = s.directLink;
+                directButton.target = '_blank';
+                directButton.rel = 'noopener';
+                directButton.textContent = s.label;
+                body.appendChild(directButton);
+                return;
+            }
+
             const header = document.createElement('button');
             header.className = 'btn accordion-header';
             header.type = 'button';
@@ -479,6 +495,14 @@ function openQuickModal(mode) {
 
             const grid = document.createElement('div');
             grid.className = 'guide-grid';
+
+            // 멜론의 경우 안내 메시지 추가
+            if (s.key === 'melon') {
+                const noticeDiv = document.createElement('div');
+                noticeDiv.style.cssText = 'text-align: center; margin-bottom: 15px; font-size: 12px; color: #666; font-style: italic; width: 100%;';
+                noticeDiv.textContent = '빈화면 뜰 시 새로고침 해주세요!';
+                content.appendChild(noticeDiv);
+            }
 
             (STREAMING_LINKS[s.key] || []).forEach(item => {
                 const isLinkReady = !!(item && item.url);
