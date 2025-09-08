@@ -137,8 +137,13 @@ class RankTracker:
             return {}
         
         # 가장 최근 히스토리 가져오기
-        latest_timestamp = max(self.history.keys())
-        previous_data = self.history[latest_timestamp]
+        timestamps = sorted(self.history.keys())
+        if len(timestamps) < 2:
+            return {}
+        
+        latest_timestamp = timestamps[-1]
+        previous_timestamp = timestamps[-2]
+        previous_data = self.history[previous_timestamp]
         
         changes = {}
         
@@ -201,7 +206,8 @@ class RankTracker:
         if previous_rank is None:
             return 0
         
-        # 순위가 낮을수록 숫자가 크므로, 이전 순위에서 현재 순위를 빼면 됨
+        # 순위가 낮을수록 숫자가 작으므로, 이전 순위에서 현재 순위를 빼면 됨
+        # 예: 3위 → 1위 = 3 - 1 = 2 (2계단 상승)
         return previous_rank - current_rank
     
     def _get_change_text(self, current_rank: Optional[int], previous_rank: Optional[int]) -> str:
