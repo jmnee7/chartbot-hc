@@ -183,11 +183,34 @@ function switchGuideTab(type) {
     const idDetailTabs = document.getElementById('idDetailTabs');
     const voteDetailTabs = document.getElementById('voteDetailTabs');
     const otherSubgrid = document.getElementById('other-subgrid');
+    
+    // 모든 서브그리드 숨김 (탭 전환 시)
+    const etcSubgrid = document.getElementById('other-etc-subgrid');
+    const idSubgrid = document.getElementById('id-subgrid');
+    if (otherSubgrid) {
+        otherSubgrid.style.display = 'none';
+        otherSubgrid.innerHTML = '';
+    }
+    if (etcSubgrid) {
+        etcSubgrid.style.maxHeight = '0px';
+        etcSubgrid.style.display = 'none'; // 추가: 확실한 숨김 처리
+        etcSubgrid.style.visibility = 'hidden'; // 추가: 완전한 숨김
+        etcSubgrid.innerHTML = ''; // 추가: 내용도 초기화
+    }
+    if (idSubgrid) {
+        idSubgrid.style.maxHeight = '0px';
+    }
+    
+    // 기타 가이드 메인 버튼들의 active 상태도 제거
+    const otherGrid = document.getElementById('other-grid');
+    if (otherGrid && type !== 'other') {
+        const buttons = otherGrid.querySelectorAll('.guide-item');
+        buttons.forEach(btn => btn.classList.remove('active'));
+    }
     const streamingGrid = document.getElementById('streaming-grid');
     const idGrid = document.getElementById('id-grid');
     const downloadGrid = document.getElementById('download-grid');
     const voteGrid = document.getElementById('vote-grid');
-    const otherGrid = document.getElementById('other-grid');
     const groupbuyGrid = document.getElementById('groupbuy-grid');
 
     // 먼저 모두 숨김 및 이미지 영역 초기화(잔상 제거)
@@ -233,20 +256,14 @@ function switchGuideTab(type) {
         }
 
         // 디바이스 탭 숨기기
-        document.getElementById('deviceTabs').style.display = 'none';
+        const deviceTabs = document.getElementById('deviceTabs');
+        if (deviceTabs) deviceTabs.style.display = 'none';
         if (idDetailTabs) { idDetailTabs.style.display = 'none'; idDetailTabs.innerHTML = ''; }
         // 가이드 콘텐츠 표시
-        document.querySelector('.guide-content').style.display = 'block';
+        const guideContent = document.querySelector('.guide-content');
+        if (guideContent) guideContent.style.display = 'block';
         if (voteDetailTabs) voteDetailTabs.style.display = 'none';
-        // 안정화: 첫 진입 시 기본 선택 보장 (듀얼넘버 > SKT)
-        if (!currentIdCategory && !currentIdDetail) {
-            // 즉시 표시를 위해 상태를 직접 설정 후 업데이트
-            currentIdCategory = 'dualnumber';
-            currentIdDetail = 'skt';
-            updateGuideImage();
-            // UI 버튼 활성화는 비동기로 보정
-            setTimeout(() => { try { openIdCategoryGrid('dualnumber', null); selectIdDetail('skt'); } catch(_){} }, 0);
-        }
+        // 기본 선택은 실제 버튼 자동 클릭 로직이 수행하므로 별도 강제값 설정을 하지 않습니다.
         return;
     } else {
         if (idCategoryTabs) idCategoryTabs.style.display = 'none';
@@ -289,8 +306,10 @@ function switchGuideTab(type) {
             const firstGridBtn = otherGrid.querySelector('.guide-item');
             if (firstGridBtn && typeof firstGridBtn.click === 'function') firstGridBtn.click();
         }
-        document.getElementById('deviceTabs').style.display = 'none';
-        document.querySelector('.guide-content').style.display = 'block';
+        const deviceTabs = document.getElementById('deviceTabs');
+        if (deviceTabs) deviceTabs.style.display = 'none';
+        const guideContent = document.querySelector('.guide-content');
+        if (guideContent) guideContent.style.display = 'block';
         return;
     }
 
@@ -405,14 +424,23 @@ function updateGuideImage() {
                 const single = document.getElementById('guideImage');
                 if (container) {
                     Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
+                    // 기존 placeholder 제거
+                    const placeholder = container.querySelector('div');
+                    if (placeholder && placeholder.textContent && placeholder.textContent.includes('로딩 중')) {
+                        placeholder.remove();
+                    }
                 }
                 if (single) { single.style.display = 'none'; single.onclick = null; single.src = ''; }
                 if (container) {
+                    let loadedCount = 0;
+                    const totalImages = kakaoList.length;
+                    
                     kakaoList.forEach(src => {
                         const img = document.createElement('img');
                         img.src = src;
                         img.alt = '카카오뮤직 아이디 생성 가이드';
                         img.className = 'guide-image vote-image';
+                        
                         container.appendChild(img);
                     });
                 }
@@ -458,12 +486,47 @@ function updateGuideImage() {
         // vote 하위 탭에서 설정됨
     }
     
-    const guideImage = document.getElementById('guideImage');
+    let guideImage = document.getElementById('guideImage');
+    const containerForSingle = document.querySelector('.guide-image-container');
+    // guideImage 요소가 사라졌을 수 있으므로 보정 생성
+    if (!guideImage && containerForSingle) {
+        guideImage = document.createElement('img');
+        guideImage.id = 'guideImage';
+        guideImage.className = 'guide-image';
+        guideImage.decoding = 'async';
+        containerForSingle.appendChild(guideImage);
+    }
+    // 단일 이미지 로딩 중 placeholder 유지 -> 흰 화면 방지
+    if (containerForSingle) {
+        // 기존 placeholder가 없으면 추가
+        const hasPlaceholder = !!Array.from(containerForSingle.children).find(c => c.nodeType === 1 && c.tagName === 'DIV' && c.textContent && c.textContent.includes('이미지 로딩'));
+        if (!hasPlaceholder) {
+            const ph = document.createElement('div');
+            ph.style.cssText = 'display:flex;align-items:center;justify-content:center;min-height:200px;color:#9ca3af;font-size:0.9rem;';
+            ph.textContent = '이미지 로딩 중...';
+            containerForSingle.appendChild(ph);
+        }
+    }
     // 이미지 경로가 있을 때만 표시하여 엑박 방지
     if (imagePath) {
-        // 초기 렌더 타이밍에서 가끔 빈 프레임이 보이는 문제 방지: onload 후 표시
-        guideImage.onload = function() { this.style.display = ''; };
-        guideImage.onerror = function() { this.style.display = 'none'; };
+        guideImage.style.display = 'block';
+        guideImage.style.visibility = 'visible';
+        guideImage.onload = function() {
+            this.style.display = 'block';
+            this.style.visibility = 'visible';
+            // 로딩 placeholder 제거
+            if (containerForSingle) {
+                const div = Array.from(containerForSingle.querySelectorAll('div')).find(d => d.textContent && d.textContent.includes('로딩 중'));
+                if (div) div.remove();
+            }
+        };
+        guideImage.onerror = function() {
+            this.style.display = 'none';
+            // 에러 안내 표시
+            if (containerForSingle) {
+                const ph = Array.from(containerForSingle.querySelectorAll('div')).find(d => d.textContent && d.textContent.includes('로딩 중'));
+            }
+        };
         guideImage.src = imagePath;
     } else {
         guideImage.src = '';
@@ -483,16 +546,7 @@ function updateGuideImage() {
     }
     guideImage.alt = `${serviceNames[currentService]} ${typeNames[currentGuideType]} 가이드 이미지 (${deviceText} 버전)`;
     
-    // 이미지 로드 실패 시 기본 이미지 표시
-    guideImage.onerror = function() {
-        console.log(`이미지 로드 실패: ${imagePath}`);
-        this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDUwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjZjVmNWY1Ii8+CjxjaXJjbGUgY3g9IjI1MCIgY3k9IjE1MCIgcj0iODAiIGZpbGw9IiNkZGQiLz4KPHBhdGggZD0iTTIxMCAxMjBsNjAgMzAtNjAgMzB6IiBmaWxsPSIjOTk5Ii8+Cjx0ZXh0IHg9IjI1MCIgeT0iMjIwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNjY2IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZvbnQtd2VpZ2h0PSJib2xkIj7siqTtirjrjJTrqoXshJzrspTslrQ8L3RleHQ+Cjx0ZXh0IHg9IjI1MCIgeT0iMjUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNjY2IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtd2VpZ2h0PSIxNiI+PuydtOuvuOyngCDssL3rs7XtlZzri6QuLi48L3RleHQ+Cjwvc3ZnPg==';
-    };
     
-    // 이미지 로드 성공 시 로그
-    guideImage.onload = function() {
-        console.log(`이미지 로드 성공: ${imagePath}`);
-    };
 }
 
 // 여러 장 이미지를 순차 표시 (클릭으로 넘기기)
@@ -694,6 +748,30 @@ function serviceToKorean(key){
 
 function openOtherGuide(kind) {
     currentGuideType = 'other';
+    
+    // 모든 서브그리드 초기화 (현재 선택된 메뉴가 아닌 경우)
+    const subgrid = document.getElementById('other-subgrid');
+    const etcSubgrid = document.getElementById('other-etc-subgrid');
+    
+    // 현재 클릭한 메뉴가 서브그리드를 사용하지 않는 경우 모든 서브그리드 숨김
+    if (!['stability', 'simul', 'radio'].includes(kind) && 
+        !(typeof kind === 'string' && (kind.indexOf('block_') === 0 || kind.indexOf('simul_') === 0 || kind.indexOf('radio_') === 0))) {
+        if (subgrid) {
+            subgrid.style.display = 'none';
+            subgrid.innerHTML = '';
+        }
+    }
+    
+    // 기타 서브그리드 숨김 (기타 카테고리가 아닌 경우)
+    if (!['gift_melon', 'cost', 'site_reco', 'etc'].includes(kind)) {
+        if (etcSubgrid) {
+            etcSubgrid.style.maxHeight = '0px';
+            etcSubgrid.style.display = 'none';
+            etcSubgrid.style.visibility = 'hidden';
+            etcSubgrid.innerHTML = '';
+        }
+    }
+    
     // active 스타일 토글
     const grid = document.getElementById('other-grid');
     if (grid) {
@@ -708,10 +786,15 @@ function openOtherGuide(kind) {
         }
         const activeBtn = Array.from(buttons).find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes(`openOtherGuide('${keyForTop}')`));
         if (activeBtn) activeBtn.classList.add('active');
+
+        // 기타 하위 메뉴 클릭 시 상단 '기타' 버튼을 강제로 active 유지
+        if (['gift_melon','cost','site_reco','etc'].includes(kind)) {
+            const etcTopBtn = Array.from(buttons).find(b => b.textContent && b.textContent.trim() === '기타');
+            if (etcTopBtn) etcTopBtn.classList.add('active');
+        }
     }
     
     // stability: 아이디 가이드처럼 2단계 하위 메뉴 렌더링
-    const subgrid = document.getElementById('other-subgrid');
     if (kind === 'stability' && subgrid) {
         subgrid.style.display = 'flex';
         // 버튼 렌더링
@@ -750,6 +833,25 @@ function openOtherGuide(kind) {
         return;
     }
 
+    // 기타 탭: 하위 3개 메뉴 (라디오 신청 가이드와 동일한 방식)
+    if (kind === 'etc' && etcSubgrid) {
+        etcSubgrid.style.display = 'flex';
+        etcSubgrid.style.visibility = 'visible';
+        etcSubgrid.innerHTML = `
+            <button class="guide-item text-only" onclick="openOtherGuide('gift_melon')">멜론 선물하기 가이드</button>
+            <button class="guide-item text-only" onclick="openOtherGuide('cost')">음원 다운로드 비용 안내</button>
+            <button class="guide-item text-only" onclick="openOtherGuide('site_reco')">음원 사이트 추천</button>
+        `;
+        etcSubgrid.style.maxHeight = etcSubgrid.scrollHeight + 'px';
+        setTimeout(() => {
+            const first = etcSubgrid.querySelector('.guide-item');
+            if (first && typeof first.click === 'function') first.click();
+        }, 0);
+        hideGuideTextBox();
+        document.querySelector('.guide-content').style.display = 'block';
+        return;
+    }
+
     // 숏폼 제작 가이드: 단일 이미지 표시
     if (kind === 'shorts') {
         if (subgrid) { subgrid.style.display = 'none'; subgrid.innerHTML = ''; }
@@ -768,8 +870,10 @@ function openOtherGuide(kind) {
             if (!img) {
                 img = document.createElement('img');
                 img.id = 'guideImage';
-                img.className = 'guide-image';
+                img.className = 'guide-image single-image';
                 container.appendChild(img);
+            } else {
+                img.className = 'guide-image single-image';
             }
             img.onload = function(){ this.style.display=''; };
             img.onerror = function(){ this.style.display='none'; };
@@ -797,16 +901,6 @@ function openOtherGuide(kind) {
         return;
     }
 
-    // stability 외 메뉴를 클릭하면 하단 서브그리드 숨김/초기화
-    if (subgrid && !(
-        kind === 'stability' ||
-        kind === 'simul' ||
-        kind === 'radio' ||
-        (typeof kind === 'string' && (kind.indexOf('block_') === 0 || kind.indexOf('simul_') === 0 || kind.indexOf('radio_') === 0))
-    )) {
-        subgrid.style.display = 'none';
-        subgrid.innerHTML = '';
-    }
 
     // block_* / simul_* / radio_* 하위 메뉴 클릭 시, 하단 버튼 active 토글
     if (subgrid && typeof kind === 'string' && (kind.indexOf('block_') === 0 || kind.indexOf('simul_') === 0 || kind.indexOf('radio_') === 0)) {
@@ -814,6 +908,31 @@ function openOtherGuide(kind) {
         subButtons.forEach(btn => btn.classList.remove('active'));
         const activeSub = Array.from(subButtons).find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes(`openOtherGuide('${kind}')`));
         if (activeSub) activeSub.classList.add('active');
+    }
+    
+    // 기타 서브그리드 버튼 active 토글
+    if (etcSubgrid && ['gift_melon', 'cost', 'site_reco', 'etc'].includes(kind)) {
+        const etcButtons = etcSubgrid.querySelectorAll('.guide-item');
+        etcButtons.forEach(btn => btn.classList.remove('active'));
+        const activeEtc = Array.from(etcButtons).find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes(`openOtherGuide('${kind}')`));
+        if (activeEtc) activeEtc.classList.add('active');
+
+        // 아코디언이 닫혀있다면 열기 (세 항목 동작 일관화를 위해 강제 오픈)
+        const isClosed = etcSubgrid.style.maxHeight === '0px' || !etcSubgrid.style.maxHeight;
+        if (isClosed) {
+            etcSubgrid.style.display = 'flex';
+            etcSubgrid.style.visibility = 'visible';
+            // 현재 컨텐츠 높이 계산 후 적용
+            requestAnimationFrame(() => {
+                etcSubgrid.style.maxHeight = etcSubgrid.scrollHeight + 'px';
+            });
+        }
+    }
+
+    // 컬러링 가이드는 준비중 처리
+    if (kind === 'coloring') {
+        alert('준비 중입니다.🐻');
+        return;
     }
 
     // 기타 가이드에서는 텍스트 박스 숨김
@@ -888,7 +1007,9 @@ function openOtherGuide(kind) {
         ],
         site_reco: [
             encodeFilePath('assets/guide/etc/music etc/음원 사이트 추천.png')
-        ]
+        ],
+        // 컬러링 가이드 (준비중)
+        coloring: []
     };
 
     const paths = map[kind] || [];
@@ -923,6 +1044,62 @@ function openOtherGuide(kind) {
     });
 
     container.appendChild(frag);
+}
+
+// 기타 가이드의 "기타" 카테고리 아코디언 처리 (아이디 가이드와 유사)
+function openOtherCategoryGrid(category, el) {
+    const grid = document.getElementById('other-etc-subgrid');
+    if (!grid) return;
+    
+    // 다른 모든 서브그리드들 숨기기
+    const otherSubgrid = document.getElementById('other-subgrid');
+    if (otherSubgrid) {
+        otherSubgrid.style.display = 'none';
+        otherSubgrid.innerHTML = '';
+    }
+    
+    // 다른 메인 버튼들의 active 상태 제거 (기타 제외)
+    const otherGrid = document.getElementById('other-grid');
+    if (otherGrid) {
+        const buttons = otherGrid.querySelectorAll('.guide-item');
+        buttons.forEach(btn => {
+            if (btn !== el) {
+                btn.classList.remove('active');
+            }
+        });
+    }
+    
+    if (el && el.parentElement) {
+        Array.from(el.parentElement.querySelectorAll('.guide-item')).forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+    }
+    
+    // 라디오 신청 가이드처럼 항상 하위 메뉴 표시 (토글 없음)
+    
+    // 하위 메뉴 내용 설정
+    if (category === 'etc') {
+        grid.innerHTML = `
+            <button class="guide-item text-only" onclick="openOtherGuide('gift_melon')">멜론 선물하기 가이드</button>
+            <button class="guide-item text-only" onclick="openOtherGuide('cost')">음원 다운로드 비용 안내</button>
+            <button class="guide-item text-only" onclick="openOtherGuide('site_reco')">음원 사이트 추천</button>
+        `;
+    }
+    
+    // 아코디언 열기
+    grid.style.display = 'flex';
+    grid.style.visibility = 'visible'; // 추가: 확실한 표시
+    // 높이를 계산해서 슬라이드 다운
+    setTimeout(() => {
+        grid.style.maxHeight = grid.scrollHeight + 'px';
+    }, 10);
+    
+    // 하위 첫 항목을 자동 선택하여 이미지가 즉시 보이도록 함
+    setTimeout(() => {
+        const firstDetailBtn = grid.querySelector('.guide-item');
+        if (firstDetailBtn && typeof firstDetailBtn.click === 'function') {
+            firstDetailBtn.click();
+        }
+    }, 150); // 아코디언 애니메이션 후 실행
 }
 
 // 공동구매 가이드 핸들러
@@ -1027,15 +1204,29 @@ function openGroupBuyGuide(vendor) {
 function openIdCategoryGrid(category, el) {
     const grid = document.getElementById('id-subgrid');
     if (!grid) return;
-    grid.style.display = 'flex';
+    
     currentGuideType = 'id';
     currentIdCategory = category;
     // 이전 선택 상태 초기화
     currentIdDetail = null;
+    
     if (el && el.parentElement) {
         Array.from(el.parentElement.querySelectorAll('.guide-item')).forEach(b => b.classList.remove('active'));
         el.classList.add('active');
     }
+    
+    // 아코디언 애니메이션으로 하위 메뉴 표시
+    const isCurrentlyOpen = grid.style.maxHeight && grid.style.maxHeight !== '0px';
+    const isSameCategory = grid.getAttribute('data-current-category') === category;
+    
+    if (isCurrentlyOpen && isSameCategory) {
+        // 같은 카테고리를 다시 클릭하면 닫기
+        grid.style.maxHeight = '0px';
+        grid.setAttribute('data-current-category', '');
+        return;
+    }
+    
+    // 하위 메뉴 내용 설정
     if (category === 'dualnumber') {
         grid.innerHTML = `
             <button class=\"guide-item text-only\" onclick=\"selectIdDetail('skt')\">SKT</button>
@@ -1052,20 +1243,38 @@ function openIdCategoryGrid(category, el) {
             <button class=\"guide-item text-only\" onclick=\"selectIdDetail('kakao')\">카카오뮤직</button>
         `;
     }
-    // 하위 첫 항목을 자동 선택하여 이미지가 즉시 보이도록 함 (렌더 뒤 이벤트 루프에서 실행)
+    
+    // 아코디언 열기
+    grid.style.display = 'flex';
+    grid.setAttribute('data-current-category', category);
+    // 높이를 계산해서 슬라이드 다운
+    setTimeout(() => {
+        grid.style.maxHeight = grid.scrollHeight + 'px';
+    }, 10);
+    
+    // 하위 첫 항목을 자동 선택하여 이미지가 즉시 보이도록 함
     setTimeout(() => {
         const firstDetailBtn = grid.querySelector('.guide-item');
         if (firstDetailBtn && typeof firstDetailBtn.click === 'function') {
             firstDetailBtn.click();
         }
-    }, 0);
+    }, 150); // 아코디언 애니메이션 후 실행
 }
 
 function selectIdDetail(detail) {
     currentIdDetail = detail;
     // 아이디 가이드에서는 텍스트 박스 숨김
     hideGuideTextBox();
-    document.querySelector('.guide-content').style.display = 'block';
+    const guideContent = document.querySelector('.guide-content');
+    if (guideContent) guideContent.style.display = 'block';
+    // 하위 버튼 active 토글
+    const subgrid = document.getElementById('id-subgrid');
+    if (subgrid) {
+        const buttons = subgrid.querySelectorAll('.guide-item');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        const activeBtn = Array.from(buttons).find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes(`selectIdDetail('${detail}')`));
+        if (activeBtn) activeBtn.classList.add('active');
+    }
     updateGuideImage();
 }
 

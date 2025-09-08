@@ -25,6 +25,68 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// 원클릭 스트리밍 하위 버튼 링크 매핑(링크 전달 시 여기만 채우면 됩니다)
+const STREAMING_LINKS = {
+    melon: [
+        { label: '아이폰', url: '' },
+        { label: '안드로이드1', url: '' },
+        { label: '안드로이드2', url: '' },
+        { label: '안드로이드3', url: '' },
+        { label: '안드로이드4', url: '' },
+        { label: 'Window PC', url: '' },
+        { label: 'Mac PC', url: '' },
+        { label: '아이패드', url: '' }
+    ],
+    genie: [
+        { label: '아이폰', url: '' },
+        { label: '안드로이드', url: '' },
+        { label: 'PC', url: '' }
+    ],
+    bugs: [
+        { label: '아이폰', url: '' },
+        { label: '안드로이드', url: '' },
+        { label: 'PC', url: '' }
+    ],
+    vibe: [
+        { label: '바이브1', url: '' },
+        { label: '바이브2', url: '' },
+        { label: '바이브3', url: '' },
+        { label: '바이브4', url: '' }
+    ]
+};
+
+// 그룹구매 데이터(설명/링크) - 모달/아코디언에서 공통 사용
+const GROUPBUY_DATA = {
+    applemusic: [
+        { label: 'Tin Case Ver.', url: 'https://abit.ly/acaxvd' },
+        { label: 'Savory Ver.', url: 'https://abit.ly/fvgwev' },
+        { label: 'Full Spread(랜덤) Ver.', url: 'https://abit.ly/rvw5i6' },
+        { label: 'Full Spread(세트) Ver.', url: 'https://abit.ly/vvau2w' }
+    ],
+    allmd: [
+        { label: '올엠디 바로가기', url: 'https://buly.kr/9BWCsD7' }
+    ],
+    minirecord: [
+        { label: 'Tin Case Ver.', url: 'https://minirecord.shop/product/detail.html?product_no=2326' },
+        { label: 'Savory Ver.', url: 'https://minirecord.shop/product/detail.html?product_no=2325' },
+        { label: 'Full Spread(랜덤) Ver.', url: 'https://minirecord.shop/product/detail.html?product_no=2328' },
+        { label: 'Full Spread(세트) Ver.', url: 'https://minirecord.shop/product/detail.html?product_no=2327' }
+    ],
+    everline: [
+        { label: 'Tin Case Ver.', url: 'https://bit.ly/45XUyWC' },
+        { label: 'Savory Ver.', url: 'https://bit.ly/4fJkn01' },
+        { label: 'Full Spread(랜덤) Ver.', url: 'https://bit.ly/45XUGp4' },
+        { label: 'Full Spread(세트) Ver.', url: 'https://bit.ly/4mQLk40' }
+    ]
+};
+
+const GROUPBUY_TEXT = {
+    minirecord: `미니레코드 공동구매\n\n▪️공구 기간: ~ 9월 7일 23:59 (KST)\n\n▪️공구 특전: 엽서 1종\n\n▪️공구 가격&링크\n💿 Tin Case Ver. 29,700원\nhttp://bit.ly/423DcoR\n\n💿 Savory Ver. 14,500원\nhttps://bit.ly/47mHYl0\n\n💿 Full Spread(랜덤) Ver. 14,500원\nhttps://bit.ly/4pfGPlM\n\n💿 Full Spread(세트) Ver. 43,500원\nhttps://bit.ly/47mg5JH\n\n※ 앨범 발매 후 온•오프라인 물량에 차질이 있을 수 있으므로 최대한 >예약 판매 기간 내에< 에 많은 구매 부탁드립니다.`,
+    applemusic: `애플뮤직 공동구매\n\n▪️공구 기간: ~ 9월 7일 23:59(KST)\n\n▪️공구 특전: 스티커 1종\n\n🔗공구 가격 & 링크\n💿Tin Case Ver. 30,700원\nhttps://abit.ly/acaxvd\n\n💿 Savory Ver. 14,500원\nhttps://abit.ly/fvgwev\n\n💿 Full Spread(랜덤) Ver. 14,500원\nhttps://abit.ly/rvw5i6\n\n💿 Full Spread(세트) ver. 43,200원\nhttps://abit.ly/vvau2w\n\n※ 앨범 발매 후 온•오프라인 물량에 차질이 있을 수 있으므로 최대한 >예약 판매 기간 내에< 에 많은 구매 부탁드립니다.`,
+    everline: `에버라인 공동구매\n\n▪️공구 기간: ~ 9월 8일 23:59 (KST)\n\n▪️공구 특전: 핀버튼 3종 중 랜덤 1종\n\n▪️공구 가격&링크\n💿 Tin Case Ver. 30,500₩\nhttps://bit.ly/45XUyWC\n\n💿 Savory Ver. 14,700\nhttps://bit.ly/4fJkn01\n\n💿 Full Spread(랜덤) Ver. 14,700₩\nhttps://bit.ly/45XUGp4\n\n💿 Full Spread(세트) Ver. 43,600₩\nhttps://bit.ly/4mQLk40\n\n* 앨범 발매 후 온•오프라인 물량에 차질이 있을 수 있으므로\n최대한 >예약 판매 기간 내에< 많은 구매 부탁드립니다.`,
+    allmd: `올엠디 공동구매\n\n▪️공구 기간 : ~ 9월 7일 23:59 (KST)\n\n▪️공구 특전: 스티커 1종\n\n▪️공구 가격\n💿Tin Case Ver. 29,500원\n💿Savory Ver. 14,400원\n💿Full Spread Ver. (랜덤) 14,400원\n💿Full Spread Ver. (세트) 42,600원\n\n🔗공구 링크 \nhttps://buly.kr/9BWCsD7\n\n※ 앨범 발매 후 온•오프라인 물량에 차질이 있을 수 있으므로 최대한 >예약 판매 기간 내에< 에 많은 구매 부탁드립니다.`
+};
+
 function showView(viewId) {
     document.getElementById('dashboard-view').style.display = 'none';
     document.getElementById('guide-view').style.display = 'none';
@@ -312,6 +374,47 @@ function openGroupBuyModal(vendor) {
     modal.classList.add('show');
 }
 
+// Streaming detail modal (two-step like groupbuy)
+function openStreamingModal(service) {
+    const modal = document.getElementById('gbModal');
+    const title = document.getElementById('gbTitle');
+    const body = document.getElementById('gbBody');
+    if (!modal || !title || !body) return;
+
+    const serviceName = {
+        melon: '멜론',
+        genie: '지니',
+        bugs: '벅스',
+        vibe: '바이브'
+    }[service] || '원클릭 스트리밍';
+
+    // 서비스별 하위 버튼 목록
+    // 데이터는 STREAMING_LINKS를 사용 (label/url 세트)
+    const buttonsByService = STREAMING_LINKS;
+
+    title.textContent = serviceName;
+    body.innerHTML = '';
+
+    const items = buttonsByService[service] || [];
+    items.forEach(item => {
+        const isLinkReady = !!(item && item.url);
+        const el = document.createElement(isLinkReady ? 'a' : 'button');
+        el.className = 'btn';
+        if (isLinkReady) {
+            el.href = item.url;
+            el.target = '_blank';
+            el.rel = 'noopener';
+        } else {
+            el.type = 'button';
+            el.addEventListener('click', function(e){ e.preventDefault(); alert('준비 중입니다.🐻'); });
+        }
+        el.textContent = item.label || '항목';
+        body.appendChild(el);
+    });
+
+    modal.classList.add('show');
+}
+
 function closeGbModal() { const m = document.getElementById('gbModal'); if (m) m.classList.remove('show'); }
 
 // Unified quick modal (streaming/radio/groupbuy)
@@ -322,25 +425,64 @@ function openQuickModal(mode) {
     if (!modal || !title || !body) return;
 
     body.innerHTML = '';
+    body.className = '';
     if (mode === 'streaming') {
         title.textContent = '원클릭 스트리밍';
+        body.className = 'accordion-group';
         const services = [
             { label: '멜론', key: 'melon' },
             { label: '지니', key: 'genie' },
             { label: '벅스', key: 'bugs' },
-            { label: '바이브', key: 'vibe' },
-            { label: '플로', key: 'flo' }
+            { label: '바이브', key: 'vibe' }
         ];
         services.forEach(s => {
-            const btn = document.createElement('a');
-            btn.className = 'btn';
-            btn.href = '#';
-            btn.onclick = function(e) { e.preventDefault(); alert('준비 중입니다.🐻'); };
-            btn.textContent = s.label;
-            body.appendChild(btn);
+            const header = document.createElement('button');
+            header.className = 'btn accordion-header';
+            header.type = 'button';
+            header.textContent = s.label;
+
+            const content = document.createElement('div');
+            content.className = 'accordion-content';
+            content.style.maxHeight = '0px';
+
+            const grid = document.createElement('div');
+            grid.className = 'guide-grid';
+
+            (STREAMING_LINKS[s.key] || []).forEach(item => {
+                const isLinkReady = !!(item && item.url);
+                const el = document.createElement(isLinkReady ? 'a' : 'button');
+                el.className = 'btn';
+                el.textContent = item.label || '항목';
+                if (isLinkReady) {
+                    el.href = item.url;
+                    el.target = '_blank';
+                    el.rel = 'noopener';
+                } else {
+                    el.type = 'button';
+                    el.addEventListener('click', function(e){ e.preventDefault(); alert('준비 중입니다.🐻'); });
+                }
+                grid.appendChild(el);
+            });
+
+            content.appendChild(grid);
+
+            header.addEventListener('click', function(){
+                const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+                if (isOpen) {
+                    content.style.maxHeight = '0px';
+                    header.classList.remove('open');
+                } else {
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                    header.classList.add('open');
+                }
+            });
+
+            body.appendChild(header);
+            body.appendChild(content);
         });
     } else if (mode === 'radio') {
         title.textContent = '원클릭 라디오 신청';
+        body.className = 'guide-grid';
 
         const ua = navigator.userAgent;
         const isIOS = /iPhone|iPad|iPod/i.test(ua);
@@ -377,6 +519,7 @@ function openQuickModal(mode) {
         body.appendChild(createSmsButton('SBS', '#1077'));
     } else if (mode === 'groupbuy') {
         title.textContent = '공동구매';
+        body.className = 'accordion-group';
         const vendors = [
             { label: '미니레코드', key: 'minirecord' },
             { label: '애플뮤직', key: 'applemusic' },
@@ -384,18 +527,68 @@ function openQuickModal(mode) {
             { label: '올엠디', key: 'allmd' }
         ];
         vendors.forEach(v => {
-            const btn = document.createElement('button');
-            btn.className = 'btn';
-            btn.type = 'button';
-            btn.onclick = function(e) {
-                // 모달 내부 클릭이 배경 닫기로 전파되지 않도록 방지
-                e.preventDefault();
-                e.stopPropagation();
-                // 같은 모달을 재활용하여 상세로 전환
-                openGroupBuyModal(v.key);
-            };
-            btn.textContent = v.label;
-            body.appendChild(btn);
+            const header = document.createElement('button');
+            header.className = 'btn accordion-header';
+            header.type = 'button';
+            header.textContent = v.label;
+
+            const content = document.createElement('div');
+            content.className = 'accordion-content';
+            content.style.maxHeight = '0px';
+
+            const grid = document.createElement('div');
+            grid.className = 'guide-grid';
+
+            // 상단 안내 텍스트
+            const description = GROUPBUY_TEXT[v.key];
+            if (description) {
+                const textDiv = document.createElement('div');
+                textDiv.className = 'guide-text';
+                textDiv.style.gridColumn = '1 / -1';
+                textDiv.innerHTML = (function linkifyText(text){
+                    const urlPattern = /(https?:\/\/[^\s]+)/g;
+                    const parts = String(text).split(urlPattern);
+                    let html = '';
+                    for (let i = 0; i < parts.length; i++) {
+                        const part = parts[i];
+                        if (i % 2 === 1) {
+                            const url = part;
+                            const safeHref = url.replace(/\"/g, '&quot;');
+                            html += `<a href="${safeHref}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+                        } else {
+                            html += part;
+                        }
+                    }
+                    return html;
+                })(description);
+                grid.appendChild(textDiv);
+            }
+
+            (GROUPBUY_DATA[v.key] || []).forEach(item => {
+                const a = document.createElement('a');
+                a.className = 'btn';
+                a.href = item.url;
+                a.target = '_blank';
+                a.rel = 'noopener';
+                a.textContent = item.label;
+                grid.appendChild(a);
+            });
+
+            content.appendChild(grid);
+
+            header.addEventListener('click', function(){
+                const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+                if (isOpen) {
+                    content.style.maxHeight = '0px';
+                    header.classList.remove('open');
+                } else {
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                    header.classList.add('open');
+                }
+            });
+
+            body.appendChild(header);
+            body.appendChild(content);
         });
     }
 
@@ -420,7 +613,6 @@ async function loadYouTubeStats() {
                 likeCountElement.textContent = data.like_count_formatted || '-';
             }
             
-            console.log('✅ YouTube 통계 로드 성공:', data);
         } else {
             throw new Error('YouTube 통계 파일을 찾을 수 없습니다.');
         }

@@ -81,6 +81,9 @@ body {
 .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 16px; }
 .modal.show { display: flex; }
 .modal-content { background:#fff; width: 100%; max-width: 720px; border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+/* Ensure modal inner grid spacing consistent */
+.modal .guide-grid { display: flex; flex-wrap: wrap; gap: 12px; }
+.modal .guide-grid .btn { margin: 0; }
 
 /* Card */
 .card { background-color: #ffffff; border-radius: 14px; padding: 20px; border: 1px solid #eef1f4; box-shadow: 0 6px 18px rgba(17, 24, 39, 0.04); }
@@ -300,6 +303,11 @@ button.home-shortcut { border-radius: 14px; background: #f8fafc; }
   display: block; 
   box-sizing: border-box;
 }
+
+/* 숏폼 제작 가이드 등 단일 이미지에 상단 여백 추가 */
+.guide-image.single-image { 
+  margin-top: 20px; 
+}
 /* Vote multi image spacing */
 .guide-image.vote-image { 
   display: block; 
@@ -431,10 +439,63 @@ button.home-shortcut { border-radius: 14px; background: #f8fafc; }
 #other-subgrid .guide-item:hover { background: #f8fafc; }
 #other-subgrid .guide-item.active { background: #966e4b !important; color: #ffffff !important; box-shadow: 0 4px 14px rgba(150, 110, 75, 0.18); border: none !important; }
 
+/* ID subgrid accordion animation */
+#id-subgrid { 
+  display: flex; 
+  flex-wrap: wrap; 
+  gap: 16px; 
+  margin-top: 10px; 
+  min-height: 44px; 
+  overflow: hidden; 
+  max-height: 0px; 
+  transition: max-height 0.3s ease-out; 
+}
+
+/* Other ETC subgrid accordion animation (same as ID subgrid) */
+#other-etc-subgrid { 
+  display: flex; 
+  flex-wrap: wrap; 
+  gap: 16px; 
+  margin-top: 10px; 
+  min-height: 44px; 
+  overflow: hidden; 
+  max-height: 0px; 
+  transition: max-height 0.3s ease-out; 
+}
+
 /* Align ID/Vote guide button groups to top-left */
 #id-grid .guide-grid { justify-content: flex-start; align-items: flex-start; }
 #vote-grid .guide-grid { justify-content: flex-start; align-items: flex-start; }
 #id-subgrid { justify-content: flex-start; align-items: flex-start; }
+#other-etc-subgrid { justify-content: flex-start; align-items: flex-start; }
+
+/* Other ETC subgrid buttons: match ID subgrid style (text-only without green border) */
+#other-etc-subgrid .guide-item { 
+  border: none !important; 
+  background: transparent !important; 
+  box-shadow: none; 
+  white-space: nowrap; 
+  min-height: 40px; 
+  padding: 8px 14px; 
+  border-radius: 12px; 
+  line-height: 1.2; 
+}
+#other-etc-subgrid .guide-item:hover { 
+  background: #f8fafc; 
+}
+#other-etc-subgrid .guide-item.active { 
+  background: #966e4b !important; 
+  color: #ffffff !important; 
+  box-shadow: 0 4px 14px rgba(150, 110, 75, 0.18); 
+  border: none !important; 
+}
 
 /* Ensure guide card centered within white area */
 #guide-view .card { margin-left: auto; margin-right: auto; }
+
+/* Accordion (streaming modal) */
+.accordion-group { display: block; }
+.accordion-header { width: 100%; text-align: left; margin-bottom: 6px; }
+.accordion-header.open { background: #966e4b; color: #fff; }
+.accordion-content { overflow: hidden; transition: max-height 0.25s ease; }
+.accordion-content .guide-grid { padding: 8px 0 12px; }
