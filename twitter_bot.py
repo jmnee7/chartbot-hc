@@ -146,9 +146,9 @@ class TwitterBot:
             # 정각으로 강제 조정 (예: 11:32 -> 11:00)
             current_time = now_kst.replace(minute=0, second=0, microsecond=0).strftime("%H:%M")
         
-        # 날짜 시간 포맷 (YYMMDD HH:00) - 정각으로 표시
-        today = now_kst.strftime("%y%m%d")
-        formatted_time = f"{today} {current_time}"
+        # 날짜 시간 포맷 (YYYY.MM.DD HH:00 KST) - 정각으로 표시
+        today = now_kst.strftime("%Y.%m.%d")
+        formatted_time = f"{today} {current_time} KST"
         
         tweets = []
 
@@ -261,10 +261,31 @@ class TwitterBot:
                 elif isinstance(count, str) and count.isdigit():
                     formatted = f"{int(count):,}"
             if formatted:
-                return f"🎬 뮤비 조회수 {formatted}"
+                return f"🎬 {formatted}"
             return None
         except Exception:
             return None
+    
+    def _format_service_name(self, service: str) -> str:
+        """
+        서비스명을 트윗용 형식으로 변환
+        
+        Args:
+            service (str): 원본 서비스명
+            
+        Returns:
+            str: 포맷팅된 서비스명
+        """
+        service_mapping = {
+            "멜론 TOP100": "멜론TOP100",
+            "멜론 HOT100": "멜론 Hot 100",
+            "멜론": "멜론",
+            "지니": "지니",
+            "벅스": "벅스",
+            "바이브": "바이브",
+            "플로": "플로"
+        }
+        return service_mapping.get(service, service)
     
     def _format_service_line(self, service: str, rank: Optional[int], change_text: str) -> str:
         """
@@ -278,20 +299,23 @@ class TwitterBot:
         Returns:
             str: 포맷팅된 라인
         """
+        # 서비스명 형식 조정
+        service_formatted = self._format_service_name(service)
+        
         if rank is None:  # 차트아웃
-            return f"{service} ❌ (-)"
+            return f"{service_formatted} ❌"
         elif change_text.startswith('↑'):
             change_num = change_text[1:]
-            return f"{service} {rank}위 (🔺{change_num})"
+            return f"{service_formatted} {rank}위 🔺{change_num}"
         elif change_text.startswith('↓'):
             change_num = change_text[1:]
-            return f"{service} {rank}위 (🔻{change_num})"
+            return f"{service_formatted} {rank}위 🔻{change_num}"
         elif change_text == "-":
-            return f"{service} {rank}위 (-)"
+            return f"{service_formatted} {rank}위"
         elif change_text == "NEW":
-            return f"{service} {rank}위 (NEW)"
+            return f"{service_formatted} {rank}위 (NEW)"
         else:
-            return f"{service} {rank}위 ({change_text})"
+            return f"{service_formatted} {rank}위 ({change_text})"
     
     def is_tweet_time(self) -> bool:
         """
