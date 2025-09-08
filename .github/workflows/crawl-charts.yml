@@ -16,8 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      pages: write
-      id-token: write
     
     steps:
     - uses: actions/checkout@v4
@@ -66,17 +64,3 @@ jobs:
         else
           echo "No changes to commit."
         fi
-
-    - name: Setup Pages
-      uses: actions/configure-pages@v4
-      with:
-        enablement: true
-    
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: './docs'
-    
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4 
