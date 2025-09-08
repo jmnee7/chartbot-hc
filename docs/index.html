@@ -99,7 +99,7 @@
             <button type="button" class="home-shortcut" onclick="openQuickModal('streaming')">원클릭 스트리밍</button>
             <button type="button" class="home-shortcut" onclick="openQuickModal('radio')">원클릭 라디오 신청</button>
             <button type="button" class="home-shortcut" onclick="openQuickModal('groupbuy')">공동구매</button>
-            <button type="button" class="home-shortcut" onclick="alert('준비 중입니다.🐻')">스트리밍 리스트</button>
+            <button type="button" class="home-shortcut" onclick="openStreamList()">스트리밍 리스트</button>
           </div>
         </div>
 
@@ -498,6 +498,64 @@
         // 기본(준비중)
         showView('dashboard');
         alert('준비 중입니다.🐻');
+      }
+
+      // Open stream list (similar to checklist)
+      function openStreamList() {
+        // 가이드 뷰로 전환하여 이미지 형태로 표시 (해프 할 일과 동일 레이아웃 재사용)
+        showView('guide');
+        // 허브(버튼 그리드) 감추고 상세 이미지만 노출
+        const hub = document.querySelector('#guide-view .guide-hub');
+        if (hub) hub.style.display = 'none';
+        const content = document.querySelector('#guide-view .guide-content');
+        if (content) content.style.display = 'block';
+        const container = document.querySelector('.guide-image-container');
+        const single = document.getElementById('guideImage');
+        
+        // 단일 이미지 표시 (해프 할 일과 동일한 방식)
+        if (single) { single.style.display = 'none'; single.onclick = null; single.src = ''; }
+        if (container) {
+          Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
+          // 로딩 placeholder 추가
+          container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; min-height: 300px; color: #9ca3af; font-size: 0.9rem;">이미지 로딩 중...</div>';
+        }
+        
+        // guide.js의 encodeFilePath 함수와 동일한 방식 사용
+        function encodeFilePath(path) {
+          if (!path) return path;
+          const lastSlash = path.lastIndexOf('/');
+          if (lastSlash === -1) return encodeURIComponent(path);
+          const dir = path.slice(0, lastSlash + 1);
+          const file = path.slice(lastSlash + 1);
+          return dir + encodeURIComponent(file);
+        }
+        
+        const images = [
+          encodeFilePath('assets/home/streamlist/streamlist.png')
+        ];
+        
+        let loadedCount = 0;
+        const totalImages = images.length;
+        
+        images.forEach(src => {
+          const img = document.createElement('img');
+          img.src = src;
+          img.alt = '스트리밍 리스트';
+          img.className = 'guide-image vote-image';
+          
+          // 이미지 로드 완료 시 placeholder 제거
+          img.onload = function() {
+            loadedCount++;
+            if (loadedCount === totalImages && container) {
+              const placeholder = container.querySelector('div');
+              if (placeholder && placeholder.textContent.includes('로딩 중')) {
+                placeholder.remove();
+              }
+            }
+          };
+          
+          if (container) container.appendChild(img);
+        });
       }
 
       // Open notice (placeholder)
