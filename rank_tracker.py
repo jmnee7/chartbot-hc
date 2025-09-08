@@ -146,6 +146,7 @@ class RankTracker:
         if len(timestamps) < 2:
             return {}
         
+        # 홈페이지와 동일한 로직: 두 번째로 최근 데이터를 이전 데이터로 사용
         latest_timestamp = timestamps[-1]
         previous_timestamp = timestamps[-2]
         previous_data = self.history[previous_timestamp]
