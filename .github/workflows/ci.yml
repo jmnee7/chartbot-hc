@@ -30,3 +30,9 @@ jobs:
       - name: Syntax check (compile all)
         run: |
           python -m compileall -q .
+
+      - name: Clear cache headers
+        run: |
+          # 캐시 무효화를 위한 빈 파일 생성 (타임스탬프 기반)
+          echo "<!-- Cache buster: $(date) -->" > docs/cache_buster.html
+          echo "Last updated: $(date)" >> docs/cache_buster.html

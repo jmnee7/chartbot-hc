@@ -105,9 +105,32 @@ function showView(viewId) {
     });
 }
 
+// 마지막으로 확인한 파일 수정 시간 저장
+let lastFileModified = null;
+
 async function updateRealTimeChartStatus() {
     try {
-        const response = await fetch('rank_history.json');
+        // 먼저 파일 헤더만 확인해서 수정 시간 체크
+        const headResponse = await fetch('rank_history.json', { method: 'HEAD' });
+        const lastModified = headResponse.headers.get('Last-Modified');
+        
+        // 파일이 새로 수정되었을 때만 캐시 무효화
+        let fetchOptions = {};
+        if (lastFileModified && lastModified !== lastFileModified) {
+            console.log('새로운 차트 데이터 감지됨, 캐시 무효화');
+            fetchOptions = {
+                cache: 'no-cache',
+                headers: {
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    'Pragma': 'no-cache',
+                    'Expires': '0'
+                }
+            };
+        }
+        
+        lastFileModified = lastModified;
+        
+        const response = await fetch('rank_history.json', fetchOptions);
         const historyData = await response.json();
         const timestamps = Object.keys(historyData || {}).sort();
 
