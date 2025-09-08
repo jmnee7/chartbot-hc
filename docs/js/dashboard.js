@@ -198,10 +198,9 @@ async function updateRealTimeChartStatus() {
                         // NEW 상태 (차트아웃에서 차트인으로)
                         changeElement.textContent = 'NEW';
                         changeElement.className = 'rank-change new';
-                    } else if (currentRank === null && previousRank !== null) {
-                        // 차트아웃 상태
-                        changeElement.textContent = 'OUT';
-                        changeElement.className = 'rank-change out';
+                    } else if (currentRank === null && previousRank !== null) {                        // 차트아웃 상태 - 아무 글씨도 표시하지 않음
+                        changeElement.textContent = '';
+                        changeElement.className = 'rank-change';
                     } else {
                         changeElement.textContent = '';
                     }
