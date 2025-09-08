@@ -311,7 +311,7 @@ class TwitterBot:
             change_num = change_text[1:]
             return f"{service_formatted} {rank}위 🔻{change_num}"
         elif change_text == "-":
-            return f"{service_formatted} {rank}위"
+            return f"{service_formatted} {rank}위 (-)"
         elif change_text == "NEW":
             return f"{service_formatted} {rank}위 (NEW)"
         else:
