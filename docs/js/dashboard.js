@@ -56,7 +56,7 @@ const STREAMING_LINKS = {
         { label: '바이브4', url: 'https://tinyurl.com/3thdtt2y' }
     ],
     flo: [
-        { label: '플로', url: 'https://tinyurl.com/4e2npphs' }
+        { label: '플로', url: 'https://tinyurl.com/3hwajfyd' }
     ]
 };
 
@@ -469,21 +469,9 @@ function openQuickModal(mode) {
             { label: '지니', key: 'genie' },
             { label: '벅스', key: 'bugs' },
             { label: '바이브', key: 'vibe' },
-            { label: '플로', key: 'flo', directLink: 'https://tinyurl.com/3hwajfyd' }
+            { label: '플로', key: 'flo' }
         ];
         services.forEach(s => {
-            // 플로는 직접 링크로 처리
-            if (s.directLink) {
-                const directButton = document.createElement('a');
-                directButton.className = 'btn accordion-header';
-                directButton.href = s.directLink;
-                directButton.target = '_blank';
-                directButton.rel = 'noopener';
-                directButton.textContent = s.label;
-                body.appendChild(directButton);
-                return;
-            }
-
             const header = document.createElement('button');
             header.className = 'btn accordion-header';
             header.type = 'button';
@@ -499,9 +487,22 @@ function openQuickModal(mode) {
             // 멜론의 경우 안내 메시지 추가
             if (s.key === 'melon') {
                 const noticeDiv = document.createElement('div');
-                noticeDiv.style.cssText = 'text-align: center; margin-bottom: 15px; font-size: 12px; color: #666; font-style: italic; width: 100%;';
+                noticeDiv.style.cssText = 'text-align: center; margin-bottom: 10px; font-size: 12px; color: #666; font-style: italic; width: 100%;';
                 noticeDiv.textContent = '빈화면 뜰 시 새로고침 해주세요!';
                 content.appendChild(noticeDiv);
+                
+                const orderDiv = document.createElement('div');
+                orderDiv.style.cssText = 'text-align: center; margin-bottom: 15px; font-size: 12px; color: #666; font-style: italic; width: 100%;';
+                orderDiv.textContent = '🐻 순서대로 클릭 🐻';
+                content.appendChild(orderDiv);
+            }
+            
+            // 바이브의 경우 안내 메시지 추가
+            if (s.key === 'vibe') {
+                const orderDiv = document.createElement('div');
+                orderDiv.style.cssText = 'text-align: center; margin-bottom: 15px; font-size: 12px; color: #666; font-style: italic; width: 100%;';
+                orderDiv.textContent = '🐻 순서대로 클릭 🐻';
+                content.appendChild(orderDiv);
             }
 
             (STREAMING_LINKS[s.key] || []).forEach(item => {
