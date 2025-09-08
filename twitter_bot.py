@@ -19,7 +19,6 @@ class TwitterBot:
     SERVICE_NAMES = {
         "melon_top100": "멜론 TOP100",
         "melon_hot100": "멜론 HOT100", 
-        "melon": "멜론",
         "genie": "지니",
         "bugs": "벅스",
         "vibe": "바이브",
@@ -162,6 +161,10 @@ class TwitterBot:
         all_target_songs = {}
         
         for service_key, changes in rank_changes.items():
+            # melon 서비스는 중복이므로 제외
+            if service_key == 'melon':
+                continue
+                
             for change_info in changes:
                 song_key = f"{change_info.get('artist', '')} - {change_info.get('title', '')}"
                 
@@ -278,8 +281,7 @@ class TwitterBot:
         """
         service_mapping = {
             "멜론 TOP100": "멜론TOP100",
-            "멜론 HOT100": "멜론 Hot 100",
-            "멜론": "멜론",
+            "멜론 HOT100": "멜론HOT100",
             "지니": "지니",
             "벅스": "벅스",
             "바이브": "바이브",
@@ -316,7 +318,6 @@ class TwitterBot:
             return f"{service_formatted} {rank}위 (NEW)"
         else:
             return f"{service_formatted} {rank}위 ({change_text})"
-    
     def is_tweet_time(self) -> bool:
         """
         트윗 허용 시간대인지 확인 (KST 기준)
