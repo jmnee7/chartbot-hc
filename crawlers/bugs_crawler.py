@@ -34,7 +34,7 @@ class BugsCrawler(BaseCrawler):
     
     def get_song_elements(self, soup):
         """
-        노래 요소들을 추출 (다양한 셀렉터 시도)
+        노래 요소들을 추출 (실제 벅스 구조에 맞게 수정)
         
         Args:
             soup: BeautifulSoup 객체
@@ -42,102 +42,62 @@ class BugsCrawler(BaseCrawler):
         Returns:
             list: 노래 요소들의 리스트
         """
-        # 여러 가능한 셀렉터들을 순서대로 시도
-        selectors = [
-            ".list.trackList.chart .track-list li",  # 기존 셀렉터
-            ".trackList tbody tr",                   # 테이블 기반 구조
-            ".list tbody tr",                        # 일반적인 테이블 구조
-            "tbody tr",                              # 가장 일반적인 테이블 행
-            ".chart-list li",                        # 차트 리스트
-            ".track-item",                           # 트랙 아이템
-            "tr.list"                                # 리스트 행
-        ]
+        # 벅스는 tbody tr 구조 사용
+        elements = soup.select("tbody tr")
+        if elements and len(elements) >= 50:  # 차트는 보통 100개
+            print(f"✅ 벅스 크롤러: tbody tr로 {len(elements)}개 요소 발견")
+            return elements
         
-        for selector in selectors:
-            elements = soup.select(selector)
-            if elements and len(elements) > 10:  # 최소 10개 이상의 요소가 있어야 유효
-                print(f"✅ 벅스 크롤러: {selector}로 {len(elements)}개 요소 발견")
-                return elements
-        
-        print("❌ 벅스 크롤러: 유효한 셀렉터를 찾을 수 없음")
+        print("❌ 벅스 크롤러: tbody tr 요소를 찾을 수 없음")
         return []
     
     def parse_song_data(self, song_element):
         """
-        노래 데이터 파싱 (다양한 셀렉터 시도)
+        노래 데이터 파싱 (벅스 실제 구조에 맞게 수정)
         
         Args:
-            song_element: BeautifulSoup 요소
+            song_element: BeautifulSoup 요소 (tbody tr)
             
         Returns:
             dict: 파싱된 노래 데이터
         """
         try:
-            # 순위 - 여러 셀렉터 시도
+            tds = song_element.select("td")
+            if len(tds) < 5:
+                return None
+            
+            # 순위 - TD[1]의 div.ranking strong에서 추출
             rank = 0
-            rank_selectors = [
-                ".ranking .num", ".num", "td:first-child", ".rank", 
-                "td.check + td", "td[class*='rank']"
-            ]
-            for selector in rank_selectors:
-                rank_element = song_element.select_one(selector)
-                if rank_element:
-                    rank = safe_int(rank_element.text)
-                    if rank > 0:
-                        break
+            rank_element = song_element.select_one("td div.ranking strong")
+            if rank_element:
+                rank_text = rank_element.get_text(strip=True)
+                rank = safe_int(rank_text)
             
-            # 제목 - 여러 셀렉터 시도
+            # 제목 - javascript:; 링크의 title 속성에서 추출
             title = ""
-            title_selectors = [
-                ".title a", ".title", "a[href*='track']", 
-                "td.title a", ".song-title", "td:nth-child(2) a"
-            ]
-            for selector in title_selectors:
-                title_element = song_element.select_one(selector)
-                if title_element:
-                    title = clean_text(title_element.text)
-                    if title:
-                        break
+            title_link = song_element.select_one("a[href='javascript:;'][title]")
+            if title_link:
+                title = clean_text(title_link.get("title", ""))
             
-            # 아티스트 - 여러 셀렉터 시도
+            # 아티스트 - 아티스트 링크에서 텍스트 추출
             artist = ""
-            artist_selectors = [
-                ".artist a", ".artist", "a[href*='artist']", 
-                "td.artist a", ".song-artist", "td:nth-child(3) a"
-            ]
-            for selector in artist_selectors:
-                artist_element = song_element.select_one(selector)
-                if artist_element:
-                    artist = clean_text(artist_element.text)
-                    if artist:
-                        break
+            artist_link = song_element.select_one("a[href*='artist']")
+            if artist_link:
+                artist = clean_text(artist_link.get_text(strip=True))
             
-            # 앨범 - 여러 셀렉터 시도
+            # 앨범 - 앨범 링크에서 텍스트 추출
             album = ""
-            album_selectors = [
-                ".album", "a[href*='album']", "td.album", 
-                ".song-album", "td:nth-child(4)"
-            ]
-            for selector in album_selectors:
-                album_element = song_element.select_one(selector)
-                if album_element:
-                    album = clean_text(album_element.text)
-                    if album:
-                        break
+            album_link = song_element.select_one("a[href*='album'][title]")
+            if album_link:
+                album = clean_text(album_link.get("title", ""))
             
-            # 앨범 아트 - 여러 셀렉터 시도
+            # 앨범 아트 - 이미지가 있다면 추출
             albumart = ""
-            albumart_selectors = [
-                ".thumbnail img", "img", "td img", ".album-art img"
-            ]
-            for selector in albumart_selectors:
-                albumart_element = song_element.select_one(selector)
-                if albumart_element:
-                    albumart = albumart_element.get("src", "")
-                    if albumart:
-                        break
+            img_element = song_element.select_one("img")
+            if img_element:
+                albumart = img_element.get("src", "")
             
-            if rank > 0 and title and artist:
+            if rank > 0 and title and artist:  # 최소 조건: 순위, 제목, 아티스트
                 return {
                     "rank": rank,
                     "title": title,
