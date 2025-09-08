@@ -295,18 +295,24 @@ class TwitterBot:
     
     def is_tweet_time(self) -> bool:
         """
-        트윗 허용 시작 시각 이후인지 확인 (KST 기준)
-        - 시작 시각: 2025-09-07 19:00 KST
-        - 그 전에는 전송하지 않음, 이후에는 항상 전송 허용
+        트윗 허용 시간대인지 확인 (KST 기준)
+        - 시작 시각: 2025-09-08 19:00 KST 이후
+        - 동작 시간대: 매일 07:00 ~ 익일 01:59 (포함)
         """
         try:
             now_kst = datetime.fromisoformat(get_current_kst_iso())
+            # 1) 날짜 조건: 2025-09-08 19:00 이후
             allow_from = datetime(2025, 9, 8, 19, 0, 0)
-            return now_kst >= allow_from
+            if now_kst < allow_from:
+                return False
+            # 2) 시간대 조건: 07:00~23:59 또는 00:00~01:59
+            hour = now_kst.hour
+            in_window = (hour >= 7) or (hour <= 1)
+            return in_window
         except Exception:
             # 시간 계산 실패 시 보수적으로 전송을 막지 않음
             return True
-    
+
     def tweet_rank_changes(self, rank_changes: Dict, current_time: Optional[str] = None) -> bool:
         """
         순위 변화를 트윗으로 전송 (시간대 및 중복 트윗 방지 포함)
@@ -326,9 +332,9 @@ class TwitterBot:
         current_hour_str = get_current_kst_timestamp_short()  # KST 정각 형식 (2025-07-24 22:00)
         now_kst = datetime.fromisoformat(get_current_kst_iso())
 
-        # 허용 시작 시각 체크 (이전에는 전송하지 않음)
+        # 허용 시작 시각 및 시간대 체크 (이전에는 전송하지 않음)
         if not self.is_tweet_time():
-            print("⏸️ 트윗 허용 시작 시각 이전입니다. (기준: 2025-09-07 19:00 KST)")
+            print("⏸️ 현재는 트윗 허용 시간이 아닙니다. (기준: 2025-09-08 19:00 이후, 매일 07:00~01:59)")
             return True
 
         # 같은 시간대에 이미 트윗을 보냈는지 확인
