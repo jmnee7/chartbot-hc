@@ -357,6 +357,21 @@ class TwitterBot:
         current_hour_str = get_current_kst_timestamp_short()  # KST 정각 형식 (2025-07-24 22:00)
         now_kst = datetime.fromisoformat(get_current_kst_iso())
 
+        # 트윗 내용도 정각 시간으로 표시하기 위해 None 전달 (자동 정각 계산)
+        tweets = self.format_rank_change_tweet(rank_changes, None)
+
+        if not tweets:
+            print("📊 타겟 곡이 차트에 없어서 트윗하지 않습니다.")
+            return True
+
+        # 트윗 본문 로그 먼저 출력 (CI에서 확인용)
+        print("📝 생성된 트윗 본문:")
+        print("-" * 50)
+        for i, tweet_content in enumerate(tweets):
+            print(f"트윗 {i+1}:")
+            print(tweet_content)
+            print("-" * 50)
+
         # 허용 시작 시각 및 시간대 체크 (이전에는 전송하지 않음)
         if not self.is_tweet_time():
             print("⏸️ 현재는 트윗 허용 시간이 아닙니다. (기준: 2025-09-08 19:00 이후, 매일 07:00~01:59)")
@@ -366,13 +381,6 @@ class TwitterBot:
         last_tweet_timestamp = self._get_last_tweet_timestamp()
         if last_tweet_timestamp == current_hour_str:
             print(f"ℹ️ {current_hour_str}에 이미 트윗을 보냈습니다. 중복 트윗을 건너뜁니다.")
-            return True
-
-        # 트윗 내용도 정각 시간으로 표시하기 위해 None 전달 (자동 정각 계산)
-        tweets = self.format_rank_change_tweet(rank_changes, None)
-
-        if not tweets:
-            print("📊 타겟 곡이 차트에 없어서 트윗하지 않습니다.")
             return True
 
         success_count = 0
@@ -390,12 +398,6 @@ class TwitterBot:
                     print(f"✅ 트윗 {i+1}/{len(tweets)} 전송 성공! (ID: {status.id})")
 
                 success_count += 1
-
-                # 트윗 내용 출력
-                print("📝 트윗 내용:")
-                print("-" * 40)
-                print(tweet_content)
-                print("-" * 40)
 
             except Exception as e:
                 print(f"❌ 트윗 {i+1}/{len(tweets)} 전송 실패: {e}")
