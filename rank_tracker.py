@@ -146,10 +146,9 @@ class RankTracker:
         if len(timestamps) < 2:
             return {}
         
-        # 홈페이지와 동일한 로직: 두 번째로 최근 데이터를 이전 데이터로 사용
+        # 홈페이지와 동일한 로직: 현재 크롤링한 데이터와 히스토리의 최근 데이터를 비교
         latest_timestamp = timestamps[-1]
-        previous_timestamp = timestamps[-2]
-        previous_data = self.history[previous_timestamp]
+        previous_data = self.history[latest_timestamp]
         
         changes = {}
         
@@ -157,9 +156,8 @@ class RankTracker:
         service_names = ["melon_top100", "melon_hot100", "melon", "genie", "bugs", "vibe", "flo"]
         
         for service_name in service_names:
-            # 홈페이지와 동일한 로직: 히스토리의 최근 데이터와 이전 데이터를 비교
-            # (현재 크롤링한 데이터가 아직 히스토리에 저장되지 않은 상태)
-            current_songs = self.history[latest_timestamp].get(service_name, [])
+            # 홈페이지와 동일한 로직: 현재 크롤링한 데이터와 히스토리의 최근 데이터를 비교
+            current_songs = current_data.get(service_name, [])
             previous_songs = previous_data.get(service_name, [])
             
             # 현재 순위 (타겟 곡이 있으면 첫 번째 곡의 순위, 없으면 None)
