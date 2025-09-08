@@ -209,7 +209,10 @@ def print_target_summary(filtered_data, rank_changes=None):
                             change_text = f" {change_info.get('change_text', '')}"
                             break
                 
-                print(f"  {rank:3}위{change_text}: {artist} - {title}")
+                if rank is not None:
+                    print(f"  {rank:3}위{change_text}: {artist} - {title}")
+                else:
+                    print(f"  {'차트아웃':>3}{change_text}: {artist} - {title}")
         else:
             print(f"\n📱 {service_name} (0곡)")
             print(f"-" * 30)
