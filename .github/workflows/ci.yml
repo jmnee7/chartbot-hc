@@ -30,5 +30,3 @@ jobs:
       - name: Syntax check (compile all)
         run: |
           python -m compileall -q .
-
-
