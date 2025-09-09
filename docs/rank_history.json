@@ -1,76 +1,4 @@
 {
-  "2025-09-09 05:00:00": {
-    "_processed_at": "2025-09-09T05:22:54.043936",
-    "melon_top100": [
-      {
-        "rank": null,
-        "timestamp": "2025-09-09 05:00",
-        "title": "CRZY",
-        "artist": "해찬 (HAECHAN)",
-        "album": "TASTE - The 1st Album",
-        "albumArt": null,
-        "service": "melon"
-      }
-    ],
-    "melon_hot100": [
-      {
-        "rank": 16,
-        "timestamp": "2025-09-09 05:00",
-        "title": "CRZY",
-        "artist": "해찬 (HAECHAN)",
-        "album": "TASTE - The 1st Album",
-        "albumArt": "https://cdnimg.melon.co.kr/cm2/album/images/120/87/109/12087109_20250908150607_500.jpg/melon/resize/120/quality/80/optimize",
-        "service": "melon",
-        "chart_type": "HOT100"
-      }
-    ],
-    "melon": [
-      {
-        "rank": 16,
-        "timestamp": "2025-09-09 05:00",
-        "title": "CRZY",
-        "artist": "해찬 (HAECHAN)",
-        "album": "TASTE - The 1st Album",
-        "albumArt": "https://cdnimg.melon.co.kr/cm2/album/images/120/87/109/12087109_20250908150607_500.jpg/melon/resize/120/quality/80/optimize",
-        "service": "melon",
-        "chart_type": "HOT100"
-      }
-    ],
-    "genie": [
-      {
-        "rank": 35,
-        "timestamp": "2025-09-09 05:00",
-        "title": "CRZY",
-        "artist": "해찬 (HAECHAN)",
-        "album": "TASTE - The 1st Album",
-        "albumArt": "https://image.genie.co.kr/Y/IMAGE/IMG_ALBUM/086/664/243/86664243_1757053313941_1_140x140.JPG/dims/resize/Q_80,0",
-        "service": "genie"
-      }
-    ],
-    "bugs": [
-      {
-        "rank": 1,
-        "timestamp": "2025-09-09 05:00",
-        "title": "CRZY",
-        "artist": "해찬 (HAECHAN)",
-        "album": "TASTE - The 1st Album",
-        "albumArt": "https://image.bugsm.co.kr/album/images/50/41265/4126598.jpg?version=20250909013732",
-        "service": "bugs"
-      }
-    ],
-    "vibe": [
-      {
-        "rank": null,
-        "timestamp": "2025-09-09 05:00:00"
-      }
-    ],
-    "flo": [
-      {
-        "rank": null,
-        "timestamp": "2025-09-09 05:00:00"
-      }
-    ]
-  },
   "2025-09-09 06:00:00": {
     "_processed_at": "2025-09-09T06:18:31.137315",
     "melon_top100": [
@@ -1741,6 +1669,78 @@
       {
         "rank": null,
         "timestamp": "2025-09-10 04:00:00"
+      }
+    ]
+  },
+  "2025-09-10 05:00:00": {
+    "_processed_at": "2025-09-10T05:10:55.410819",
+    "melon_top100": [
+      {
+        "rank": null,
+        "timestamp": "2025-09-10 05:00",
+        "title": "CRZY",
+        "artist": "해찬 (HAECHAN)",
+        "album": "TASTE - The 1st Album",
+        "albumArt": null,
+        "service": "melon"
+      }
+    ],
+    "melon_hot100": [
+      {
+        "rank": 21,
+        "timestamp": "2025-09-10 05:00",
+        "title": "CRZY",
+        "artist": "해찬 (HAECHAN)",
+        "album": "TASTE - The 1st Album",
+        "albumArt": "https://cdnimg.melon.co.kr/cm2/album/images/120/87/109/12087109_20250908150607_500.jpg/melon/resize/120/quality/80/optimize",
+        "service": "melon",
+        "chart_type": "HOT100"
+      }
+    ],
+    "melon": [
+      {
+        "rank": 21,
+        "timestamp": "2025-09-10 05:00",
+        "title": "CRZY",
+        "artist": "해찬 (HAECHAN)",
+        "album": "TASTE - The 1st Album",
+        "albumArt": "https://cdnimg.melon.co.kr/cm2/album/images/120/87/109/12087109_20250908150607_500.jpg/melon/resize/120/quality/80/optimize",
+        "service": "melon",
+        "chart_type": "HOT100"
+      }
+    ],
+    "genie": [
+      {
+        "rank": null,
+        "timestamp": "2025-09-10 05:00",
+        "title": "CRZY",
+        "artist": "해찬 (HAECHAN)",
+        "album": "TASTE - The 1st Album",
+        "albumArt": null,
+        "service": "genie"
+      }
+    ],
+    "bugs": [
+      {
+        "rank": 1,
+        "timestamp": "2025-09-10 05:00",
+        "title": "CRZY",
+        "artist": "해찬 (HAECHAN)",
+        "album": "TASTE - The 1st Album",
+        "albumArt": "https://image.bugsm.co.kr/album/images/50/41265/4126598.jpg?version=20250909013732",
+        "service": "bugs"
+      }
+    ],
+    "vibe": [
+      {
+        "rank": null,
+        "timestamp": "2025-09-10 05:00:00"
+      }
+    ],
+    "flo": [
+      {
+        "rank": null,
+        "timestamp": "2025-09-10 05:00:00"
       }
     ]
   }
