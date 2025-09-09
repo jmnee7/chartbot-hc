@@ -22,16 +22,57 @@ def make_request(url, headers=None, max_retries=MAX_RETRIES):
     if headers is None:
         headers = COMMON_HEADERS
     
+    # URL에서 서비스명 추출
+    service_name = "Unknown"
+    if "melon.com" in url:
+        service_name = "멜론"
+    elif "genie.co.kr" in url:
+        service_name = "지니"
+    elif "bugs.co.kr" in url:
+        service_name = "벅스"
+    elif "vibe.naver.com" in url:
+        service_name = "바이브"
+    elif "music-flo.com" in url:
+        service_name = "플로"
+    elif "googleapis.com" in url:
+        service_name = "YouTube API"
+    
+    print(f"🌐 [{service_name}] 요청 중: {url}")
+    
     for attempt in range(max_retries):
         try:
             response = requests.get(url, headers=headers, timeout=REQUEST_TIMEOUT)
             response.raise_for_status()
+            print(f"✅ [{service_name}] 요청 성공 (상태: {response.status_code})")
             return response
         except requests.exceptions.RequestException as e:
+            # HTTP 상태 코드 확인
+            status_code = getattr(e.response, 'status_code', None) if hasattr(e, 'response') and e.response else None
+            
             if attempt == max_retries - 1:
+                # Rate limit 에러인 경우 더 자세한 정보 출력
+                if status_code == 429 or "429" in str(e) or "rate limit" in str(e).lower():
+                    print(f"❌ [{service_name}] Rate limit 에러 발생!")
+                    print(f"   URL: {url}")
+                    print(f"   상태 코드: {status_code}")
+                    print(f"   에러: {e}")
+                    print("💡 해결 방법: 크롤링 간격을 늘리거나 잠시 후 다시 시도하세요.")
+                else:
+                    print(f"❌ [{service_name}] 최종 요청 실패!")
+                    print(f"   URL: {url}")
+                    print(f"   상태 코드: {status_code}")
+                    print(f"   에러: {e}")
                 raise e
-            print(f"요청 실패 (시도 {attempt + 1}/{max_retries}): {e}")
-            time.sleep(RETRY_DELAY)
+            
+            # Rate limit 에러인 경우 더 긴 대기
+            if status_code == 429 or "429" in str(e) or "rate limit" in str(e).lower():
+                wait_time = RETRY_DELAY * (attempt + 1) * 2  # 점진적으로 대기 시간 증가
+                print(f"⚠️ [{service_name}] Rate limit 감지! (시도 {attempt + 1}/{max_retries})")
+                print(f"   {wait_time}초 대기 중...")
+                time.sleep(wait_time)
+            else:
+                print(f"⚠️ [{service_name}] 요청 실패 (시도 {attempt + 1}/{max_retries}): {e}")
+                time.sleep(RETRY_DELAY)
     
     return None
 

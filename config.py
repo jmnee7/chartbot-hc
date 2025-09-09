@@ -32,4 +32,4 @@ REQUEST_TIMEOUT = 30
 
 # 재시도 설정
 MAX_RETRIES = 3
-RETRY_DELAY = 1
+RETRY_DELAY = 2  # Rate limit 방지를 위해 2초로 증가

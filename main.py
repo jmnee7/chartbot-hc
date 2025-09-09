@@ -44,10 +44,22 @@ def crawl_all_charts(crawlers, chart_type="top_100"):
     Returns:
         dict: 크롤링된 모든 차트 데이터
     """
-    all_chart_data = {}
+    print("🚀 전체 차트 크롤링 시작!")
+    print(f"📊 크롤링 대상: {list(crawlers.keys())}")
+    print("-" * 50)
     
-    for service_name, crawler in crawlers.items():
-        print(f"Crawling {service_name} chart...")
+    all_chart_data = {}
+    success_count = 0
+    fail_count = 0
+    
+    for i, (service_name, crawler) in enumerate(crawlers.items()):
+        # 서비스 간 딜레이 추가 (Rate limit 방지)
+        if i > 0:
+            import time
+            print(f"⏳ {service_name} 크롤링 전 3초 대기 중...")
+            time.sleep(3)
+        
+        print(f"🎵 [{service_name.upper()}] 차트 크롤링 시작...")
         try:
             chart_data = crawler.crawl_chart(chart_type)
             all_chart_data[service_name] = chart_data
@@ -56,14 +68,31 @@ def crawl_all_charts(crawlers, chart_type="top_100"):
             if service_name == "melon" and hasattr(crawler, 'chart_results'):
                 all_chart_data['melon_top100'] = crawler.chart_results.get('top100', [])
                 all_chart_data['melon_hot100'] = crawler.chart_results.get('hot100', [])
-                print(f"Successfully crawled {len(chart_data)} songs from {service_name}")
-                print(f"  - TOP100: {len(all_chart_data['melon_top100'])} songs")
-                print(f"  - HOT100: {len(all_chart_data['melon_hot100'])} songs")
+                print(f"✅ [{service_name.upper()}] 크롤링 완료: 총 {len(chart_data)}곡")
+                print(f"   - TOP100: {len(all_chart_data['melon_top100'])}곡")
+                print(f"   - HOT100: {len(all_chart_data['melon_hot100'])}곡")
             else:
-                print(f"Successfully crawled {len(chart_data)} songs from {service_name}")
+                print(f"✅ [{service_name.upper()}] 크롤링 완료: {len(chart_data)}곡")
+            success_count += 1
         except Exception as e:
-            print(f"Error crawling {service_name}: {e}")
+            print(f"❌ [{service_name.upper()}] 크롤링 실패!")
+            print(f"   에러: {e}")
+            # Rate limit 에러인지 확인
+            if "429" in str(e) or "rate limit" in str(e).lower():
+                print(f"   🚨 Rate limit 에러 감지! {service_name} 사이트에서 요청 제한됨")
             all_chart_data[service_name] = []
+            fail_count += 1
+    
+    # 크롤링 결과 요약
+    print("-" * 50)
+    print("📈 크롤링 결과 요약:")
+    print(f"   ✅ 성공: {success_count}개 서비스")
+    print(f"   ❌ 실패: {fail_count}개 서비스")
+    if fail_count > 0:
+        failed_services = [name for name, data in all_chart_data.items() if not data]
+        print(f"   실패한 서비스: {failed_services}")
+    print("🏁 전체 차트 크롤링 완료!")
+    print("-" * 50)
     
     return all_chart_data
 

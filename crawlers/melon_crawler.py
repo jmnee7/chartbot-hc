@@ -107,17 +107,23 @@ class MelonCrawler(BaseCrawler):
         # TOP100과 HOT100 차트 각각 크롤링
         chart_types = ["top_100", "hot_100"]
         
-        for chart in chart_types:
+        for i, chart in enumerate(chart_types):
             try:
+                # 차트 간 딜레이 추가 (Rate limit 방지)
+                if i > 0:
+                    import time
+                    print(f"⏳ {chart} 차트 크롤링 전 2초 대기 중...")
+                    time.sleep(2)
+                
                 chart_name = "TOP100" if chart == "top_100" else "HOT100"
                 chart_key = "top100" if chart == "top_100" else "hot100"
-                print(f"Crawling Melon {chart_name} chart...")
+                print(f"🎵 [멜론] {chart_name} 차트 크롤링 중...")
                 
                 url = self.get_chart_url(chart)
                 response = make_request(url)
                 
                 if not response:
-                    print(f"Error: Failed to fetch Melon {chart_name} chart")
+                    print(f"❌ [멜론] {chart_name} 차트 요청 실패")
                     chart_results[chart_key] = []
                     continue
                 
@@ -137,10 +143,13 @@ class MelonCrawler(BaseCrawler):
                         continue
                 
                 chart_results[chart_key] = chart_songs
-                print(f"Successfully crawled {len(chart_songs)} songs from Melon {chart_name}")
+                print(f"✅ [멜론] {chart_name} 완료: {len(chart_songs)}곡")
                 
             except Exception as e:
-                print(f"Error crawling Melon {chart_name} chart: {e}")
+                print(f"❌ [멜론] {chart_name} 크롤링 실패: {e}")
+                # Rate limit 에러인지 확인
+                if "429" in str(e) or "rate limit" in str(e).lower():
+                    print(f"   🚨 Rate limit 에러! 멜론 {chart_name}에서 요청 제한됨")
                 chart_results[chart_key] = []
         
         # 기존 방식과 호환성을 위해 합친 결과도 저장

@@ -84,7 +84,7 @@ class TwitterBot:
             # Twitter API v1.1 (OAuth 1.0a - 만료 없음, 안정적)
             auth = tweepy.OAuthHandler(api_key, api_secret)
             auth.set_access_token(access_token, access_token_secret)
-            self.api = tweepy.API(auth, wait_on_rate_limit=True)
+            self.api = tweepy.API(auth, wait_on_rate_limit=False)
             
             # Twitter API v2 (Bearer Token - 선택사항, 만료 있음)
             if bearer_token:
@@ -95,7 +95,7 @@ class TwitterBot:
                         consumer_secret=api_secret,
                         access_token=access_token,
                         access_token_secret=access_token_secret,
-                        wait_on_rate_limit=True
+                        wait_on_rate_limit=False
                     )
                     print("✅ Twitter API v2 (Bearer Token) 설정 완료")
                 except Exception as e:

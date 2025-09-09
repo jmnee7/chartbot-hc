@@ -55,17 +55,23 @@ class GenieCrawler(BaseCrawler):
             
             for page in pages:
                 try:
+                    # 페이지 간 딜레이 추가 (Rate limit 방지)
+                    if page > 1:
+                        import time
+                        print(f"⏳ 페이지 {page} 크롤링 전 2초 대기 중...")
+                        time.sleep(2)
+                    
                     # 페이지별 URL 생성
                     if page == 1:
                         url = base_url
                     else:
                         url = f"{base_url}?pg={page}"
                     
-                    print(f"Crawling Genie page {page}: {url}")
+                    print(f"🎵 [지니] 페이지 {page} 크롤링 중...")
                     
                     response = make_request(url)
                     if not response:
-                        print(f"Failed to fetch Genie page {page}")
+                        print(f"❌ [지니] 페이지 {page} 요청 실패")
                         continue
                     
                     soup = BeautifulSoup(response.text, "html.parser")
@@ -82,10 +88,13 @@ class GenieCrawler(BaseCrawler):
                             continue
                     
                     all_chart_data.extend(page_data)
-                    print(f"Successfully crawled {len(page_data)} songs from Genie page {page}")
+                    print(f"✅ [지니] 페이지 {page} 완료: {len(page_data)}곡")
                     
                 except Exception as e:
-                    print(f"Error crawling Genie page {page}: {e}")
+                    print(f"❌ [지니] 페이지 {page} 크롤링 실패: {e}")
+                    # Rate limit 에러인지 확인
+                    if "429" in str(e) or "rate limit" in str(e).lower():
+                        print(f"   🚨 Rate limit 에러! 지니 페이지 {page}에서 요청 제한됨")
                     continue
             
             self.chart_data = all_chart_data
