@@ -54,7 +54,8 @@
       <a href="#" id="guideParent" onclick="toggleSubmenu('guide'); return false;">가이드 ▾</a>
       <div class="submenu" id="guideSubmenu" style="display: none;">
         <a href="#" onclick="openGuideMenu('id'); closeMenu(); return false;">아이디 가이드</a>
-        <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">스트리밍 가이드</a>
+        <a href="#" onclick="openGuideMenu('streaming'); closeMenu(); return false;">음원 스트리밍 가이드</a>
+        <a href="#" onclick="openGuideMenu('mv'); closeMenu(); return false;">뮤비 가이드</a>
         <a href="#" onclick="openGuideMenu('music'); closeMenu(); return false;">음원 다운로드 가이드</a>
         <a href="#" onclick="openGuideMenu('vote'); closeMenu(); return false;">투표 가이드</a>
         <a href="#" onclick="openGuideMenu('other'); closeMenu(); return false;">기타 가이드</a>
@@ -208,11 +209,15 @@
         <div class="guide-hub">
           <div id="streaming-grid" style="display: none;">
             <div class="guide-grid">
-              <button class="guide-item" onclick="openStreamingGuide('melon')">멜론 스트리밍 가이드</button>
-              <button class="guide-item" onclick="openStreamingGuide('genie')">지니 스트리밍 가이드</button>
-              <button class="guide-item" onclick="openStreamingGuide('bugs')">벅스 스트리밍 가이드</button>
-              <button class="guide-item" onclick="openStreamingGuide('vibe')">바이브 스트리밍 가이드</button>
-              <button class="guide-item" onclick="openStreamingGuide('flo')">플로 스트리밍 가이드</button>
+              <button class="guide-item" onclick="openStreamingGuide('melon')">멜론</button>
+              <button class="guide-item" onclick="openStreamingGuide('musicwave')">뮤직웨이브</button>
+              <button class="guide-item" onclick="openStreamingGuide('vibe')">바이브</button>
+              <button class="guide-item" onclick="openStreamingGuide('bugs')">벅스</button>
+              <button class="guide-item" onclick="openStreamingGuide('stationhead')">스테이션헤드</button>
+              <button class="guide-item" onclick="openStreamingGuide('spotify')">스포티파이</button>
+              <button class="guide-item" onclick="openStreamingGuide('applemusic')">애플뮤직</button>
+              <button class="guide-item" onclick="openStreamingGuide('genie')">지니</button>
+              <button class="guide-item" onclick="openStreamingGuide('flo')">플로</button>
             </div>
           </div>
 
@@ -234,6 +239,14 @@
             </div>
           </div>
 
+          <div id="mv-grid" style="display: none;">
+            <div class="guide-grid">
+              <button class="guide-item" onclick="openMvCategoryGrid('streaming', this)">스트리밍</button>
+              <button class="guide-item" onclick="openMvCategoryGrid('download', this)">다운로드</button>
+            </div>
+            <div id="mv-subgrid" class="guide-grid" style="display: none;"></div>
+          </div>
+
           <div id="vote-grid" style="display: none;">
             <div class="guide-grid">
               <button class="guide-item" onclick="openVoteGuide('musicbank')">뮤직뱅크</button>
@@ -249,7 +262,7 @@
             <div class="guide-grid">
               <button class="guide-item" onclick="openOtherGuide('spotify_pre')">스포티파이 사전 저장 가이드</button>
               <button class="guide-item" onclick="openOtherGuide('radio')">라디오 신청 가이드</button>
-              <button class="guide-item" onclick="openOtherGuide('coloring')">컬러링 가이드</button>
+              <button class="guide-item" onclick="openOtherGuide('coloring')">V컬러링 가이드</button>
               <button class="guide-item" onclick="openOtherGuide('simul')">동시스밍 가이드</button>
               <button class="guide-item" onclick="openOtherGuide('stability')">스밍 끊김 방지 가이드</button>
               <button class="guide-item" onclick="openOtherGuide('shorts')">숏폼 제작 가이드</button>

@@ -5,6 +5,8 @@ let currentMainTab = 'music';
 let currentDevice = 'mobile';
 let currentIdCategory = null; // 'dualnumber' | 'id'
 let currentIdDetail = null;   // nested detail (e.g., 'kt', 'skt', 'lgu+', 'melon', ...)
+let currentMvCategory = null; // 'streaming' | 'download'
+let currentMvDetail = null;   // nested detail (e.g., 'melon', 'bugs')
 
 // 사용 가능한 가이드 파일 목록
 const availableGuides = {
@@ -210,11 +212,20 @@ function switchGuideTab(type) {
     const streamingGrid = document.getElementById('streaming-grid');
     const idGrid = document.getElementById('id-grid');
     const downloadGrid = document.getElementById('download-grid');
+    const mvGrid = document.getElementById('mv-grid');
     const voteGrid = document.getElementById('vote-grid');
     const groupbuyGrid = document.getElementById('groupbuy-grid');
 
     // 먼저 모두 숨김 및 이미지 영역 초기화(잔상 제거)
-    [streamingGrid, idGrid, downloadGrid, voteGrid, otherGrid, groupbuyGrid].forEach(el => { if (el) el.style.display = 'none'; });
+    [streamingGrid, idGrid, downloadGrid, mvGrid, voteGrid, otherGrid, groupbuyGrid].forEach(el => { if (el) el.style.display = 'none'; });
+    
+    // 뮤비 가이드 서브그리드도 숨김 (아이디 가이드와 동일한 방식)
+    const mvSubgrid = document.getElementById('mv-subgrid');
+    if (mvSubgrid) {
+        mvSubgrid.style.display = 'none';
+        mvSubgrid.style.maxHeight = '0px';
+        mvSubgrid.innerHTML = '';
+    }
     if (otherSubgrid) { otherSubgrid.style.display = 'none'; otherSubgrid.innerHTML = ''; }
     const container = document.querySelector('.guide-image-container');
     const single = document.getElementById('guideImage');
@@ -315,10 +326,15 @@ function switchGuideTab(type) {
 
     // 디바이스 탭 표시 (음원 다운로드나 뮤비 다운로드인 경우)
     if (type === 'music' || type === 'mv') {
-        if (downloadGrid) downloadGrid.style.display = 'block';
-        // 기본(첫 번째) 버튼 자동 선택 - 투표 가이드와 동일한 방식
-        if (downloadGrid) {
+        if (type === 'music' && downloadGrid) {
+            downloadGrid.style.display = 'block';
+            // 기본(첫 번째) 버튼 자동 선택 - 투표 가이드와 동일한 방식
             const firstGridBtn = downloadGrid.querySelector('.guide-item');
+            if (firstGridBtn && typeof firstGridBtn.click === 'function') firstGridBtn.click();
+        } else if (type === 'mv' && mvGrid) {
+            mvGrid.style.display = 'block';
+            // 기본(첫 번째) 버튼 자동 선택 - 아이디 가이드와 동일한 방식
+            const firstGridBtn = mvGrid.querySelector('.guide-item');
             if (firstGridBtn && typeof firstGridBtn.click === 'function') firstGridBtn.click();
         }
         const availableDevices = availableGuides[type][currentService];
@@ -346,16 +362,27 @@ function switchGuideTab(type) {
         // 가이드 이미지 업데이트
         updateGuideImage();
         document.querySelector('.guide-content').style.display = 'block';
-    } else {
-        // 스트리밍이나 아이디 찾기인 경우
-        document.getElementById('deviceTabs').style.display = 'none';
-        if (type === 'streaming') {
-            if (streamingGrid) streamingGrid.style.display = 'block';
-            document.querySelector('.guide-content').style.display = 'none';
-        } else {
-            updateGuideImage();
-            document.querySelector('.guide-content').style.display = 'block';
+    } else if (type === 'streaming') {
+        // 스트리밍 가이드 - 투표 가이드와 동일한 방식으로 처리
+        const deviceTabs = document.getElementById('deviceTabs');
+        if (deviceTabs) deviceTabs.style.display = 'none';
+        
+        if (streamingGrid) {
+            streamingGrid.style.display = 'block';
+            // 투표 가이드와 동일: 기본(첫 번째) 버튼 자동 선택
+            const firstGridBtn = streamingGrid.querySelector('.guide-item');
+            if (firstGridBtn && typeof firstGridBtn.click === 'function') firstGridBtn.click();
         }
+        // 투표 가이드와 동일: 콘텐츠 표시
+        const guideContent = document.querySelector('.guide-content');
+        if (guideContent) guideContent.style.display = 'block';
+    } else {
+        // 아이디 찾기인 경우
+        const deviceTabs = document.getElementById('deviceTabs');
+        if (deviceTabs) deviceTabs.style.display = 'none';
+        updateGuideImage();
+        const guideContent = document.querySelector('.guide-content');
+        if (guideContent) guideContent.style.display = 'block';
     }
 }
 
@@ -646,15 +673,100 @@ function openVoteGuide(key) {
 
 // Guide hub handlers
 function openStreamingGuide(service) {
+    // 투표 가이드와 동일한 방식으로 처리
+    const streamingGrid = document.getElementById('streaming-grid');
+    if (streamingGrid) {
+        const buttons = streamingGrid.querySelectorAll('.guide-item');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        const activeBtn = Array.from(buttons).find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes(`openStreamingGuide('${service}')`));
+        if (activeBtn) activeBtn.classList.add('active');
+    }
     currentGuideType = 'streaming';
-    currentService = service;
     // 스트리밍 가이드에서는 텍스트 박스 숨김
     hideGuideTextBox();
-    // 스트리밍 선택 시 그리드 유지, 이미지 표시
-    const streamingGrid = document.getElementById('streaming-grid');
-    if (streamingGrid) streamingGrid.style.display = 'block';
-    document.querySelector('.guide-content').style.display = 'block';
-    updateGuideImage();
+    const guideContent = document.querySelector('.guide-content');
+    if (guideContent) guideContent.style.display = 'block';
+    updateStreamingGuideImage(service);
+}
+
+// 스트리밍 가이드 이미지 업데이트 함수 (투표 가이드와 동일한 방식)
+function updateStreamingGuideImage(service) {
+    try {
+        // 투표 가이드와 동일한 방식으로 다중 이미지 표시
+        const container = document.querySelector('.guide-image-container');
+        const single = document.getElementById('guideImage');
+        if (!container) return;
+
+        // 단일 기본 이미지 숨김
+        if (single) { single.style.display = 'none'; single.onclick = null; single.src = ''; }
+
+        // 기존 스트리밍 이미지 제거 및 로딩 placeholder 추가
+        Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
+        container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; min-height: 200px; color: #9ca3af; font-size: 0.9rem;">이미지 로딩 중...</div>';
+
+        const map = {
+            melon: [
+                encodeFilePath('assets/guide/음원 스트리밍 가이드/멜론/음원 스트리밍 가이드-01.png'),
+                encodeFilePath('assets/guide/음원 스트리밍 가이드/멜론/음원 스트리밍 가이드-02.png')
+            ],
+            musicwave: [
+                encodeFilePath('assets/guide/음원 스트리밍 가이드/뮤직웨이브/뮤직웨이브 가이드.png')
+            ],
+            vibe: [
+                encodeFilePath('assets/guide/음원 스트리밍 가이드/바이브/음원 스트리밍 가이드-07.png'),
+                encodeFilePath('assets/guide/음원 스트리밍 가이드/바이브/음원 스트리밍 가이드-08.png')
+            ],
+            bugs: [
+                encodeFilePath('assets/guide/음원 스트리밍 가이드/벅스/음원 스트리밍 가이드-05.png'),
+                encodeFilePath('assets/guide/음원 스트리밍 가이드/벅스/음원 스트리밍 가이드-06.png')
+            ],
+            stationhead: [
+                encodeFilePath('assets/guide/음원 스트리밍 가이드/스테이션헤드/스테이션헤드 스트리밍 가이드.png')
+            ],
+            spotify: [
+                encodeFilePath('assets/guide/음원 스트리밍 가이드/스포티파이/음원 스트리밍 가이드-11.png'),
+                encodeFilePath('assets/guide/음원 스트리밍 가이드/스포티파이/음원 스트리밍 가이드-12.png')
+            ],
+            applemusic: [
+                encodeFilePath('assets/guide/음원 스트리밍 가이드/애플뮤직/음원 스트리밍 가이드-13.png'),
+                encodeFilePath('assets/guide/음원 스트리밍 가이드/애플뮤직/음원 스트리밍 가이드-14.png')
+            ],
+            genie: [
+                encodeFilePath('assets/guide/음원 스트리밍 가이드/지니/음원 스트리밍 가이드-03.png'),
+                encodeFilePath('assets/guide/음원 스트리밍 가이드/지니/음원 스트리밍 가이드-04.png')
+            ],
+            flo: [
+                encodeFilePath('assets/guide/음원 스트리밍 가이드/플로/음원 스트리밍 가이드-09.png'),
+                encodeFilePath('assets/guide/음원 스트리밍 가이드/플로/음원 스트리밍 가이드-10.png')
+            ]
+        };
+        const paths = map[service] || [];
+
+        // 이미지 로드 카운터
+        let loadedCount = 0;
+        const totalImages = paths.length;
+
+        // 순서대로 이미지들을 추가 (투표 가이드와 동일)
+        paths.forEach(src => {
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = '음원 스트리밍 가이드';
+            img.className = 'guide-image vote-image';
+            
+            // 이미지 로드 완료 시 placeholder 제거
+            img.onload = function() {
+                loadedCount++;
+                if (loadedCount === totalImages && container) {
+                    const placeholder = container.querySelector('div');
+                    if (placeholder && placeholder.textContent.includes('로딩 중')) {
+                        placeholder.remove();
+                    }
+                }
+            };
+            
+            container.appendChild(img);
+        });
+    } catch (e) { console.log(e); }
 }
 
 function openDownloadGuide(kind, service) {
@@ -744,6 +856,142 @@ function openMusicDlGuide(service) {
 function serviceToKorean(key){
     const map = { melon:'멜론', vibe:'바이브', bugs:'벅스', genie:'지니', kakao:'카카오뮤직' };
     return map[key] || key;
+}
+
+// 뮤비 가이드 카테고리 그리드 함수 (아이디 가이드와 동일한 방식)
+function openMvCategoryGrid(category, el) {
+    const grid = document.getElementById('mv-subgrid');
+    if (!grid) return;
+    
+    currentGuideType = 'mv';
+    currentMvCategory = category;
+    // 이전 선택 상태 초기화
+    currentMvDetail = null;
+    
+    if (el && el.parentElement) {
+        Array.from(el.parentElement.querySelectorAll('.guide-item')).forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+    }
+    
+    // 아코디언 애니메이션으로 하위 메뉴 표시
+    const isCurrentlyOpen = grid.style.maxHeight && grid.style.maxHeight !== '0px';
+    const isSameCategory = grid.getAttribute('data-current-category') === category;
+    
+    if (isCurrentlyOpen && isSameCategory) {
+        // 같은 카테고리를 다시 클릭하면 닫기
+        grid.style.maxHeight = '0px';
+        grid.setAttribute('data-current-category', '');
+        return;
+    }
+    
+    // 하위 메뉴 내용 설정
+    if (category === 'streaming') {
+        // 스트리밍은 하위 메뉴 없이 바로 이미지 표시
+        grid.style.display = 'none';
+        grid.innerHTML = '';
+        grid.style.maxHeight = '0px';
+        showMvImages('streaming', null);
+        return;
+    } else if (category === 'download') {
+        grid.innerHTML = `
+            <button class="guide-item text-only" onclick="selectMvDetail('melon')">멜론</button>
+            <button class="guide-item text-only" onclick="selectMvDetail('bugs')">벅스</button>
+        `;
+    }
+    
+    // 아코디언 열기 (아이디 가이드와 동일한 방식)
+    grid.style.display = 'flex';
+    grid.setAttribute('data-current-category', category);
+    // 높이를 계산해서 슬라이드 다운
+    setTimeout(() => {
+        grid.style.maxHeight = grid.scrollHeight + 'px';
+    }, 10);
+    
+    // 하위 첫 항목을 자동 선택하여 이미지가 즉시 보이도록 함
+    setTimeout(() => {
+        const firstDetailBtn = grid.querySelector('.guide-item');
+        if (firstDetailBtn && typeof firstDetailBtn.click === 'function') {
+            firstDetailBtn.click();
+        }
+    }, 150); // 아코디언 애니메이션 후 실행
+}
+
+// 뮤비 가이드 세부 항목 선택
+function selectMvDetail(detail) {
+    currentMvDetail = detail;
+    // 뮤비 가이드에서는 텍스트 박스 숨김
+    hideGuideTextBox();
+    const guideContent = document.querySelector('.guide-content');
+    if (guideContent) guideContent.style.display = 'block';
+    // 하위 버튼 active 토글
+    const subgrid = document.getElementById('mv-subgrid');
+    if (subgrid) {
+        const buttons = subgrid.querySelectorAll('.guide-item');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        const activeBtn = Array.from(buttons).find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes(`selectMvDetail('${detail}')`));
+        if (activeBtn) activeBtn.classList.add('active');
+    }
+    showMvImages(currentMvCategory, detail);
+}
+
+// 뮤비 가이드 이미지 표시
+function showMvImages(category, detail) {
+    try {
+        const container = document.querySelector('.guide-image-container');
+        const single = document.getElementById('guideImage');
+        if (!container) return;
+        
+        // single 숨기고 리스트로
+        if (single) { single.style.display = 'none'; single.onclick = null; single.src = ''; }
+        Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
+        
+        // 로딩 placeholder 추가 (사이즈 변화 방지)
+        container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; min-height: 300px; color: #9ca3af; font-size: 0.9rem;">이미지 로딩 중...</div>';
+
+        let list = [];
+        if (category === 'streaming') {
+            list = [
+                encodeFilePath('assets/guide/뮤비 가이드/스트리밍/KakaoTalk_Photo_2025-09-08-15-06-17.png')
+            ];
+        } else if (category === 'download') {
+            const map = {
+                melon: [
+                    encodeFilePath('assets/guide/뮤비 가이드/다운로드/멜론/KakaoTalk_Photo_2025-09-08-15-05-55 001.png'),
+                    encodeFilePath('assets/guide/뮤비 가이드/다운로드/멜론/KakaoTalk_Photo_2025-09-08-15-05-56 003.png')
+                ],
+                bugs: [
+                    encodeFilePath('assets/guide/뮤비 가이드/다운로드/벅스/KakaoTalk_Photo_2025-09-08-15-05-56 002.png')
+                ]
+            };
+            list = map[detail] || [];
+        }
+        
+        // 이미지 로드 카운터
+        let loadedCount = 0;
+        const totalImages = list.length;
+        
+        list.forEach(src => {
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = category === 'streaming' ? '뮤비 스트리밍 가이드' : '뮤비 다운로드 가이드';
+            img.className = 'guide-image vote-image';
+            
+            // 이미지 로드 완료 시 placeholder 제거
+            img.onload = function() {
+                loadedCount++;
+                if (loadedCount === totalImages && container) {
+                    const placeholder = container.querySelector('div');
+                    if (placeholder && placeholder.textContent.includes('로딩 중')) {
+                        placeholder.remove();
+                    }
+                }
+            };
+            
+            container.appendChild(img);
+        });
+        
+        document.querySelector('.guide-content').style.display = 'block';
+    } catch (e) { console.log(e); }
 }
 
 function openOtherGuide(kind) {
@@ -929,9 +1177,36 @@ function openOtherGuide(kind) {
         }
     }
 
-    // 컬러링 가이드는 준비중 처리
+    // V컬러링 가이드: 단일 이미지 표시
     if (kind === 'coloring') {
-        alert('준비 중입니다.🐻');
+        if (subgrid) { subgrid.style.display = 'none'; subgrid.innerHTML = ''; }
+        hideGuideTextBox();
+        const container = document.querySelector('.guide-image-container');
+        document.querySelector('.guide-content').style.display = 'block';
+        if (container) {
+            // 기존 다중 이미지/placeholder 정리
+            Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
+            const placeholder = container.querySelector('div');
+            if (placeholder && placeholder.textContent && placeholder.textContent.includes('로딩 중')) {
+                placeholder.remove();
+            }
+            // guideImage 보장
+            let img = document.getElementById('guideImage');
+            if (!img) {
+                img = document.createElement('img');
+                img.id = 'guideImage';
+                img.className = 'guide-image single-image';
+                container.appendChild(img);
+            } else {
+                img.className = 'guide-image single-image';
+            }
+            img.onload = function(){ this.style.display=''; };
+            img.onerror = function(){ this.style.display='none'; };
+            // V컬러링 가이드 이미지 경로
+            const path = 'assets/guide/vcoloring/vcoloring.png';
+            img.src = encodeURI(path);
+            img.alt = 'V컬러링 가이드';
+        }
         return;
     }
 

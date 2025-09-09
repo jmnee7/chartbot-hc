@@ -400,9 +400,26 @@ button.home-shortcut { border-radius: 14px; background: #f8fafc; }
 #vote-grid .guide-item:hover { background: #f8fafc; }
 #vote-grid .guide-item.active { background: #966e4b; color: #fff; box-shadow: 0 4px 14px rgba(150, 110, 75, 0.18); }
 
-/* Override: remove borders on streaming buttons entirely */
-.streaming-btn, .no-border { border: none !important; box-shadow: none !important; background: #ffffff; }
-.streaming-btn:hover, .no-border:hover { border: none !important; box-shadow: none !important; background: #f8fafc; }
+/* Streaming guide buttons: match vote guide button design exactly */
+#streaming-grid { min-height: 64px; }
+#streaming-grid .guide-grid { display: flex; flex-wrap: wrap; gap: 12px; min-height: 56px; }
+#streaming-grid .guide-item { border: none !important; background: #fff; box-shadow: none; white-space: nowrap; min-height: 40px; padding: 8px 12px; border-radius: 12px; line-height: 1.2; }
+#streaming-grid .guide-item:active { transform: none !important; }
+#streaming-grid .guide-item:hover { background: #f8fafc; }
+#streaming-grid .guide-item.active { background: #966e4b; color: #fff; box-shadow: 0 4px 14px rgba(150, 110, 75, 0.18); }
+
+/* Normalize sizes: make streaming buttons identical to vote guide buttons */
+#streaming-grid .guide-item {
+  height: 44px !important;
+  min-height: 44px !important;
+  padding: 0 16px !important;
+  border-radius: 12px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+  line-height: 1 !important;
+}
+
 .guide-subheader { margin: 8px 0; font-size: 0.9rem; color: #6b7280; font-weight: 700; padding: 6px 10px; background: #f3f4f6; border-radius: 8px; display: inline-block; }
 
 /* Groupbuy guide - unified with vote guide */
@@ -463,9 +480,10 @@ button.home-shortcut { border-radius: 14px; background: #f8fafc; }
   transition: max-height 0.3s ease-out; 
 }
 
-/* Align ID/Vote guide button groups to top-left */
+/* Align ID/Vote/Streaming guide button groups to top-left */
 #id-grid .guide-grid { justify-content: flex-start; align-items: flex-start; }
 #vote-grid .guide-grid { justify-content: flex-start; align-items: flex-start; }
+#streaming-grid .guide-grid { justify-content: flex-start; align-items: flex-start; }
 #id-subgrid { justify-content: flex-start; align-items: flex-start; }
 #other-etc-subgrid { justify-content: flex-start; align-items: flex-start; }
 
@@ -479,6 +497,46 @@ button.home-shortcut { border-radius: 14px; background: #f8fafc; }
   padding: 8px 14px; 
   border-radius: 12px; 
   line-height: 1.2; 
+}
+
+/* MV guide styling - match ID guide exactly */
+#mv-grid .guide-grid { display: flex; flex-wrap: wrap; gap: 12px; }
+#mv-subgrid { 
+  display: flex; 
+  flex-wrap: wrap; 
+  gap: 16px; 
+  margin-top: 10px; 
+  min-height: 44px; 
+  overflow: hidden; 
+  max-height: 0px; 
+  transition: max-height 0.3s ease-out; 
+}
+#mv-grid .guide-item { border: none !important; background: #fff; box-shadow: none; white-space: nowrap; min-height: 40px; padding: 8px 12px; border-radius: 12px; line-height: 1.2; }
+#mv-grid .guide-item:hover { background: #f8fafc; }
+#mv-grid .guide-item.active {
+  background: #966e4b !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(150, 110, 75, 0.18);
+  border: none !important;
+}
+
+/* MV subgrid buttons: match ID subgrid (text-only style without green border) */
+#mv-subgrid .guide-item { 
+  border: none !important; 
+  background: transparent !important; 
+  box-shadow: none; 
+  white-space: nowrap; 
+  min-height: 40px; 
+  padding: 8px 14px; 
+  border-radius: 12px; 
+  line-height: 1.2; 
+}
+#mv-subgrid .guide-item:hover { background: #f8fafc; }
+#mv-subgrid .guide-item.active { 
+  background: #966e4b !important; 
+  color: #ffffff !important; 
+  box-shadow: 0 4px 14px rgba(150, 110, 75, 0.18); 
+  border: none !important; 
 }
 #other-etc-subgrid .guide-item:hover { 
   background: #f8fafc; 
