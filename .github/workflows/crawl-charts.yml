@@ -1,15 +1,17 @@
 name: Crawl Music Charts
 
 on:
-  schedule:
-    # 한국 시간(KST) 기준 매 시간 정각에 실행
-    # KST = UTC + 9시간이므로, UTC로 9시간 전에 실행하면 KST 정각이 됨
-    - cron: '0 15-23,0-14 * * *'
+  # schedule:
+  #   # 한국 시간(KST) 기준 매 시간 정각에 실행
+  #   # KST = UTC + 9시간이므로, UTC로 9시간 전에 실행하면 KST 정각이 됨
+  #   - cron: '0 15-23,0-14 * * *'
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
+  repository_dispatch:
+    types: [chart_update_trigger]
 
 jobs:
   crawl-and-deploy:
