@@ -27,7 +27,7 @@
     <meta property="og:image:type" content="image/jpeg">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.8/dist/web/static/pretendard.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
-    <link rel="stylesheet" href="styles/main.css?v=3.8">
+    <link rel="stylesheet" href="styles/main.css?v=3.9">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E🐻%3C/text%3E%3C/svg%3E">
   </head>
   <body>
@@ -46,9 +46,8 @@
       <div class="mobile-menu__header">
         <button class="menu-close" id="menuCloseBtn" aria-label="닫기">✕</button>
       </div>
-      <a href="#" onclick="openStreamList(); return false;">스트리밍 리스트</a>
-      <a href="#" onclick="openChecklist('pre'); return false;">🌻해프 할 일🌻</a>
-      <a href="#" onclick="openChecklist('release'); return false;">🌻음원 발매 당일 체크리스트🌻</a>
+      <a href="#" onclick="openStreamList(); closeMenu(); return false;">스트리밍 리스트</a>
+      <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">Daily TO-DO LIST</a>
 
       <!-- 가이드 상위 및 하위 메뉴 -->
       <a href="#" id="guideParent" onclick="toggleSubmenu('guide'); return false;">가이드 ▾</a>
@@ -65,7 +64,7 @@
       <a href="#" id="etcParent" onclick="toggleSubmenu('etc'); return false;">기타 ▾</a>
       <div class="submenu" id="etcSubmenu" style="display: none;">
         <a href="#" onclick="openQuickModal('streaming'); closeMenu(); return false;">원클릭 스트리밍</a>
-        <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">원클릭 라디오 신청</a>
+        <a href="#" onclick="openQuickModal('radio'); closeMenu(); return false;">원클릭 라디오 신청</a>
         <a href="#" onclick="openGuideMenu('groupbuy'); closeMenu(); return false;">공동구매</a>
         <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">투표</a>
         <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">이벤트</a>
@@ -101,7 +100,7 @@
           <div class="home-shortcuts-grid">
             <button type="button" class="home-shortcut" onclick="openQuickModal('streaming')">원클릭 스트리밍</button>
             <button type="button" class="home-shortcut" onclick="openQuickModal('radio')">원클릭 라디오 신청</button>
-            <button type="button" class="home-shortcut" onclick="openQuickModal('groupbuy')">공동구매</button>
+            <button type="button" class="home-shortcut" onclick="alert('준비 중입니다.🐻')">TO-DO LIST</button>
             <button type="button" class="home-shortcut" onclick="openStreamList()">스트리밍 리스트</button>
           </div>
         </div>
@@ -211,31 +210,31 @@
             <div class="guide-grid">
               <button class="guide-item" onclick="openStreamingGuide('melon')">멜론</button>
               <button class="guide-item" onclick="openStreamingGuide('musicwave')">뮤직웨이브</button>
-              <button class="guide-item" onclick="openStreamingGuide('vibe')">바이브</button>
-              <button class="guide-item" onclick="openStreamingGuide('bugs')">벅스</button>
-              <button class="guide-item" onclick="openStreamingGuide('stationhead')">스테이션헤드</button>
-              <button class="guide-item" onclick="openStreamingGuide('spotify')">스포티파이</button>
-              <button class="guide-item" onclick="openStreamingGuide('applemusic')">애플뮤직</button>
               <button class="guide-item" onclick="openStreamingGuide('genie')">지니</button>
+              <button class="guide-item" onclick="openStreamingGuide('bugs')">벅스</button>
               <button class="guide-item" onclick="openStreamingGuide('flo')">플로</button>
+              <button class="guide-item" onclick="openStreamingGuide('vibe')">바이브</button>
+              <button class="guide-item" onclick="openStreamingGuide('spotify')">스포티파이</button>
+              <button class="guide-item" onclick="openStreamingGuide('stationhead')">스테이션헤드</button>
+              <button class="guide-item" onclick="openStreamingGuide('applemusic')">애플뮤직</button>
             </div>
           </div>
 
           <div id="id-grid" style="display: none;">
             <div class="guide-grid">
-              <button class="guide-item" onclick="openIdCategoryGrid('id', this)">아이디 생성 가이드</button>
-              <button class="guide-item" onclick="openIdCategoryGrid('dualnumber', this)">듀얼 넘버 생성 가이드</button>
+              <button class="guide-item" onclick="openIdCategoryGrid('id', this)">아이디 생성</button>
+              <button class="guide-item" onclick="openIdCategoryGrid('dualnumber', this)">듀얼 넘버 생성</button>
             </div>
             <div id="id-subgrid" class="guide-grid" style="display: none;"></div>
           </div>
 
           <div id="download-grid" style="display: none;">
             <div class="guide-grid">
-              <button class="guide-item" onclick="openMusicDlGuide('melon')">멜론 다운로드</button>
-              <button class="guide-item" onclick="openMusicDlGuide('genie')">지니 다운로드</button>
-              <button class="guide-item" onclick="openMusicDlGuide('bugs')">벅스 다운로드</button>
-              <button class="guide-item" onclick="openMusicDlGuide('vibe')">바이브 다운로드</button>
-              <button class="guide-item" onclick="openMusicDlGuide('kakao')">카카오뮤직 다운로드</button>
+              <button class="guide-item" onclick="openMusicDlGuide('melon')">멜론</button>
+              <button class="guide-item" onclick="openMusicDlGuide('genie')">지니</button>
+              <button class="guide-item" onclick="openMusicDlGuide('bugs')">벅스</button>
+              <button class="guide-item" onclick="openMusicDlGuide('vibe')">바이브</button>
+              <button class="guide-item" onclick="openMusicDlGuide('kakao')">카카오뮤직</button>
             </div>
           </div>
 
@@ -260,12 +259,12 @@
 
           <div id="other-grid" style="display: none;">
             <div class="guide-grid">
-              <button class="guide-item" onclick="openOtherGuide('spotify_pre')">스포티파이 사전 저장 가이드</button>
-              <button class="guide-item" onclick="openOtherGuide('radio')">라디오 신청 가이드</button>
-              <button class="guide-item" onclick="openOtherGuide('coloring')">V컬러링 가이드</button>
-              <button class="guide-item" onclick="openOtherGuide('simul')">동시스밍 가이드</button>
-              <button class="guide-item" onclick="openOtherGuide('stability')">스밍 끊김 방지 가이드</button>
-              <button class="guide-item" onclick="openOtherGuide('shorts')">숏폼 제작 가이드</button>
+              <button class="guide-item" onclick="openOtherGuide('spotify_pre')">스포티파이 사전 저장</button>
+              <button class="guide-item" onclick="openOtherGuide('radio')">라디오 신청</button>
+              <button class="guide-item" onclick="openOtherGuide('coloring')">V컬러링</button>
+              <button class="guide-item" onclick="openOtherGuide('simul')">동시스밍</button>
+              <button class="guide-item" onclick="openOtherGuide('stability')">스밍 끊김 방지</button>
+              <button class="guide-item" onclick="openOtherGuide('shorts')">숏폼 제작</button>
               <button class="guide-item" onclick="openOtherGuide('etc')">기타</button>
             </div>
           </div>
@@ -306,9 +305,9 @@
         </div>
         <div id="gbBody" class="guide-grid"></div>
       </div>
-    </div>    <script src="js/dashboard.js?v=20250901d"></script>
-    <script src="js/chart.js?v=20250901d"></script>
-    <script src="js/guide.js?v=20250901o"></script>
+    </div>    <script src="js/dashboard.js?v=20250910a"></script>
+    <script src="js/chart.js?v=20250910a"></script>
+    <script src="js/guide.js?v=20250910a"></script>
     <script>
       const hamburgerBtn = document.getElementById('hamburgerBtn');
       const mobileMenu = document.getElementById('mobileMenu');
@@ -421,54 +420,6 @@
         const container = document.querySelector('.guide-image-container');
         const single = document.getElementById('guideImage');
         
-        if (type === 're, e') {
-          // 발매 당일 체크리스트 - 투표 가이드와 동일한 다중 이미지 방식 사용
-          if (single) { single.style.display = 'none'; single.onclick = null; single.src = ''; }
-          if (container) {
-            Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
-            // 로딩 placeholder 추가
-            container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; min-height: 300px; color: #9ca3af; font-size: 0.9rem;">이미지 로딩 중...</div>';
-          }
-          
-          // guide.js의 encodeFilePath 함수와 동일한 방식 사용
-          function encodeFilePath(path) {
-            if (!path) return path;
-            const lastSlash = path.lastIndexOf('/');
-            if (lastSlash === -1) return encodeURIComponent(path);
-            const dir = path.slice(0, lastSlash + 1);
-            const file = path.slice(lastSlash + 1);
-            return dir + encodeURIComponent(file);
-          }
-          
-          const images = [
-            encodeFilePath('assets/checklist/발매 당일 해프 일정표.png')
-          ];
-          
-          let loadedCount = 0;
-          const totalImages = images.length;
-          
-          images.forEach(src => {
-            const img = document.createElement('img');
-            img.src = src;
-            img.alt = '발매 당일 체크리스트';
-            img.className = 'guide-image vote-image';
-            
-            // 이미지 로드 완료 시 placeholder 제거
-            img.onload = function() {
-              loadedCount++;
-              if (loadedCount === totalImages && container) {
-                const placeholder = container.querySelector('div');
-                if (placeholder && placeholder.textContent.includes('로딩 중')) {
-                  placeholder.remove();
-                }
-              }
-            };
-            
-            
-            if (container) container.appendChild(img);
-          });
-          return;
-        }
         
         if (type === 'pre') {
           // 해프 할 일 - 다중 이미지 (투표 가이드와 동일한 방식)

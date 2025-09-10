@@ -1067,7 +1067,7 @@ function openOtherGuide(kind) {
     if (kind === 'radio' && subgrid) {
         subgrid.style.display = 'flex';
         subgrid.innerHTML = `
-            <button class="guide-item text-only" onclick="openOtherGuide('radio_guide')">라디오 신청 가이드</button>
+            <button class="guide-item text-only" onclick="openOtherGuide('radio_guide')">공통</button>
             <button class="guide-item text-only" onclick="openOtherGuide('radio_kbs')">KBS</button>
             <button class="guide-item text-only" onclick="openOtherGuide('radio_mbc')">MBC</button>
             <button class="guide-item text-only" onclick="openOtherGuide('radio_sbs')">SBS</button>
@@ -1086,7 +1086,7 @@ function openOtherGuide(kind) {
         etcSubgrid.style.display = 'flex';
         etcSubgrid.style.visibility = 'visible';
         etcSubgrid.innerHTML = `
-            <button class="guide-item text-only" onclick="openOtherGuide('gift_melon')">멜론 선물하기 가이드</button>
+            <button class="guide-item text-only" onclick="openOtherGuide('gift_melon')">멜론 선물하기</button>
             <button class="guide-item text-only" onclick="openOtherGuide('cost')">음원 다운로드 비용 안내</button>
             <button class="guide-item text-only" onclick="openOtherGuide('site_reco')">음원 사이트 추천</button>
         `;
@@ -1354,7 +1354,7 @@ function openOtherCategoryGrid(category, el) {
     // 하위 메뉴 내용 설정
     if (category === 'etc') {
         grid.innerHTML = `
-            <button class="guide-item text-only" onclick="openOtherGuide('gift_melon')">멜론 선물하기 가이드</button>
+            <button class="guide-item text-only" onclick="openOtherGuide('gift_melon')">멜론 선물하기</button>
             <button class="guide-item text-only" onclick="openOtherGuide('cost')">음원 다운로드 비용 안내</button>
             <button class="guide-item text-only" onclick="openOtherGuide('site_reco')">음원 사이트 추천</button>
         `;
