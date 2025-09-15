@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     loadYouTubeStats(); // 유튜브 통계 로드
     setInterval(updateRealTimeChartStatus, 60000); // 1분마다 업데이트
 
-    // 초기 뷰 설정
-    showView('dashboard');
+    // 해시 기반 라우팅 초기화
+    initHashRouting();
 
     // Init banner slider
     initBannerSlider();
@@ -92,23 +92,130 @@ const GROUPBUY_TEXT = {
     allmd: `올엠디 공동구매\n\n▪️공구 기간 : ~ 9월 7일 23:59 (KST)\n\n▪️공구 특전: 스티커 1종\n\n▪️공구 가격\n💿Tin Case Ver. 29,500원\n💿Savory Ver. 14,400원\n💿Full Spread Ver. (랜덤) 14,400원\n💿Full Spread Ver. (세트) 42,600원\n\n🔗공구 링크 \nhttps://buly.kr/9BWCsD7\n\n※ 앨범 발매 후 온•오프라인 물량에 차질이 있을 수 있으므로 최대한 >예약 판매 기간 내에< 에 많은 구매 부탁드립니다.`
 };
 
-  function showView(viewId) {
+  // 해시 기반 라우팅 초기화
+  function initHashRouting() {
+    // 브라우저 뒤로가기/앞으로가기 지원
+    window.addEventListener('hashchange', handleHashChange);
+    
+    // 페이지 로드 시 현재 해시에 따라 뷰 설정
+    handleHashChange();
+  }
+
+  // 해시 변경 처리
+  function handleHashChange() {
+    const hash = window.location.hash.substring(1); // # 제거
+    const parts = hash.split('/'); // guide/id 형태 지원
+    const viewId = parts[0];
+    const subSection = parts[1];
+    
+    const validViews = ['dashboard', 'guide', 'event', 'todo', 'streamlist'];
+    
+    // 유효한 뷰인지 확인, 없으면 dashboard로 기본 설정
+    const finalViewId = validViews.includes(viewId) ? viewId : 'dashboard';
+    
+    // URL 해시가 없거나 잘못된 경우 올바른 해시로 설정 (서브섹션 제외하고)
+    if (!hash || !validViews.includes(viewId)) {
+      window.location.hash = finalViewId;
+      return;
+    }
+    
+    showViewWithoutHash(finalViewId, subSection);
+  }
+
+  // 해시 업데이트 없이 뷰만 변경
+  function showViewWithoutHash(viewId, subSection) {
     document.getElementById('dashboard-view').style.display = 'none';
     document.getElementById('guide-view').style.display = 'none';
     document.getElementById('event-view').style.display = 'none';
     document.getElementById('todo-view').style.display = 'none';
 
-    document.getElementById(`${viewId}-view`).style.display = 'block';
+    // streamlist는 guide-view를 사용하므로 별도 처리
+    if (viewId !== 'streamlist') {
+      const targetView = document.getElementById(`${viewId}-view`);
+      if (targetView) {
+        targetView.style.display = 'block';
+      }
+    } else {
+      // streamlist는 guide-view를 사용
+      document.getElementById('guide-view').style.display = 'block';
+    }
 
     // 네비게이션 아이템 활성화/비활성화
     document.querySelectorAll('.nav-item').forEach(item => {
-        if (item.onclick.toString().includes(`'${viewId}'`)) {
+        // streamlist는 guide 네비게이션을 활성화
+        const targetViewForNav = viewId === 'streamlist' ? 'guide' : viewId;
+        if (item.onclick.toString().includes(`'${targetViewForNav}'`)) {
             item.classList.add('active');
         } else {
             item.classList.remove('active');
         }
     });
-}
+
+    // 가이드 페이지이고 서브섹션이 있는 경우
+    if (viewId === 'guide' && subSection && typeof switchGuideTab === 'function') {
+      // 약간의 딜레이를 주어 DOM이 완전히 로드된 후 실행
+      setTimeout(() => {
+        switchGuideTab(subSection);
+      }, 100);
+    }
+
+    // 스트리밍 리스트 페이지인 경우
+    if (viewId === 'streamlist') {
+      setTimeout(() => {
+        showStreamListContent();
+      }, 100);
+    }
+
+    // todo 페이지인 경우 달력 초기화
+    if (viewId === 'todo' && typeof initializeTodoData === 'function' && typeof initializeCalendar === 'function') {
+      initializeTodoData();
+      initializeCalendar();
+    }
+  }
+
+  // 기존 showView 함수 - 해시도 함께 업데이트
+  function showView(viewId) {
+    window.location.hash = viewId;
+  }
+
+  // 스트리밍 리스트 콘텐츠 표시 함수
+  function showStreamListContent() {
+    // 허브(버튼 그리드) 감추고 상세 이미지만 노출
+    const hub = document.querySelector('#guide-view .guide-hub');
+    if (hub) hub.style.display = 'none';
+    const content = document.querySelector('#guide-view .guide-content');
+    if (content) content.style.display = 'block';
+    const container = document.querySelector('.guide-image-container');
+    const single = document.getElementById('guideImage');
+    
+    // 단일 이미지 표시
+    if (single) { 
+      single.style.display = 'none'; 
+      single.onclick = null; 
+      single.src = ''; 
+    }
+    
+    if (container) {
+      // 기존 내용 제거
+      Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
+      container.innerHTML = '';
+      
+      // 스트리밍 리스트 이미지 생성 및 추가
+      const img = document.createElement('img');
+      img.src = 'assets/home/streamlist/streamlist.png';
+      img.alt = '스트리밍 리스트';
+      img.className = 'guide-image vote-image';
+      img.style.cssText = 'width: 100%; max-width: 600px; height: auto; display: block; margin: 0 auto;';
+      
+      // 이미지 로드 에러 처리
+      img.onerror = function() {
+        console.error('스트리밍 리스트 이미지 로드 실패:', img.src);
+        container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; min-height: 300px; color: #ef4444; font-size: 0.9rem;">이미지를 불러올 수 없습니다.</div>';
+      };
+      
+      container.appendChild(img);
+    }
+  }
 
 // 마지막으로 확인한 파일 수정 시간 저장
 let lastFileModified = null;

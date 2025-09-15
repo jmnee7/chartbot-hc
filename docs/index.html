@@ -32,7 +32,7 @@
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet">
     <!-- FullCalendar JS -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
-    <link rel="stylesheet" href="styles/main.css?v=3.9">
+    <link rel="stylesheet" href="styles/main.css?v=4.0">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E🐻%3C/text%3E%3C/svg%3E">
   </head>
   <body>
@@ -451,9 +451,9 @@
         </div>
         <div id="gbBody" class="guide-grid"></div>
       </div>
-    </div>    <script src="js/dashboard.js?v=20250910a"></script>
-    <script src="js/chart.js?v=20250910a"></script>
-    <script src="js/guide.js?v=20250910a"></script>
+    </div>    <script src="js/dashboard.js?v=20250915a"></script>
+    <script src="js/chart.js?v=20250915a"></script>
+    <script src="js/guide.js?v=20250915a"></script>
     <script>
       const hamburgerBtn = document.getElementById('hamburgerBtn');
       const mobileMenu = document.getElementById('mobileMenu');
@@ -535,11 +535,8 @@
 
       // Open guide view with specific type (direct routing)
       function openGuideMenu(type) {
-        showView('guide');
+        window.location.hash = `guide/${type}`;
         closeMenu();
-        if (typeof switchGuideTab === 'function') {
-          switchGuideTab(type);
-        }
       }
 
       // Open dashboard specific section helper
@@ -614,8 +611,13 @@
 
       // Open stream list (similar to checklist)
       function openStreamList() {
+        window.location.hash = 'streamlist';
+        closeMenu();
+      }
+
+      // 스트리밍 리스트 콘텐츠 표시 함수
+      function openStreamListContent() {
         // 가이드 뷰로 전환하여 이미지 형태로 표시 (해프 할 일과 동일 레이아웃 재사용)
-        showView('guide');
         // 허브(버튼 그리드) 감추고 상세 이미지만 노출
         const hub = document.querySelector('#guide-view .guide-hub');
         if (hub) hub.style.display = 'none';
