@@ -107,13 +107,18 @@ function encodeFilePath(path) {
 (function preloadGroupBuyImages(){
     try {
         const sources = [
-            'assets/guide/groupbuy/미니레코드 국문.png',
-            'assets/guide/groupbuy/미니레코드 영문.png',
-            'assets/guide/groupbuy/애플뮤직 국문.png',
-            'assets/guide/groupbuy/애플뮤직 영문.png',
-            'assets/guide/groupbuy/에버라인 국문.png',
-            'assets/guide/groupbuy/에버라인 영문.png',
-            'assets/guide/groupbuy/올엠디.png'
+            'assets/etc/groupbuy/minirecord/0.png',
+            'assets/etc/groupbuy/minirecord/1.png',
+            'assets/etc/groupbuy/minirecord/2.png',
+            'assets/etc/groupbuy/applemusic/0.png',
+            'assets/etc/groupbuy/applemusic/1.png',
+            'assets/etc/groupbuy/applemusic/2.png',
+            'assets/etc/groupbuy/everline/0-1-Full Spread ver.png',
+            'assets/etc/groupbuy/everline/0-2-Savory ver.png',
+            'assets/etc/groupbuy/everline/0-3-Tin Case Ver.png',
+            'assets/etc/groupbuy/everline/1.png',
+            'assets/etc/groupbuy/everline/2.png',
+            'assets/etc/groupbuy/allmd/1.png'
         ].map(encodeFilePath);
         sources.forEach(src => { const img = new Image(); img.decoding = 'async'; img.src = src; });
     } catch (_) {}
@@ -237,6 +242,12 @@ function switchGuideTab(type) {
     if (single) { single.style.display = 'none'; single.src = ''; single.onclick = null; }
     // 공동구매 전용 텍스트는 기본적으로 숨김/초기화 (다른 탭 잔상 제거)
     if (guideTextBox) { guideTextBox.style.display = 'none'; guideTextBox.innerHTML = ''; }
+    
+    // 0번대 이미지 컨테이너 정리 (다른 가이드로 전환 시)
+    const existingZeroContainer = document.querySelector('.zero-images-container');
+    if (existingZeroContainer) {
+        existingZeroContainer.remove();
+    }
     if (type === 'id') {
         if (idGrid) idGrid.style.display = 'block';
         // 1단계: 카테고리 탭 렌더링 (구 그리드 사용)
@@ -408,6 +419,12 @@ function hideGuideTextBox() {
     if (textBox) {
         textBox.style.display = 'none';
         textBox.innerHTML = '';
+    }
+    
+    // 0번대 이미지 컨테이너도 함께 정리
+    const existingZeroContainer = document.querySelector('.zero-images-container');
+    if (existingZeroContainer) {
+        existingZeroContainer.remove();
     }
 }
 
@@ -1399,6 +1416,12 @@ function openGroupBuyGuide(vendor) {
         container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; min-height: 140px; color: #9ca3af; font-size: 0.9rem;">이미지 로딩 중...</div>';
     }
     if (single) { single.style.display = 'none'; single.onclick = null; single.src = ''; }
+    
+    // 0번대 이미지 컨테이너 정리 (다른 가이드에서 남아있을 수 있음)
+    const existingZeroContainer = document.querySelector('.zero-images-container');
+    if (existingZeroContainer) {
+        existingZeroContainer.remove();
+    }
 
     // 벤더별 안내 텍스트 매핑 (상단 표시)
     const vendorText = {
@@ -1420,24 +1443,65 @@ function openGroupBuyGuide(vendor) {
 
     const map = {
         minirecord: [
-            encodeFilePath('assets/guide/groupbuy/미니레코드 국문.png'),
-            encodeFilePath('assets/guide/groupbuy/미니레코드 영문.png')
+            encodeFilePath('assets/etc/groupbuy/minirecord/0.png'),
+            encodeFilePath('assets/etc/groupbuy/minirecord/1.png'),
+            encodeFilePath('assets/etc/groupbuy/minirecord/2.png')
         ],
         applemusic: [
-            encodeFilePath('assets/guide/groupbuy/애플뮤직 국문.png'),
-            encodeFilePath('assets/guide/groupbuy/애플뮤직 영문.png')
+            encodeFilePath('assets/etc/groupbuy/applemusic/0.png'),
+            encodeFilePath('assets/etc/groupbuy/applemusic/1.png'),
+            encodeFilePath('assets/etc/groupbuy/applemusic/2.png')
         ],
         everline: [
-            encodeFilePath('assets/guide/groupbuy/에버라인 국문.png'),
-            encodeFilePath('assets/guide/groupbuy/에버라인 영문.png')
+            encodeFilePath('assets/etc/groupbuy/everline/0-1-Full Spread ver.png'),
+            encodeFilePath('assets/etc/groupbuy/everline/0-2-Savory ver.png'),
+            encodeFilePath('assets/etc/groupbuy/everline/0-3-Tin Case Ver.png'),
+            encodeFilePath('assets/etc/groupbuy/everline/1.png'),
+            encodeFilePath('assets/etc/groupbuy/everline/2.png')
         ],
         allmd: [
-            encodeFilePath('assets/guide/groupbuy/올엠디.png')
+            encodeFilePath('assets/etc/groupbuy/allmd/1.png')
         ]
     };
     const paths = map[vendor] || [];
-    const list = paths.length ? paths : [];
-    // 투표 가이드와 동일: 두 이미지가 있으면 모두 표시, 하나면 하나만 표시
+    
+    // 0으로 시작하는 이미지와 그렇지 않은 이미지 분리
+    const zeroImages = paths.filter(src => {
+        const filename = src.split('/').pop();
+        return filename.startsWith('0');
+    });
+    const otherImages = paths.filter(src => {
+        const filename = src.split('/').pop();
+        return !filename.startsWith('0');
+    });
+    
+    // 0으로 시작하는 이미지들을 텍스트 위에 먼저 표시
+    if (zeroImages.length > 0 && textBox) {
+        const zeroContainer = document.createElement('div');
+        zeroContainer.className = 'zero-images-container';
+        zeroContainer.style.cssText = 'margin-bottom: 20px;';
+        
+        zeroImages.forEach((src, idx) => {
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = '공동구매 가이드 이미지 (상세)';
+            img.className = 'guide-image vote-image';
+            img.decoding = 'async';
+            if (idx === 0) {
+                img.loading = 'eager';
+                img.setAttribute('fetchpriority', 'high');
+            } else {
+                img.loading = 'lazy';
+            }
+            zeroContainer.appendChild(img);
+        });
+        
+        // 텍스트 박스 앞에 삽입
+        textBox.parentNode.insertBefore(zeroContainer, textBox);
+    }
+    
+    // 나머지 이미지들을 기존 컨테이너에 표시
+    const list = otherImages.length ? otherImages : [];
     const frag = document.createDocumentFragment();
     let loadedCount = 0;
     const totalImages = list.length;
@@ -1472,6 +1536,10 @@ function openGroupBuyGuide(vendor) {
     
     if (container && totalImages > 0) {
         container.appendChild(frag);
+    }
+    
+    // 0으로 시작하는 이미지가 있거나 다른 이미지가 있으면 콘텐츠 표시
+    if (zeroImages.length > 0 || totalImages > 0) {
         document.querySelector('.guide-content').style.display = 'block';
     }
 }

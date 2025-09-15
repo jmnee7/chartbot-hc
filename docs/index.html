@@ -27,6 +27,11 @@
     <meta property="og:image:type" content="image/jpeg">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.8/dist/web/static/pretendard.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet">
+    <!-- FullCalendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
     <link rel="stylesheet" href="styles/main.css?v=3.9">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E🐻%3C/text%3E%3C/svg%3E">
   </head>
@@ -47,7 +52,7 @@
         <button class="menu-close" id="menuCloseBtn" aria-label="닫기">✕</button>
       </div>
       <a href="#" onclick="openStreamList(); closeMenu(); return false;">스트리밍 리스트</a>
-      <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">Daily TO-DO LIST</a>
+        <a href="#" onclick="openTodoPage(); closeMenu(); return false;">Daily TO-DO LIST</a>
 
       <!-- 가이드 상위 및 하위 메뉴 -->
       <a href="#" id="guideParent" onclick="toggleSubmenu('guide'); return false;">가이드 ▾</a>
@@ -67,7 +72,7 @@
         <a href="#" onclick="openQuickModal('radio'); closeMenu(); return false;">원클릭 라디오 신청</a>
         <a href="#" onclick="openGuideMenu('groupbuy'); closeMenu(); return false;">공동구매</a>
         <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">투표</a>
-        <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">이벤트</a>
+        <a href="#" onclick="openEventPage(); closeMenu(); return false;">이벤트</a>
         <a href="#" onclick="alert('준비 중입니다.🐻'); closeMenu(); return false;">공지사항</a>
       </div>
     </div>
@@ -100,7 +105,7 @@
           <div class="home-shortcuts-grid">
             <button type="button" class="home-shortcut" onclick="openQuickModal('streaming')">원클릭 스트리밍</button>
             <button type="button" class="home-shortcut" onclick="openQuickModal('radio')">원클릭 라디오 신청</button>
-            <button type="button" class="home-shortcut" onclick="alert('준비 중입니다.🐻')">TO-DO LIST</button>
+              <button type="button" class="home-shortcut" onclick="openTodoPage()">TO-DO LIST</button>
             <button type="button" class="home-shortcut" onclick="openStreamList()">스트리밍 리스트</button>
           </div>
         </div>
@@ -285,6 +290,147 @@
           <div id="guideText" class="guide-text" style="display: none;"></div>
           <div class="guide-image-container" aria-live="polite">
             <img id="guideImage" class="guide-image" alt="가이드 이미지" decoding="async" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="event-view" class="container event-section" style="display: none;">
+      <div class="card">
+        <div class="event-hub">
+          <div id="event-grid">
+            <div class="guide-grid">
+              <div class="event-item-wrapper">
+                <button class="guide-item" onclick="toggleEventDetail('radio')">일일 라디오 신청<span class="event-period">9/10~9/17</span></button>
+                <div class="event-detail" id="event-radio" style="display: none;">
+                  <div class="event-image-container">
+                    <img src="assets/etc/event/(9-10~9-17) 일일 라디오 신청 이벤트/일일 라디오 신청 이벤트 1.png" alt="일일 라디오 신청 이벤트 1" class="event-image" />
+                    <img src="assets/etc/event/(9-10~9-17) 일일 라디오 신청 이벤트/일일 라디오 신청 이벤트 2.png" alt="일일 라디오 신청 이벤트 2" class="event-image" />
+                  </div>
+                </div>
+              </div>
+              
+              <div class="event-item-wrapper">
+                <button class="guide-item" onclick="toggleEventDetail('vote')">사전투표 인증<span class="event-period">9/10~9/18</span></button>
+                <div class="event-detail" id="event-vote" style="display: none;">
+                  <div class="event-image-container">
+                    <img src="assets/etc/event/9-10~9-18 사전투표 인증 이벤트/사전투표 인증 이벤트 1.jpeg" alt="사전투표 인증 이벤트 1" class="event-image" />
+                    <img src="assets/etc/event/9-10~9-18 사전투표 인증 이벤트/사전투표 인증 이벤트 2.jpeg" alt="사전투표 인증 이벤트 2" class="event-image" />
+                  </div>
+                </div>
+              </div>
+              
+              <div class="event-item-wrapper">
+                <button class="guide-item" onclick="toggleEventDetail('kakao')">카카오뮤직 다운로드 페이백<span class="event-period">선착 200명</span></button>
+                <div class="event-detail" id="event-kakao" style="display: none;">
+                  <div class="event-image-container">
+                    <img src="assets/etc/event/(선착 소진 시까지) 카카오뮤직 다운로드 페이백 이벤트/카카오뮤직 다운로드 페이백 이벤트.jpeg" alt="카카오뮤직 다운로드 페이백 이벤트" class="event-image" />
+                  </div>
+                </div>
+              </div>
+              
+              <div class="event-item-wrapper">
+                <button class="guide-item" onclick="toggleEventDetail('melon')">멜론 선물하기 페이백<span class="event-period">선착 100명</span></button>
+                <div class="event-detail" id="event-melon" style="display: none;">
+                  <div class="event-image-container">
+                    <img src="assets/etc/event/(선착 소진 시까지) 멜론 선물하기 페이백 이벤트/멜론 선물하기 페이백 이벤트.png" alt="멜론 선물하기 페이백 이벤트" class="event-image" />
+                  </div>
+                </div>
+              </div>
+              
+              <div class="event-item-wrapper">
+                <button class="guide-item" onclick="toggleEventDetail('mv')">뮤비 다운로드<span class="event-period">9/10~9/17</span></button>
+                <div class="event-detail" id="event-mv" style="display: none;">
+                  <div class="event-image-container">
+                    <img src="assets/etc/event/9-10~9-17 뮤비 다운로드 이벤트/뮤비 다운로드 이벤트.png" alt="뮤비 다운로드 이벤트" class="event-image" />
+                  </div>
+                </div>
+              </div>
+              
+              <div class="event-item-wrapper">
+                <button class="guide-item" onclick="toggleEventDetail('shorts')">숏폼 제작<span class="event-period">9/9~9/21</span></button>
+                <div class="event-detail" id="event-shorts" style="display: none;">
+                  <div class="event-image-container">
+                    <img src="assets/etc/event/9-9~9-21 숏폼 이벤트/숏폼 이벤트 1.png" alt="숏폼 이벤트 1" class="event-image" />
+                    <img src="assets/etc/event/9-9~9-21 숏폼 이벤트/숏폼 이벤트 2.png" alt="숏폼 이벤트 2" class="event-image" />
+                  </div>
+                </div>
+              </div>
+              
+              <div class="event-item-wrapper">
+                <button class="guide-item" onclick="toggleEventDetail('music')">음원 다운로드<span class="event-period">9/11~9/16</span></button>
+                <div class="event-detail" id="event-music" style="display: none;">
+                  <div class="event-image-container">
+                    <img src="assets/etc/event/9-11~9-16 음원 다운로드 인증 이벤트/음원 다운로드 인증 이벤트.png" alt="음원 다운로드 인증 이벤트" class="event-image" />
+                  </div>
+                </div>
+              </div>
+              
+              <div class="event-item-wrapper">
+                <button class="guide-item" onclick="toggleEventDetail('iphone')">아이폰 17 PRO<span class="event-period">9/12~9/15</span></button>
+                <div class="event-detail" id="event-iphone" style="display: none;">
+                  <div class="event-image-container">
+                    <img src="assets/etc/event/9-12~9-15 아이폰 17프로 스밍이벤트/아이폰 17프로 스밍이벤트.jpg" alt="아이폰 17프로 스밍이벤트" class="event-image" />
+                  </div>
+                </div>
+              </div>
+              
+              <div class="event-item-wrapper">
+                <button class="guide-item" onclick="toggleEventDetail('album')">앨범 추가 구매<span class="event-period">9/13~9/14</span></button>
+                <div class="event-detail" id="event-album" style="display: none;">
+                  <div class="event-image-container">
+                    <img src="assets/etc/event/9-13~9-14 초동 마감 전 앨범 추가 구매 이벤트/초동 마감 전 앨범 추가 구매 이벤트.png" alt="초동 마감 전 앨범 추가 구매 이벤트" class="event-image" />
+                  </div>
+                </div>
+              </div>
+              
+              <div class="event-item-wrapper">
+                <button class="guide-item" onclick="toggleEventDetail('streaming')">음원스밍&뮤비스밍 앵콜<span class="event-period">9/14~9/15</span></button>
+                <div class="event-detail" id="event-streaming" style="display: none;">
+                  <div class="event-image-container">
+                    <img src="assets/etc/event/9-14~9-15 일일 음원스밍&뮤비스밍 앵콜 이벤트/일일 음원스밍&뮤비 스밍 앵콜 이벤트 1.png" alt="일일 음원스밍&뮤비 스밍 앵콜 이벤트 1" class="event-image" />
+                    <img src="assets/etc/event/9-14~9-15 일일 음원스밍&뮤비스밍 앵콜 이벤트/일일 음원스밍&뮤비 스밍 앵콜 이벤트 2.png" alt="일일 음원스밍&뮤비 스밍 앵콜 이벤트 2" class="event-image" />
+                  </div>
+                </div>
+              </div>
+              
+              <div class="event-item-wrapper">
+                <button class="guide-item" onclick="toggleEventDetail('cumulative')">누적 스밍<span class="event-period">9/15~9/25</span></button>
+                <div class="event-detail" id="event-cumulative" style="display: none;">
+                  <div class="event-image-container">
+                    <img src="assets/etc/event/9-15~9-25 누적 스밍 이벤트/누적 스밍 이벤트.png" alt="누적 스밍 이벤트" class="event-image" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Daily To do list 페이지 -->
+    <section id="todo-view" class="container todo-section" style="display: none;">
+      <div class="card">
+        <div class="todo-hub">
+          <!-- 공통 일정 -->
+          <div class="common-tasks">
+            <div class="common-tasks-list">
+              <div class="common-task-item">• 음원 스트리밍 하기</div>
+              <div class="common-task-item">• 뮤직비디오 스트리밍 하기</div>
+              <div class="common-task-item">• 지니 음악 나누기로 지니 스트리밍 하기</div>
+              <div class="common-task-item">• 라디오 신청 하기</div>
+              <div class="common-task-item">• 그 외 스밍팀에 올라오는 독려 등 잘 보고 참여하기!</div>
+            </div>
+          </div>
+          
+          <div class="calendar-container">
+            <div id="calendar"></div>
+          </div>
+          <div class="todo-details" id="todo-details" style="display: none;">
+            <h3 id="selected-date-title">선택된 날짜</h3>
+            <div class="todo-list" id="todo-list">
+              <!-- 할 일 목록이 여기에 표시됩니다 -->
+            </div>
           </div>
         </div>
       </div>
@@ -529,6 +675,280 @@
         showView('dashboard');
         closeMenu();
         alert('공지사항은 곧 업데이트됩니다.');
+      }
+
+      // Open event page
+      function openEventPage() {
+        showView('event');
+        closeMenu();
+      }
+
+      // Toggle event detail (accordion style)
+      function toggleEventDetail(eventType) {
+        const detailElement = document.getElementById(`event-${eventType}`);
+        const button = document.querySelector(`[onclick="toggleEventDetail('${eventType}')"]`);
+        
+        if (!detailElement || !button) return;
+        
+        // 현재 상태 확인
+        const isOpen = detailElement.style.display !== 'none';
+        
+        // 모든 다른 이벤트 상세 내용 닫기
+        document.querySelectorAll('.event-detail').forEach(detail => {
+          if (detail.id !== `event-${eventType}`) {
+            detail.style.display = 'none';
+            detail.style.maxHeight = '0px';
+          }
+        });
+        
+        // 모든 버튼의 active 상태 제거
+        document.querySelectorAll('#event-grid .guide-item').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        
+        if (isOpen) {
+          // 현재 열려있으면 닫기
+          detailElement.style.display = 'none';
+          detailElement.style.maxHeight = '0px';
+          button.classList.remove('active');
+        } else {
+          // 닫혀있으면 열기
+          detailElement.style.display = 'block';
+          button.classList.add('active');
+          
+          // 아코디언 애니메이션
+          detailElement.style.maxHeight = '0px';
+          setTimeout(() => {
+            detailElement.style.maxHeight = detailElement.scrollHeight + 'px';
+          }, 10);
+        }
+      }
+
+      // Daily To do list 관련 함수들
+      let calendar;
+      let todos = JSON.parse(localStorage.getItem('haechan-todos')) || {};
+
+      // 초기 일정 데이터 설정
+      function initializeTodoData() {
+        const defaultTodos = {
+          '2025-09-15': [
+            { text: '사전 투표 하기 (쇼챔피언, 엠카운트다운, 뮤직뱅크)' },
+            { text: '숏폼 업로드 하기 (유튜브, 틱톡, 인스타그램)' },
+            { text: '오후 7시 스트리밍 첫곡으로 리셋하기' },
+            { text: '각종 이벤트 참여하기' }
+          ],
+          '2025-09-16': [
+            { text: '사전 투표 하기 (뮤직뱅크, 음악중심)' },
+            { text: '숏폼 업로드 하기 (유튜브, 틱톡, 인스타그램)' },
+            { text: '오후 7시 스트리밍 첫곡으로 리셋하기' },
+            { text: '각종 이벤트 참여하기' }
+          ],
+          '2025-09-17': [
+            { text: '사전 투표 하기 (뮤직뱅크, 음악중심)' },
+            { text: '숏폼 업로드 하기 (유튜브, 틱톡, 인스타그램)' },
+            { text: '오후 7시 스트리밍 첫곡으로 리셋하기' },
+            { text: '각종 이벤트 참여하기' }
+          ],
+          '2025-09-18': [
+            { text: '사전 투표 하기 (음악중심)' },
+            { text: '엠카운트다운 실시간 투표 하기 (엠넷플러스)' },
+            { text: '숏폼 업로드 하기 (유튜브, 틱톡, 인스타그램)' },
+            { text: '오후 7시 스트리밍 첫곡으로 리셋하기' },
+            { text: '각종 이벤트 참여하기' }
+          ],
+          '2025-09-19': [
+            { text: '숏폼 업로드 하기 (유튜브, 틱톡, 인스타그램)' },
+            { text: '오후 7시 스트리밍 첫곡으로 리셋하기' },
+            { text: '각종 이벤트 참여하기' }
+          ],
+          '2025-09-20': [
+            { text: '음악중심 실시간 문자투표 하기 (뮤빗, 문자투표)' },
+            { text: '숏폼 업로드 하기 (유튜브, 틱톡, 인스타그램)' },
+            { text: '오후 7시 스트리밍 첫곡으로 리셋하기' },
+            { text: '각종 이벤트 참여하기' }
+          ],
+          '2025-09-21': [
+            { text: '인기가요 실시간 투표 하기 (하이어)' },
+            { text: '숏폼 업로드 하기 (유튜브, 틱톡, 인스타그램)' },
+            { text: '오후 7시 스트리밍 첫곡으로 리셋하기' },
+            { text: '각종 이벤트 참여하기' }
+          ]
+        };
+
+        // 기존 데이터를 완전히 제거하고 새로운 데이터로 초기화
+        todos = defaultTodos;
+        localStorage.setItem('haechan-todos', JSON.stringify(todos));
+      }
+
+      function openTodoPage() {
+        showView('todo');
+        closeMenu();
+        initializeTodoData();
+        initializeCalendar();
+      }
+
+      function initializeCalendar() {
+        const calendarEl = document.getElementById('calendar');
+        
+        calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          locale: 'ko',
+          headerToolbar: {
+            left: 'title',
+            center: '',
+            right: 'prev,next today'
+          },
+          buttonText: {
+            today: 'Today'
+          },
+          dayMaxEvents: false,
+          moreLinkClick: 'popover',
+          dayCellContent: function(info) {
+            return info.dayNumberText.replace('일', '');
+          },
+          dateClick: function(info) {
+            showTodoDetails(info.dateStr);
+          },
+          datesSet: function(info) {
+            // 달력이 렌더링될 때마다 갈색 점 추가
+            setTimeout(() => {
+              updateCalendarEvents();
+              reinitializeTodayButton();
+            }, 100);
+          }
+        });
+
+        calendar.render();
+        updateCalendarEvents();
+        
+        // '오늘' 버튼에 클릭 이벤트 추가
+        setTimeout(() => {
+          const todayButton = document.querySelector('.fc-today-button');
+          if (todayButton) {
+            // 기존 이벤트 리스너 제거
+            todayButton.removeEventListener('click', handleTodayButtonClick);
+            // 새 이벤트 리스너 추가
+            todayButton.addEventListener('click', handleTodayButtonClick);
+          }
+        }, 100);
+      }
+
+      // '오늘' 버튼 클릭 핸들러
+      function handleTodayButtonClick(event) {
+        // 기본 동작 수행 후 오늘 날짜 일정 표시
+        setTimeout(() => {
+          const today = new Date().toISOString().split('T')[0];
+          showTodoDetails(today);
+        }, 200);
+      }
+
+      // 달력이 다시 렌더링될 때마다 '오늘' 버튼 이벤트 재설정
+      function reinitializeTodayButton() {
+        setTimeout(() => {
+          const todayButton = document.querySelector('.fc-today-button');
+          if (todayButton) {
+            todayButton.removeEventListener('click', handleTodayButtonClick);
+            todayButton.addEventListener('click', handleTodayButtonClick);
+          }
+        }, 100);
+      }
+
+      function showTodoDetails(dateStr) {
+        const todoDetails = document.getElementById('todo-details');
+        const selectedDateTitle = document.getElementById('selected-date-title');
+        const todoList = document.getElementById('todo-list');
+        
+        const date = new Date(dateStr);
+        const formattedDate = date.toLocaleDateString('ko-KR', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          weekday: 'long'
+        });
+        
+        selectedDateTitle.textContent = formattedDate;
+        todoDetails.style.display = 'block';
+        
+        // 해당 날짜의 할 일 목록 표시
+        const dateTodos = todos[dateStr] || [];
+        todoList.innerHTML = '';
+        
+        if (dateTodos.length === 0) {
+          todoList.innerHTML = '<p class="no-todos">등록된 할 일이 없습니다.</p>';
+        } else {
+          // 특별 투표 일정과 일반 일정을 분리
+          const specialVoteTasks = [];
+          const normalTasks = [];
+          
+          dateTodos.forEach((todo, index) => {
+            const isSpecialVote = todo.text.includes('사전 투표') || 
+                                 todo.text.includes('실시간 투표') || 
+                                 todo.text.includes('문자투표');
+            
+            if (isSpecialVote) {
+              specialVoteTasks.push(todo);
+            } else {
+              normalTasks.push(todo);
+            }
+          });
+          
+          // 특별 투표 일정을 먼저 표시
+          specialVoteTasks.forEach((todo, index) => {
+            const todoItem = document.createElement('div');
+            todoItem.className = 'todo-item';
+            todoItem.innerHTML = `
+              <span class="todo-text special-vote">${todo.text}</span>
+            `;
+            todoList.appendChild(todoItem);
+          });
+          
+          // 일반 일정을 나중에 표시
+          normalTasks.forEach((todo, index) => {
+            const todoItem = document.createElement('div');
+            todoItem.className = 'todo-item';
+            todoItem.innerHTML = `
+              <span class="todo-text">${todo.text}</span>
+            `;
+            todoList.appendChild(todoItem);
+          });
+        }
+      }
+
+      function updateCalendarEvents() {
+        if (!calendar) return;
+        
+        // 이벤트는 표시하지 않고 갈색 점만 표시
+        calendar.removeAllEvents();
+        
+          // 달력 렌더링 후 갈색 점 추가
+          setTimeout(() => {
+            Object.keys(todos).forEach(dateStr => {
+              if (todos[dateStr] && todos[dateStr].length > 0) {
+                const date = new Date(dateStr);
+                const dayElement = document.querySelector(`[data-date="${dateStr}"]`);
+                const numberElement = dayElement ? dayElement.querySelector('.fc-daygrid-day-number') : null;
+                
+                if (dayElement && numberElement && !dayElement.querySelector('.todo-dot')) {
+                  const dot = document.createElement('div');
+                  dot.className = 'todo-dot';
+                  dot.style.cssText = `
+                    width: 5px;
+                    height: 5px;
+                    background-color: #966e4b;
+                    border-radius: 50%;
+                    position: absolute;
+                    top: 100%;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    margin-top: 1px;
+                    z-index: 10;
+                  `;
+                  numberElement.style.position = 'relative';
+                  numberElement.appendChild(dot);
+                }
+              }
+            });
+          }, 100);
       }
 
       // Prevent '#' from appearing in URL for placeholder links

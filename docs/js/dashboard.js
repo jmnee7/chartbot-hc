@@ -92,9 +92,11 @@ const GROUPBUY_TEXT = {
     allmd: `올엠디 공동구매\n\n▪️공구 기간 : ~ 9월 7일 23:59 (KST)\n\n▪️공구 특전: 스티커 1종\n\n▪️공구 가격\n💿Tin Case Ver. 29,500원\n💿Savory Ver. 14,400원\n💿Full Spread Ver. (랜덤) 14,400원\n💿Full Spread Ver. (세트) 42,600원\n\n🔗공구 링크 \nhttps://buly.kr/9BWCsD7\n\n※ 앨범 발매 후 온•오프라인 물량에 차질이 있을 수 있으므로 최대한 >예약 판매 기간 내에< 에 많은 구매 부탁드립니다.`
 };
 
-function showView(viewId) {
+  function showView(viewId) {
     document.getElementById('dashboard-view').style.display = 'none';
     document.getElementById('guide-view').style.display = 'none';
+    document.getElementById('event-view').style.display = 'none';
+    document.getElementById('todo-view').style.display = 'none';
 
     document.getElementById(`${viewId}-view`).style.display = 'block';
 
