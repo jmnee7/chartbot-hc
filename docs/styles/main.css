@@ -887,6 +887,21 @@ button.home-shortcut { border-radius: 14px; background: #f8fafc; }
   font-weight: 600;
 }
 
+/* 선택된 날짜 스타일 */
+.fc-daygrid-day.selected-date {
+  background-color: rgba(150, 110, 75, 0.2) !important;
+  border: 2px solid #966e4b !important;
+  border-radius: 4px !important;
+}
+
+.fc-daygrid-day.selected-date .fc-daygrid-day-number {
+  color: #966e4b !important;
+  font-weight: 700 !important;
+  background-color: rgba(150, 110, 75, 0.1);
+  border-radius: 3px;
+  padding: 2px 4px;
+}
+
 .fc-event {
   border-radius: 4px !important;
   font-size: 0.8rem !important;

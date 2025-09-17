@@ -412,16 +412,6 @@
     <section id="todo-view" class="container todo-section" style="display: none;">
       <div class="card">
         <div class="todo-hub">
-          <!-- 공통 일정 -->
-          <div class="common-tasks">
-            <div class="common-tasks-list">
-              <div class="common-task-item">• 음원 스트리밍 하기</div>
-              <div class="common-task-item">• 뮤직비디오 스트리밍 하기</div>
-              <div class="common-task-item">• 지니 음악 나누기로 지니 스트리밍 하기</div>
-              <div class="common-task-item">• 라디오 신청 하기</div>
-              <div class="common-task-item">• 그 외 스밍팀에 올라오는 독려 등 잘 보고 참여하기!</div>
-            </div>
-          </div>
           
           <div class="calendar-container">
             <div id="calendar"></div>
@@ -734,46 +724,73 @@
       function initializeTodoData() {
         const defaultTodos = {
           '2025-09-15': [
+            { text: '음원/뮤비 스트리밍하기', isDefault: true },
+            { text: '지니 음악 나누기로 지니 스트리밍 하기' },
+            { text: '라디오 신청 하기' },
             { text: '사전 투표 하기 (쇼챔피언, 엠카운트다운, 뮤직뱅크)' },
-            { text: '숏폼 업로드 하기 (유튜브, 틱톡, 인스타그램)' },
             { text: '오후 7시 스트리밍 첫곡으로 리셋하기' },
-            { text: '각종 이벤트 참여하기' }
+            { text: '각종 이벤트 참여하기' },
+            { text: '그 외 스밍팀에 올라오는 독려 등 잘 보고 참여하기!' }
           ],
           '2025-09-16': [
+            { text: '음원/뮤비 스트리밍하기', isDefault: true },
+            { text: '지니 음악 나누기로 지니 스트리밍 하기' },
+            { text: '라디오 신청 하기' },
             { text: '사전 투표 하기 (뮤직뱅크, 음악중심)' },
-            { text: '숏폼 업로드 하기 (유튜브, 틱톡, 인스타그램)' },
             { text: '오후 7시 스트리밍 첫곡으로 리셋하기' },
-            { text: '각종 이벤트 참여하기' }
+            { text: '각종 이벤트 참여하기' },
+            { text: '그 외 스밍팀에 올라오는 독려 등 잘 보고 참여하기!' }
           ],
           '2025-09-17': [
+            { text: '🔥 오후 5시 쇼!챔피언 🔥', highlight: true },
+            { text: '음원/뮤비 스트리밍하기', isDefault: true },
+            { text: '지니 음악 나누기로 지니 스트리밍 하기' },
+            { text: '라디오 신청 하기' },
             { text: '사전 투표 하기 (뮤직뱅크, 음악중심)' },
-            { text: '숏폼 업로드 하기 (유튜브, 틱톡, 인스타그램)' },
             { text: '오후 7시 스트리밍 첫곡으로 리셋하기' },
-            { text: '각종 이벤트 참여하기' }
+            { text: '각종 이벤트 참여하기' },
+            { text: '그 외 스밍팀에 올라오는 독려 등 잘 보고 참여하기!' }
           ],
           '2025-09-18': [
+            { text: '🔥 오후 6시 엠카운트다운 🔥', highlight: true },
+            { text: '음원/뮤비 스트리밍하기', isDefault: true },
+            { text: '지니 음악 나누기로 지니 스트리밍 하기' },
+            { text: '라디오 신청 하기' },
             { text: '사전 투표 하기 (음악중심)' },
             { text: '엠카운트다운 실시간 투표 하기 (엠넷플러스)' },
-            { text: '숏폼 업로드 하기 (유튜브, 틱톡, 인스타그램)' },
             { text: '오후 7시 스트리밍 첫곡으로 리셋하기' },
-            { text: '각종 이벤트 참여하기' }
+            { text: '각종 이벤트 참여하기' },
+            { text: '그 외 스밍팀에 올라오는 독려 등 잘 보고 참여하기!' }
           ],
           '2025-09-19': [
-            { text: '숏폼 업로드 하기 (유튜브, 틱톡, 인스타그램)' },
+            { text: '🔥 오후 5시 5분 뮤직뱅크 🔥', highlight: true },
+            { text: '음원/뮤비 스트리밍하기', isDefault: true },
+            { text: '지니 음악 나누기로 지니 스트리밍 하기' },
+            { text: '라디오 신청 하기' },
+            { text: '실시간 투표 하기 (뮤빗, 문자투표)' },
             { text: '오후 7시 스트리밍 첫곡으로 리셋하기' },
-            { text: '각종 이벤트 참여하기' }
+            { text: '각종 이벤트 참여하기' },
+            { text: '그 외 스밍팀에 올라오는 독려 등 잘 보고 참여하기!' }
           ],
           '2025-09-20': [
+            { text: '🔥 오후 3시 15분 쇼! 음악중심 🔥', highlight: true },
+            { text: '음원/뮤비 스트리밍하기', isDefault: true },
+            { text: '지니 음악 나누기로 지니 스트리밍 하기' },
+            { text: '라디오 신청 하기' },
             { text: '음악중심 실시간 문자투표 하기 (뮤빗, 문자투표)' },
-            { text: '숏폼 업로드 하기 (유튜브, 틱톡, 인스타그램)' },
             { text: '오후 7시 스트리밍 첫곡으로 리셋하기' },
-            { text: '각종 이벤트 참여하기' }
+            { text: '각종 이벤트 참여하기' },
+            { text: '그 외 스밍팀에 올라오는 독려 등 잘 보고 참여하기!' }
           ],
           '2025-09-21': [
+            { text: '🔥 오후 3시 20분 인기가요 🔥', highlight: true },
+            { text: '음원/뮤비 스트리밍하기', isDefault: true },
+            { text: '지니 음악 나누기로 지니 스트리밍 하기' },
+            { text: '라디오 신청 하기' },
             { text: '인기가요 실시간 투표 하기 (하이어)' },
-            { text: '숏폼 업로드 하기 (유튜브, 틱톡, 인스타그램)' },
             { text: '오후 7시 스트리밍 첫곡으로 리셋하기' },
-            { text: '각종 이벤트 참여하기' }
+            { text: '각종 이벤트 참여하기' },
+            { text: '그 외 스밍팀에 올라오는 독려 등 잘 보고 참여하기!' }
           ]
         };
 
@@ -860,41 +877,63 @@
         const selectedDateTitle = document.getElementById('selected-date-title');
         const todoList = document.getElementById('todo-list');
         
-        const date = new Date(dateStr);
-        const formattedDate = date.toLocaleDateString('ko-KR', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          weekday: 'long'
+        // 이전에 선택된 날짜의 하이라이트 제거
+        document.querySelectorAll('.fc-daygrid-day').forEach(day => {
+          day.classList.remove('selected-date');
         });
         
-        selectedDateTitle.textContent = formattedDate;
+        // 현재 선택된 날짜에 하이라이트 추가
+        const selectedDayElement = document.querySelector(`[data-date="${dateStr}"]`);
+        if (selectedDayElement) {
+          selectedDayElement.classList.add('selected-date');
+        }
+        
+        // 날짜 타이틀 숨기기
+        selectedDateTitle.style.display = 'none';
         todoDetails.style.display = 'block';
         
-        // 해당 날짜의 할 일 목록 표시
-        const dateTodos = todos[dateStr] || [];
+        // 해당 날짜의 할 일 목록 표시 (디폴트 일정 포함)
+        let dateTodos = todos[dateStr] || [];
+        
+        // 모든 날짜에 디폴트 스트리밍 일정 추가 (이미 있지 않은 경우에만)
+        const hasDefaultStreaming = dateTodos.some(todo => todo.text === '음원/뮤비 스트리밍하기' && todo.isDefault);
+        if (!hasDefaultStreaming) {
+          dateTodos = [{ text: '음원/뮤비 스트리밍하기', isDefault: true }, ...dateTodos];
+        }
+        
         todoList.innerHTML = '';
         
         if (dateTodos.length === 0) {
           todoList.innerHTML = '<p class="no-todos">등록된 할 일이 없습니다.</p>';
         } else {
-          // 특별 투표 일정과 일반 일정을 분리
+          // 하이라이트, 특별 투표 일정, 일반 일정을 분리
+          const highlightTasks = [];
           const specialVoteTasks = [];
           const normalTasks = [];
           
           dateTodos.forEach((todo, index) => {
-            const isSpecialVote = todo.text.includes('사전 투표') || 
-                                 todo.text.includes('실시간 투표') || 
-                                 todo.text.includes('문자투표');
-            
-            if (isSpecialVote) {
+            if (todo.highlight) {
+              highlightTasks.push(todo);
+            } else if (todo.text.includes('사전 투표') || 
+                       todo.text.includes('실시간 투표') || 
+                       todo.text.includes('문자투표')) {
               specialVoteTasks.push(todo);
             } else {
               normalTasks.push(todo);
             }
           });
           
-          // 특별 투표 일정을 먼저 표시
+          // 하이라이트 일정을 가장 먼저 표시
+          highlightTasks.forEach((todo, index) => {
+            const todoItem = document.createElement('div');
+            todoItem.className = 'todo-item';
+            todoItem.innerHTML = `
+              <span class="todo-text special-vote" style="background: linear-gradient(135deg, #ff6b6b, #feca57); color: white; font-weight: bold; font-size: 1.1rem; padding: 8px 12px; border-radius: 8px; display: block; text-align: center; box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);">${todo.text}</span>
+            `;
+            todoList.appendChild(todoItem);
+          });
+          
+          // 특별 투표 일정을 두 번째로 표시
           specialVoteTasks.forEach((todo, index) => {
             const todoItem = document.createElement('div');
             todoItem.className = 'todo-item';
@@ -904,7 +943,7 @@
             todoList.appendChild(todoItem);
           });
           
-          // 일반 일정을 나중에 표시
+          // 일반 일정을 마지막에 표시
           normalTasks.forEach((todo, index) => {
             const todoItem = document.createElement('div');
             todoItem.className = 'todo-item';
@@ -922,31 +961,36 @@
         // 이벤트는 표시하지 않고 갈색 점만 표시
         calendar.removeAllEvents();
         
-          // 달력 렌더링 후 갈색 점 추가
+          // 달력 렌더링 후 갈색 점 추가 (디폴트 일정 제외)
           setTimeout(() => {
             Object.keys(todos).forEach(dateStr => {
               if (todos[dateStr] && todos[dateStr].length > 0) {
-                const date = new Date(dateStr);
-                const dayElement = document.querySelector(`[data-date="${dateStr}"]`);
-                const numberElement = dayElement ? dayElement.querySelector('.fc-daygrid-day-number') : null;
+                // 디폴트 일정이 아닌 일정이 있는지 확인
+                const nonDefaultTodos = todos[dateStr].filter(todo => !todo.isDefault);
                 
-                if (dayElement && numberElement && !dayElement.querySelector('.todo-dot')) {
-                  const dot = document.createElement('div');
-                  dot.className = 'todo-dot';
-                  dot.style.cssText = `
-                    width: 5px;
-                    height: 5px;
-                    background-color: #966e4b;
-                    border-radius: 50%;
-                    position: absolute;
-                    top: 100%;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    margin-top: 1px;
-                    z-index: 10;
-                  `;
-                  numberElement.style.position = 'relative';
-                  numberElement.appendChild(dot);
+                if (nonDefaultTodos.length > 0) {
+                  const date = new Date(dateStr);
+                  const dayElement = document.querySelector(`[data-date="${dateStr}"]`);
+                  const numberElement = dayElement ? dayElement.querySelector('.fc-daygrid-day-number') : null;
+                  
+                  if (dayElement && numberElement && !dayElement.querySelector('.todo-dot')) {
+                    const dot = document.createElement('div');
+                    dot.className = 'todo-dot';
+                    dot.style.cssText = `
+                      width: 5px;
+                      height: 5px;
+                      background-color: #966e4b;
+                      border-radius: 50%;
+                      position: absolute;
+                      top: 100%;
+                      left: 50%;
+                      transform: translateX(-50%);
+                      margin-top: 1px;
+                      z-index: 10;
+                    `;
+                    numberElement.style.position = 'relative';
+                    numberElement.appendChild(dot);
+                  }
                 }
               }
             });
