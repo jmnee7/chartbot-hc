@@ -441,9 +441,9 @@
         </div>
         <div id="gbBody" class="guide-grid"></div>
       </div>
-    </div>    <script src="js/dashboard.js?v=20250917b"></script>
-    <script src="js/chart.js?v=20250917b"></script>
-    <script src="js/guide.js?v=20250917b"></script>
+    </div>    <script src="js/dashboard.js?v=20250917c"></script>
+    <script src="js/chart.js?v=20250917c"></script>
+    <script src="js/guide.js?v=20250917c"></script>
     <script>
       const hamburgerBtn = document.getElementById('hamburgerBtn');
       const mobileMenu = document.getElementById('mobileMenu');
@@ -725,8 +725,6 @@
         const defaultTodos = {
           '2025-09-15': [
             { text: '음원/뮤비 스트리밍하기', isDefault: true },
-            { text: '지니 음악 나누기로 지니 스트리밍 하기' },
-            { text: '라디오 신청 하기' },
             { text: '사전 투표 하기 (쇼챔피언, 엠카운트다운, 뮤직뱅크)' },
             { text: '오후 7시 스트리밍 첫곡으로 리셋하기' },
             { text: '각종 이벤트 참여하기' },
@@ -734,8 +732,6 @@
           ],
           '2025-09-16': [
             { text: '음원/뮤비 스트리밍하기', isDefault: true },
-            { text: '지니 음악 나누기로 지니 스트리밍 하기' },
-            { text: '라디오 신청 하기' },
             { text: '사전 투표 하기 (뮤직뱅크, 음악중심)' },
             { text: '오후 7시 스트리밍 첫곡으로 리셋하기' },
             { text: '각종 이벤트 참여하기' },
@@ -744,8 +740,6 @@
           '2025-09-17': [
             { text: '🔥 오후 5시 쇼!챔피언 🔥', highlight: true },
             { text: '음원/뮤비 스트리밍하기', isDefault: true },
-            { text: '지니 음악 나누기로 지니 스트리밍 하기' },
-            { text: '라디오 신청 하기' },
             { text: '사전 투표 하기 (뮤직뱅크, 음악중심)' },
             { text: '오후 7시 스트리밍 첫곡으로 리셋하기' },
             { text: '각종 이벤트 참여하기' },
@@ -754,8 +748,6 @@
           '2025-09-18': [
             { text: '🔥 오후 6시 엠카운트다운 🔥', highlight: true },
             { text: '음원/뮤비 스트리밍하기', isDefault: true },
-            { text: '지니 음악 나누기로 지니 스트리밍 하기' },
-            { text: '라디오 신청 하기' },
             { text: '사전 투표 하기 (음악중심)' },
             { text: '엠카운트다운 실시간 투표 하기 (엠넷플러스)' },
             { text: '오후 7시 스트리밍 첫곡으로 리셋하기' },
@@ -765,8 +757,6 @@
           '2025-09-19': [
             { text: '🔥 오후 5시 5분 뮤직뱅크 🔥', highlight: true },
             { text: '음원/뮤비 스트리밍하기', isDefault: true },
-            { text: '지니 음악 나누기로 지니 스트리밍 하기' },
-            { text: '라디오 신청 하기' },
             { text: '실시간 투표 하기 (뮤빗, 문자투표)' },
             { text: '오후 7시 스트리밍 첫곡으로 리셋하기' },
             { text: '각종 이벤트 참여하기' },
@@ -775,8 +765,6 @@
           '2025-09-20': [
             { text: '🔥 오후 3시 15분 쇼! 음악중심 🔥', highlight: true },
             { text: '음원/뮤비 스트리밍하기', isDefault: true },
-            { text: '지니 음악 나누기로 지니 스트리밍 하기' },
-            { text: '라디오 신청 하기' },
             { text: '음악중심 실시간 문자투표 하기 (뮤빗, 문자투표)' },
             { text: '오후 7시 스트리밍 첫곡으로 리셋하기' },
             { text: '각종 이벤트 참여하기' },
@@ -785,8 +773,6 @@
           '2025-09-21': [
             { text: '🔥 오후 3시 20분 인기가요 🔥', highlight: true },
             { text: '음원/뮤비 스트리밍하기', isDefault: true },
-            { text: '지니 음악 나누기로 지니 스트리밍 하기' },
-            { text: '라디오 신청 하기' },
             { text: '인기가요 실시간 투표 하기 (하이어)' },
             { text: '오후 7시 스트리밍 첫곡으로 리셋하기' },
             { text: '각종 이벤트 참여하기' },
@@ -931,7 +917,7 @@
             const todoItem = document.createElement('div');
             todoItem.className = 'todo-item';
             todoItem.innerHTML = `
-              <span class="todo-text special-vote" style="background: linear-gradient(135deg, #ff6b6b, #feca57); color: white; font-weight: bold; font-size: 1.1rem; padding: 8px 12px; border-radius: 8px; display: block; text-align: center; box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);">${todo.text}</span>
+              <span class="todo-text special-vote" style="background: linear-gradient(135deg, #ff6b6b, #feca57); color: white; font-weight: bold; font-size: 0.95rem; padding: 8px 12px; border-radius: 8px; display: block; text-align: center; box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);">${todo.text}</span>
             `;
             todoList.appendChild(todoItem);
           });

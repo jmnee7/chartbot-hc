@@ -118,6 +118,7 @@ function encodeFilePath(path) {
             'assets/etc/groupbuy/everline/0-3-Tin Case Ver.png',
             'assets/etc/groupbuy/everline/1.png',
             'assets/etc/groupbuy/everline/2.png',
+            'assets/etc/groupbuy/allmd/0.png',
             'assets/etc/groupbuy/allmd/1.png'
         ].map(encodeFilePath);
         sources.forEach(src => { const img = new Image(); img.decoding = 'async'; img.src = src; });
@@ -1460,6 +1461,7 @@ function openGroupBuyGuide(vendor) {
             encodeFilePath('assets/etc/groupbuy/everline/2.png')
         ],
         allmd: [
+            encodeFilePath('assets/etc/groupbuy/allmd/0.png'),
             encodeFilePath('assets/etc/groupbuy/allmd/1.png')
         ]
     };
