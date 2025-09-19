@@ -32,7 +32,7 @@
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet">
     <!-- FullCalendar JS -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
-    <link rel="stylesheet" href="styles/main.css?v=5.1">
+    <link rel="stylesheet" href="styles/main.css?v=5.3">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E🐻%3C/text%3E%3C/svg%3E">
   </head>
   <body>
@@ -102,11 +102,14 @@
 
         <!-- Shortcut buttons under banner -->
         <div class="card" id="home-shortcuts">
-          <div class="home-shortcuts-grid">
-            <button type="button" class="home-shortcut" onclick="openQuickModal('streaming')">원클릭 스트리밍</button>
-            <button type="button" class="home-shortcut" onclick="openQuickModal('radio')">원클릭 라디오 신청</button>
-              <button type="button" class="home-shortcut" onclick="openTodoPage()">TO-DO LIST</button>
-            <button type="button" class="home-shortcut" onclick="openStreamList()">스트리밍 리스트</button>
+          <div class="home-shortcuts-container">
+            <div class="home-shortcuts-grid">
+              <button type="button" class="home-shortcut" onclick="openQuickModal('streaming')">원클릭 스트리밍</button>
+              <button type="button" class="home-shortcut" onclick="openQuickModal('radio')">원클릭 라디오 신청</button>
+              <button type="button" class="home-shortcut" onclick="openSmsVote()">원클릭 문자투표</button>
+              <button type="button" class="home-shortcut" onclick="openStreamList()">스트리밍 리스트</button>
+            </div>
+            <button type="button" class="home-shortcut home-shortcut-full" onclick="openTodoPage()">TO-DO LIST</button>
           </div>
         </div>
 
@@ -441,9 +444,9 @@
         </div>
         <div id="gbBody" class="guide-grid"></div>
       </div>
-    </div>    <script src="js/dashboard.js?v=20250917c"></script>
-    <script src="js/chart.js?v=20250917c"></script>
-    <script src="js/guide.js?v=20250917c"></script>
+    </div>    <script src="js/dashboard.js?v=20250917g"></script>
+    <script src="js/chart.js?v=20250917g"></script>
+    <script src="js/guide.js?v=20250917g"></script>
     <script>
       const hamburgerBtn = document.getElementById('hamburgerBtn');
       const mobileMenu = document.getElementById('mobileMenu');
@@ -757,7 +760,6 @@
           '2025-09-19': [
             { text: '🔥 오후 5시 5분 뮤직뱅크 🔥', highlight: true },
             { text: '음원/뮤비 스트리밍하기', isDefault: true },
-            { text: '실시간 투표 하기 (뮤빗, 문자투표)' },
             { text: '오후 7시 스트리밍 첫곡으로 리셋하기' },
             { text: '각종 이벤트 참여하기' },
             { text: '그 외 스밍팀에 올라오는 독려 등 잘 보고 참여하기!' }
@@ -765,7 +767,7 @@
           '2025-09-20': [
             { text: '🔥 오후 3시 15분 쇼! 음악중심 🔥', highlight: true },
             { text: '음원/뮤비 스트리밍하기', isDefault: true },
-            { text: '음악중심 실시간 문자투표 하기 (뮤빗, 문자투표)' },
+            { text: '실시간 투표 하기 (뮤빗, 문자투표)' },
             { text: '오후 7시 스트리밍 첫곡으로 리셋하기' },
             { text: '각종 이벤트 참여하기' },
             { text: '그 외 스밍팀에 올라오는 독려 등 잘 보고 참여하기!' }
@@ -790,6 +792,29 @@
         closeMenu();
         initializeTodoData();
         initializeCalendar();
+      }
+
+      function openSmsVote() {
+        // KBS 버튼과 동일한 로직으로 문자투표 구현
+        const ua = navigator.userAgent;
+        const isIOS = /iPhone|iPad|iPod/i.test(ua);
+        const isAndroid = /Android/i.test(ua);
+        const isMacOS = /Macintosh|Mac OS X/i.test(ua);
+        
+        // 안드로이드는 smsto:, 그 외(iOS/맥/데스크톱)는 sms:
+        const scheme = isAndroid ? 'smsto:' : 'sms:';
+        const sep = isAndroid ? '?' : '&';
+        const smsBody = encodeURIComponent('해찬');
+        
+        // iOS/맥/데스크톱은 '#' 그대로, Android는 인코딩
+        const recipient = (isAndroid ? encodeURIComponent('#0505') : '#0505');
+        const href = `${scheme}${recipient}${sep}body=${smsBody}`;
+        
+        try {
+          window.location.href = href;
+        } catch (err) {
+          // 무시
+        }
       }
 
       function initializeCalendar() {

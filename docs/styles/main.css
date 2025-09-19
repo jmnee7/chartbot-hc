@@ -152,8 +152,10 @@ body {
 #musicwave-section .btn { display: block; width: 100%; text-align: center; font-size: 0.95rem; padding: 12px 16px; border-radius: 12px; }
 #musicwave-section .quick-actions.single { justify-content: center; }
 
-/* Home shortcut grid (2x2 like quick tiles) */
+/* Home shortcut container and grid (2x2 + 1 full width layout) */
+.home-shortcuts-container { display: flex; flex-direction: column; gap: 12px; }
 .home-shortcuts-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.home-shortcut-full { width: 100%; }
 button.home-shortcut, a.home-shortcut { -webkit-appearance: none; appearance: none; border: none; text-decoration: none; }
 .home-shortcut { display: flex; align-items: center; justify-content: center; padding: 12px 16px; border-radius: 12px; background: #ffffff; border: 1.5px solid #e5e7eb !important; color: #111827; font-weight: 600; font-size: 0.95rem; box-shadow: 0 6px 18px rgba(17, 24, 39, 0.04); transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease; cursor: pointer; width: 100%; box-sizing: border-box; min-height: 56px; }
 .home-shortcut:hover { background: #f8fafc; border-color: #d1d5db !important; box-shadow: 0 8px 22px rgba(17, 24, 39, 0.06); }
@@ -164,13 +166,22 @@ button.home-shortcut, a.home-shortcut { -webkit-appearance: none; appearance: no
 button.home-shortcut { border-radius: 14px; background: #f8fafc; }
 
 @media (max-width: 480px) {
+  .home-shortcuts-container { gap: 10px; }
   .home-shortcuts-grid { gap: 10px; }
   .home-shortcut { padding: 12px 16px; font-size: 0.95rem; min-height: 52px; }
 }
 
+/* Tablet sizing adjustments */
+@media (min-width: 481px) and (max-width: 991px) {
+  .home-shortcuts-container { gap: 14px; }
+  .home-shortcuts-grid { gap: 14px; }
+  .home-shortcut { padding: 14px 16px; font-size: 0.95rem; }
+}
+
 /* Desktop sizing adjustments */
 @media (min-width: 992px) {
-  .home-shortcuts-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .home-shortcuts-container { gap: 16px; }
+  .home-shortcuts-grid { gap: 16px; }
   .home-shortcut { padding: 16px 18px; font-size: 1rem; }
 }
 
