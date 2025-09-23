@@ -1,76 +1,4 @@
 {
-  "2025-09-23 03:00:00": {
-    "_processed_at": "2025-09-23T03:11:17.303620",
-    "melon_top100": [
-      {
-        "rank": null,
-        "timestamp": "2025-09-23 03:00",
-        "title": "CRZY",
-        "artist": "해찬 (HAECHAN)",
-        "album": "TASTE - The 1st Album",
-        "albumArt": null,
-        "service": "melon"
-      }
-    ],
-    "melon_hot100": [
-      {
-        "rank": 35,
-        "timestamp": "2025-09-23 03:00",
-        "title": "CRZY",
-        "artist": "해찬 (HAECHAN)",
-        "album": "TASTE - The 1st Album",
-        "albumArt": "https://cdnimg.melon.co.kr/cm2/album/images/120/87/109/12087109_20250908150607_500.jpg/melon/resize/120/quality/80/optimize",
-        "service": "melon",
-        "chart_type": "HOT100"
-      }
-    ],
-    "melon": [
-      {
-        "rank": 35,
-        "timestamp": "2025-09-23 03:00",
-        "title": "CRZY",
-        "artist": "해찬 (HAECHAN)",
-        "album": "TASTE - The 1st Album",
-        "albumArt": "https://cdnimg.melon.co.kr/cm2/album/images/120/87/109/12087109_20250908150607_500.jpg/melon/resize/120/quality/80/optimize",
-        "service": "melon",
-        "chart_type": "HOT100"
-      }
-    ],
-    "genie": [
-      {
-        "rank": null,
-        "timestamp": "2025-09-23 03:00",
-        "title": "CRZY",
-        "artist": "해찬 (HAECHAN)",
-        "album": "TASTE - The 1st Album",
-        "albumArt": null,
-        "service": "genie"
-      }
-    ],
-    "bugs": [
-      {
-        "rank": null,
-        "timestamp": "2025-09-23 03:00",
-        "title": "CRZY",
-        "artist": "해찬 (HAECHAN)",
-        "album": "TASTE - The 1st Album",
-        "albumArt": null,
-        "service": "bugs"
-      }
-    ],
-    "vibe": [
-      {
-        "rank": null,
-        "timestamp": "2025-09-23 03:00:00"
-      }
-    ],
-    "flo": [
-      {
-        "rank": null,
-        "timestamp": "2025-09-23 03:00:00"
-      }
-    ]
-  },
   "2025-09-23 04:00:00": {
     "_processed_at": "2025-09-23T04:11:15.454049",
     "melon_top100": [
@@ -1724,6 +1652,78 @@
       {
         "rank": null,
         "timestamp": "2025-09-24 02:00:00"
+      }
+    ]
+  },
+  "2025-09-24 03:00:00": {
+    "_processed_at": "2025-09-24T03:11:36.785216",
+    "melon_top100": [
+      {
+        "rank": null,
+        "timestamp": "2025-09-24 03:00",
+        "title": "CRZY",
+        "artist": "해찬 (HAECHAN)",
+        "album": "TASTE - The 1st Album",
+        "albumArt": null,
+        "service": "melon"
+      }
+    ],
+    "melon_hot100": [
+      {
+        "rank": 41,
+        "timestamp": "2025-09-24 03:00",
+        "title": "CRZY",
+        "artist": "해찬 (HAECHAN)",
+        "album": "TASTE - The 1st Album",
+        "albumArt": "https://cdnimg.melon.co.kr/cm2/album/images/120/87/109/12087109_20250908150607_500.jpg/melon/resize/120/quality/80/optimize",
+        "service": "melon",
+        "chart_type": "HOT100"
+      }
+    ],
+    "melon": [
+      {
+        "rank": 41,
+        "timestamp": "2025-09-24 03:00",
+        "title": "CRZY",
+        "artist": "해찬 (HAECHAN)",
+        "album": "TASTE - The 1st Album",
+        "albumArt": "https://cdnimg.melon.co.kr/cm2/album/images/120/87/109/12087109_20250908150607_500.jpg/melon/resize/120/quality/80/optimize",
+        "service": "melon",
+        "chart_type": "HOT100"
+      }
+    ],
+    "genie": [
+      {
+        "rank": null,
+        "timestamp": "2025-09-24 03:00",
+        "title": "CRZY",
+        "artist": "해찬 (HAECHAN)",
+        "album": "TASTE - The 1st Album",
+        "albumArt": null,
+        "service": "genie"
+      }
+    ],
+    "bugs": [
+      {
+        "rank": null,
+        "timestamp": "2025-09-24 03:00",
+        "title": "CRZY",
+        "artist": "해찬 (HAECHAN)",
+        "album": "TASTE - The 1st Album",
+        "albumArt": null,
+        "service": "bugs"
+      }
+    ],
+    "vibe": [
+      {
+        "rank": null,
+        "timestamp": "2025-09-24 03:00:00"
+      }
+    ],
+    "flo": [
+      {
+        "rank": null,
+        "timestamp": "2025-09-24 03:00:00"
       }
     ]
   }
