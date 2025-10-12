@@ -1,76 +1,4 @@
 {
-  "2025-10-12 03:00:00": {
-    "_processed_at": "2025-10-12T03:11:10.841325",
-    "melon_top100": [
-      {
-        "rank": null,
-        "timestamp": "2025-10-12 03:00",
-        "title": "CRZY",
-        "artist": "해찬 (HAECHAN)",
-        "album": "TASTE - The 1st Album",
-        "albumArt": null,
-        "service": "melon"
-      }
-    ],
-    "melon_hot100": [
-      {
-        "rank": 79,
-        "timestamp": "2025-10-12 03:00",
-        "title": "CRZY",
-        "artist": "해찬 (HAECHAN)",
-        "album": "TASTE - The 1st Album",
-        "albumArt": "https://cdnimg.melon.co.kr/cm2/album/images/120/87/109/12087109_20250908150607_500.jpg/melon/resize/120/quality/80/optimize",
-        "service": "melon",
-        "chart_type": "HOT100"
-      }
-    ],
-    "melon": [
-      {
-        "rank": 79,
-        "timestamp": "2025-10-12 03:00",
-        "title": "CRZY",
-        "artist": "해찬 (HAECHAN)",
-        "album": "TASTE - The 1st Album",
-        "albumArt": "https://cdnimg.melon.co.kr/cm2/album/images/120/87/109/12087109_20250908150607_500.jpg/melon/resize/120/quality/80/optimize",
-        "service": "melon",
-        "chart_type": "HOT100"
-      }
-    ],
-    "genie": [
-      {
-        "rank": null,
-        "timestamp": "2025-10-12 03:00",
-        "title": "CRZY",
-        "artist": "해찬 (HAECHAN)",
-        "album": "TASTE - The 1st Album",
-        "albumArt": null,
-        "service": "genie"
-      }
-    ],
-    "bugs": [
-      {
-        "rank": null,
-        "timestamp": "2025-10-12 03:00",
-        "title": "CRZY",
-        "artist": "해찬 (HAECHAN)",
-        "album": "TASTE - The 1st Album",
-        "albumArt": null,
-        "service": "bugs"
-      }
-    ],
-    "vibe": [
-      {
-        "rank": null,
-        "timestamp": "2025-10-12 03:00:00"
-      }
-    ],
-    "flo": [
-      {
-        "rank": null,
-        "timestamp": "2025-10-12 03:00:00"
-      }
-    ]
-  },
   "2025-10-12 04:00:00": {
     "_processed_at": "2025-10-12T04:11:13.888157",
     "melon_top100": [
@@ -1704,6 +1632,78 @@
       {
         "rank": null,
         "timestamp": "2025-10-13 02:00:00"
+      }
+    ]
+  },
+  "2025-10-13 03:00:00": {
+    "_processed_at": "2025-10-13T03:11:09.570993",
+    "melon_top100": [
+      {
+        "rank": null,
+        "timestamp": "2025-10-13 03:00",
+        "title": "CRZY",
+        "artist": "해찬 (HAECHAN)",
+        "album": "TASTE - The 1st Album",
+        "albumArt": null,
+        "service": "melon"
+      }
+    ],
+    "melon_hot100": [
+      {
+        "rank": 78,
+        "timestamp": "2025-10-13 03:00",
+        "title": "CRZY",
+        "artist": "해찬 (HAECHAN)",
+        "album": "TASTE - The 1st Album",
+        "albumArt": "https://cdnimg.melon.co.kr/cm2/album/images/120/87/109/12087109_20250908150607_500.jpg/melon/resize/120/quality/80/optimize",
+        "service": "melon",
+        "chart_type": "HOT100"
+      }
+    ],
+    "melon": [
+      {
+        "rank": 78,
+        "timestamp": "2025-10-13 03:00",
+        "title": "CRZY",
+        "artist": "해찬 (HAECHAN)",
+        "album": "TASTE - The 1st Album",
+        "albumArt": "https://cdnimg.melon.co.kr/cm2/album/images/120/87/109/12087109_20250908150607_500.jpg/melon/resize/120/quality/80/optimize",
+        "service": "melon",
+        "chart_type": "HOT100"
+      }
+    ],
+    "genie": [
+      {
+        "rank": null,
+        "timestamp": "2025-10-13 03:00",
+        "title": "CRZY",
+        "artist": "해찬 (HAECHAN)",
+        "album": "TASTE - The 1st Album",
+        "albumArt": null,
+        "service": "genie"
+      }
+    ],
+    "bugs": [
+      {
+        "rank": null,
+        "timestamp": "2025-10-13 03:00",
+        "title": "CRZY",
+        "artist": "해찬 (HAECHAN)",
+        "album": "TASTE - The 1st Album",
+        "albumArt": null,
+        "service": "bugs"
+      }
+    ],
+    "vibe": [
+      {
+        "rank": null,
+        "timestamp": "2025-10-13 03:00:00"
+      }
+    ],
+    "flo": [
+      {
+        "rank": null,
+        "timestamp": "2025-10-13 03:00:00"
       }
     ]
   }
