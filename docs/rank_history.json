@@ -1,74 +1,4 @@
 {
-  "2025-12-05 15:00:00": {
-    "_processed_at": "2025-12-05T15:11:32.659302",
-    "melon_top100": [
-      {
-        "rank": null,
-        "timestamp": "2025-12-05 15:00",
-        "title": "CRZY",
-        "artist": "해찬 (HAECHAN)",
-        "album": "TASTE - The 1st Album",
-        "albumArt": null,
-        "service": "melon"
-      }
-    ],
-    "melon_hot100": [
-      {
-        "rank": null,
-        "timestamp": "2025-12-05 15:00",
-        "title": "CRZY",
-        "artist": "해찬 (HAECHAN)",
-        "album": "TASTE - The 1st Album",
-        "albumArt": null,
-        "service": "melon"
-      }
-    ],
-    "melon": [
-      {
-        "rank": null,
-        "timestamp": "2025-12-05 15:00",
-        "title": "CRZY",
-        "artist": "해찬 (HAECHAN)",
-        "album": "TASTE - The 1st Album",
-        "albumArt": null,
-        "service": "melon"
-      }
-    ],
-    "genie": [
-      {
-        "rank": null,
-        "timestamp": "2025-12-05 15:00",
-        "title": "CRZY",
-        "artist": "해찬 (HAECHAN)",
-        "album": "TASTE - The 1st Album",
-        "albumArt": null,
-        "service": "genie"
-      }
-    ],
-    "bugs": [
-      {
-        "rank": null,
-        "timestamp": "2025-12-05 15:00",
-        "title": "CRZY",
-        "artist": "해찬 (HAECHAN)",
-        "album": "TASTE - The 1st Album",
-        "albumArt": null,
-        "service": "bugs"
-      }
-    ],
-    "vibe": [
-      {
-        "rank": null,
-        "timestamp": "2025-12-05 15:00:00"
-      }
-    ],
-    "flo": [
-      {
-        "rank": null,
-        "timestamp": "2025-12-05 15:00:00"
-      }
-    ]
-  },
   "2025-12-05 16:00:00": {
     "_processed_at": "2025-12-05T16:11:20.562384",
     "melon_top100": [
@@ -1676,6 +1606,76 @@
       {
         "rank": null,
         "timestamp": "2025-12-06 14:00:00"
+      }
+    ]
+  },
+  "2025-12-06 15:00:00": {
+    "_processed_at": "2025-12-06T15:11:09.461624",
+    "melon_top100": [
+      {
+        "rank": null,
+        "timestamp": "2025-12-06 15:00",
+        "title": "CRZY",
+        "artist": "해찬 (HAECHAN)",
+        "album": "TASTE - The 1st Album",
+        "albumArt": null,
+        "service": "melon"
+      }
+    ],
+    "melon_hot100": [
+      {
+        "rank": null,
+        "timestamp": "2025-12-06 15:00",
+        "title": "CRZY",
+        "artist": "해찬 (HAECHAN)",
+        "album": "TASTE - The 1st Album",
+        "albumArt": null,
+        "service": "melon"
+      }
+    ],
+    "melon": [
+      {
+        "rank": null,
+        "timestamp": "2025-12-06 15:00",
+        "title": "CRZY",
+        "artist": "해찬 (HAECHAN)",
+        "album": "TASTE - The 1st Album",
+        "albumArt": null,
+        "service": "melon"
+      }
+    ],
+    "genie": [
+      {
+        "rank": null,
+        "timestamp": "2025-12-06 15:00",
+        "title": "CRZY",
+        "artist": "해찬 (HAECHAN)",
+        "album": "TASTE - The 1st Album",
+        "albumArt": null,
+        "service": "genie"
+      }
+    ],
+    "bugs": [
+      {
+        "rank": null,
+        "timestamp": "2025-12-06 15:00",
+        "title": "CRZY",
+        "artist": "해찬 (HAECHAN)",
+        "album": "TASTE - The 1st Album",
+        "albumArt": null,
+        "service": "bugs"
+      }
+    ],
+    "vibe": [
+      {
+        "rank": null,
+        "timestamp": "2025-12-06 15:00:00"
+      }
+    ],
+    "flo": [
+      {
+        "rank": null,
+        "timestamp": "2025-12-06 15:00:00"
       }
     ]
   }
