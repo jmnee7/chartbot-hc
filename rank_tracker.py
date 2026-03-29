@@ -136,7 +136,7 @@ class RankTracker:
         Returns:
             Dict: 순위 변화 정보
         """
-        from target_songs import TARGET_ARTIST, TARGET_SONG
+        from target_songs import TARGET_ARTISTS, TARGET_SONG
         
         if not self.history:
             return {}
@@ -178,7 +178,7 @@ class RankTracker:
             change_info = {
                 "rank": current_rank,
                 "title": TARGET_SONG,  # 설정에서 가져옴
-                "artist": TARGET_ARTIST,  # 설정에서 가져옴
+                "artist": ", ".join(TARGET_ARTISTS),  # 설정에서 가져옴
                 "previous_rank": previous_rank,
                 "change": self._calculate_change(current_rank, previous_rank),
                 "change_text": self._get_change_text(current_rank, previous_rank),
