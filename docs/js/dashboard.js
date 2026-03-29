@@ -248,7 +248,15 @@ const GROUPBUY_TEXT = {
       };
       contentDiv.appendChild(img);
     } else if (tab === 'bittersweet') {
-      contentDiv.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; min-height: 300px; color: #9ca3af; font-size: 1rem;">준비 중입니다 🎵</div>';
+      const img = document.createElement('img');
+      img.src = 'assets/home/streamlist/bittersweet.jpeg';
+      img.alt = '스트리밍 리스트 - Bitter Sweet';
+      img.className = 'guide-image vote-image';
+      img.style.cssText = 'width: 100%; max-width: 600px; height: auto; display: block; margin: 0 auto;';
+      img.onerror = function() {
+        contentDiv.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; min-height: 300px; color: #ef4444; font-size: 0.9rem;">이미지를 불러올 수 없습니다.</div>';
+      };
+      contentDiv.appendChild(img);
     }
   }
 
