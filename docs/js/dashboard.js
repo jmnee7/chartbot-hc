@@ -179,6 +179,8 @@ const GROUPBUY_TEXT = {
   }
 
   // 스트리밍 리스트 콘텐츠 표시 함수
+  let currentStreamTab = 'taste';
+
   function showStreamListContent() {
     // 허브(버튼 그리드) 감추고 상세 이미지만 노출
     const hub = document.querySelector('#guide-view .guide-hub');
@@ -187,33 +189,66 @@ const GROUPBUY_TEXT = {
     if (content) content.style.display = 'block';
     const container = document.querySelector('.guide-image-container');
     const single = document.getElementById('guideImage');
-    
-    // 단일 이미지 표시
-    if (single) { 
-      single.style.display = 'none'; 
-      single.onclick = null; 
-      single.src = ''; 
+
+    // 단일 이미지 숨기기
+    if (single) {
+      single.style.display = 'none';
+      single.onclick = null;
+      single.src = '';
     }
-    
+
     if (container) {
-      // 기존 내용 제거
-      Array.from(container.querySelectorAll('.vote-image')).forEach(el => el.remove());
       container.innerHTML = '';
-      
-      // 스트리밍 리스트 이미지 생성 및 추가
+
+      // 탭 버튼 생성
+      const tabsDiv = document.createElement('div');
+      tabsDiv.className = 'guide-tabs';
+      tabsDiv.style.cssText = 'margin-bottom: 16px;';
+      tabsDiv.innerHTML = `
+        <button class="guide-tab ${currentStreamTab === 'taste' ? 'active' : ''}" onclick="switchStreamTab('taste')">TASTE</button>
+        <button class="guide-tab ${currentStreamTab === 'bittersweet' ? 'active' : ''}" onclick="switchStreamTab('bittersweet')">Bitter Sweet</button>
+      `;
+      container.appendChild(tabsDiv);
+
+      // 콘텐츠 영역
+      const contentDiv = document.createElement('div');
+      contentDiv.id = 'stream-tab-content';
+      container.appendChild(contentDiv);
+
+      renderStreamTabContent(currentStreamTab, contentDiv);
+    }
+  }
+
+  window.switchStreamTab = switchStreamTab;
+  function switchStreamTab(tab) {
+    currentStreamTab = tab;
+    // 탭 버튼 활성화 업데이트
+    document.querySelectorAll('.guide-image-container .guide-tab').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+
+    const contentDiv = document.getElementById('stream-tab-content');
+    if (contentDiv) {
+      renderStreamTabContent(tab, contentDiv);
+    }
+  }
+
+  function renderStreamTabContent(tab, contentDiv) {
+    contentDiv.innerHTML = '';
+
+    if (tab === 'taste') {
       const img = document.createElement('img');
       img.src = 'assets/home/streamlist/streamlist.png';
-      img.alt = '스트리밍 리스트';
+      img.alt = '스트리밍 리스트 - TASTE';
       img.className = 'guide-image vote-image';
       img.style.cssText = 'width: 100%; max-width: 600px; height: auto; display: block; margin: 0 auto;';
-      
-      // 이미지 로드 에러 처리
       img.onerror = function() {
-        console.error('스트리밍 리스트 이미지 로드 실패:', img.src);
-        container.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; min-height: 300px; color: #ef4444; font-size: 0.9rem;">이미지를 불러올 수 없습니다.</div>';
+        contentDiv.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; min-height: 300px; color: #ef4444; font-size: 0.9rem;">이미지를 불러올 수 없습니다.</div>';
       };
-      
-      container.appendChild(img);
+      contentDiv.appendChild(img);
+    } else if (tab === 'bittersweet') {
+      contentDiv.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; min-height: 300px; color: #9ca3af; font-size: 1rem;">준비 중입니다 🎵</div>';
     }
   }
 
